@@ -283,32 +283,47 @@ CREATE TABLE `jsh_function` (
 -- ----------------------------
 -- Records of jsh_function
 -- ----------------------------
+INSERT INTO `jsh_function` VALUES ('24', '0102', '基本资料', '0', '/systemA', '/layouts/TabLayout', '\0', '0750', '', '电脑版', null, 'appstore', '0');
+INSERT INTO `jsh_function` VALUES ('243', '000108', '部门管理', '0102', '/system/organization', '/system/OrganizationList', '', '0150', '', '电脑版', '1', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('13', '000102', '角色管理', '0102', '/system/role', '/system/RoleList', '\0', '0130', '', '电脑版', '1', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('14', '000103', '用户管理', '0102', '/system/user', '/system/UserList', '\0', '0140', '', '电脑版', '1', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('25', '01020101', '供应商信息', '0102', '/system/vendor', '/system/VendorList', '\0', '0260', '', '电脑版', '1,3', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('217', '01020102', '客户信息', '0102', '/system/customer', '/system/CustomerList', '\0', '0262', '', '电脑版', '1,3', 'profile', '0');
+
+INSERT INTO `jsh_function` VALUES ('239', '0801', '仓库管理', '0', '/billD', '/layouts/TabLayout', '\0', '0420', '', '电脑版', '', 'hdd', '0');
+INSERT INTO `jsh_function` VALUES ('26', '010202', '仓库信息', '0801', '/system/depot', '/system/DepotList', '\0', '0270', '', '电脑版', '1', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('228', '030108', '入库汇总', '0801', '/report/in_material_count', '/report/InMaterialCount', '\0', '0650', '', '电脑版', '', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('229', '030109', '出库汇总', '0801', '/report/out_material_count', '/report/OutMaterialCount', '\0', '0655', '', '电脑版', '', 'profile', '0');
+
+INSERT INTO `jsh_function` VALUES ('21', '0101', '产品管理', '0', '/material', '/layouts/TabLayout', '\0', '0620', '', '电脑版', null, 'shopping', '0');
+INSERT INTO `jsh_function` VALUES ('22', '010101', '产品类别', '0101', '/material/material_category', '/material/MaterialCategoryList', '\0', '0230', '', '电脑版', '1', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('23', '010102', '产品信息', '0101', '/material/material', '/material/MaterialList', '\0', '0240', '', '电脑版', '1,3', 'profile', '0');
+
+INSERT INTO `jsh_function` VALUES ('38', '0603', '销售管理', '0', '/billB', '/layouts/TabLayout', '\0', '0390', '', '电脑版', '', 'shopping-cart', '0');
+INSERT INTO `jsh_function` VALUES ('41', '060303', '销售出库', '0603', '/bill/sale_out', '/bill/SaleOutList', '\0', '0394', '', '电脑版', '1,2,3,7', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('200', '060305', '销售退货', '0603', '/bill/sale_back', '/bill/SaleBackList', '\0', '0396', '', '电脑版', '1,2,3,7', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('242', '060301', '销售订单', '0603', '/bill/sale_order', '/bill/SaleOrderList', '\0', '0392', '', '电脑版', '1,2,3,7', 'profile', '0');
+
+INSERT INTO `jsh_function` VALUES ('32', '0502', '采购管理', '0', '/bill', '/layouts/TabLayout', '\0', '0330', '', '电脑版', '', 'retweet', '0');
+INSERT INTO `jsh_function` VALUES ('33', '050201', '采购入库', '0502', '/bill/purchase_in', '/bill/PurchaseInList', '\0', '0340', '', '电脑版', '1,2,3,7', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('199', '050204', '采购退货', '0502', '/bill/purchase_back', '/bill/PurchaseBackList', '\0', '0345', '', '电脑版', '1,2,3,7', 'profile', '0');
+INSERT INTO `jsh_function` VALUES ('241', '050202', '采购订单', '0502', '/bill/purchase_order', '/bill/PurchaseOrderList', '\0', '0335', '', '电脑版', '1,2,3,7', 'profile', '0');
+
+
+
+
 INSERT INTO `jsh_function` VALUES ('1', '0001', '系统管理', '0', '/system', '/layouts/TabLayout', '', '0910', '', '电脑版', '', 'setting', '0');
-INSERT INTO `jsh_function` VALUES ('13', '000102', '角色管理', '0001', '/system/role', '/system/RoleList', '\0', '0130', '', '电脑版', '1', 'profile', '0');
-INSERT INTO `jsh_function` VALUES ('14', '000103', '用户管理', '0001', '/system/user', '/system/UserList', '\0', '0140', '', '电脑版', '1', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('15', '000104', '日志管理', '0001', '/system/log', '/system/LogList', '\0', '0160', '', '电脑版', '', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('16', '000105', '功能管理', '0001', '/system/function', '/system/FunctionList', '\0', '0166', '', '电脑版', '1', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('18', '000109', '租户管理', '0001', '/system/tenant', '/system/TenantList', '\0', '0167', '', '电脑版', '1', 'profile', '0');
-INSERT INTO `jsh_function` VALUES ('21', '0101', '商品管理', '0', '/material', '/layouts/TabLayout', '\0', '0620', '', '电脑版', null, 'shopping', '0');
-INSERT INTO `jsh_function` VALUES ('22', '010101', '商品类别', '0101', '/material/material_category', '/material/MaterialCategoryList', '\0', '0230', '', '电脑版', '1', 'profile', '0');
-INSERT INTO `jsh_function` VALUES ('23', '010102', '商品信息', '0101', '/material/material', '/material/MaterialList', '\0', '0240', '', '电脑版', '1,3', 'profile', '0');
-INSERT INTO `jsh_function` VALUES ('24', '0102', '基本资料', '0', '/systemA', '/layouts/TabLayout', '\0', '0750', '', '电脑版', null, 'appstore', '0');
-INSERT INTO `jsh_function` VALUES ('25', '01020101', '供应商信息', '0102', '/system/vendor', '/system/VendorList', '\0', '0260', '', '电脑版', '1,3', 'profile', '0');
-INSERT INTO `jsh_function` VALUES ('26', '010202', '仓库信息', '0102', '/system/depot', '/system/DepotList', '\0', '0270', '', '电脑版', '1', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('31', '010206', '经手人管理', '0102', '/system/person', '/system/PersonList', '\0', '0284', '', '电脑版', '1', 'profile', '0');
-INSERT INTO `jsh_function` VALUES ('32', '0502', '采购管理', '0', '/bill', '/layouts/TabLayout', '\0', '0330', '', '电脑版', '', 'retweet', '0');
-INSERT INTO `jsh_function` VALUES ('33', '050201', '采购入库', '0502', '/bill/purchase_in', '/bill/PurchaseInList', '\0', '0340', '', '电脑版', '1,2,3,7', 'profile', '0');
-INSERT INTO `jsh_function` VALUES ('38', '0603', '销售管理', '0', '/billB', '/layouts/TabLayout', '\0', '0390', '', '电脑版', '', 'shopping-cart', '0');
 INSERT INTO `jsh_function` VALUES ('40', '080107', '调拨出库', '0801', '/bill/allocation_out', '/bill/AllocationOutList', '\0', '0807', '', '电脑版', '1,2,3,7', 'profile', '0');
-INSERT INTO `jsh_function` VALUES ('41', '060303', '销售出库', '0603', '/bill/sale_out', '/bill/SaleOutList', '\0', '0394', '', '电脑版', '1,2,3,7', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('44', '0704', '财务管理', '0', '/financial', '/layouts/TabLayout', '\0', '0450', '', '电脑版', '', 'money-collect', '0');
 INSERT INTO `jsh_function` VALUES ('59', '030101', '进销存统计', '0301', '/report/in_out_stock_report', '/report/InOutStockReport', '\0', '0658', '', '电脑版', '', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('194', '010204', '收支项目', '0102', '/system/in_out_item', '/system/InOutItemList', '\0', '0282', '', '电脑版', '1', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('195', '010205', '结算账户', '0102', '/system/account', '/system/AccountList', '\0', '0283', '', '电脑版', '1', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('197', '070402', '收入单', '0704', '/financial/item_in', '/financial/ItemInList', '\0', '0465', '', '电脑版', '1,2,3,7', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('198', '0301', '报表查询', '0', '/report', '/layouts/TabLayout', '\0', '0570', '', '电脑版', null, 'pie-chart', '0');
-INSERT INTO `jsh_function` VALUES ('199', '050204', '采购退货', '0502', '/bill/purchase_back', '/bill/PurchaseBackList', '\0', '0345', '', '电脑版', '1,2,3,7', 'profile', '0');
-INSERT INTO `jsh_function` VALUES ('200', '060305', '销售退货', '0603', '/bill/sale_back', '/bill/SaleBackList', '\0', '0396', '', '电脑版', '1,2,3,7', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('201', '080103', '其它入库', '0801', '/bill/other_in', '/bill/OtherInList', '\0', '0803', '', '电脑版', '1,2,3,7', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('202', '080105', '其它出库', '0801', '/bill/other_out', '/bill/OtherOutList', '\0', '0805', '', '电脑版', '1,2,3,7', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('203', '070403', '支出单', '0704', '/financial/item_out', '/financial/ItemOutList', '\0', '0470', '', '电脑版', '1,2,3,7', 'profile', '0');
@@ -321,24 +336,17 @@ INSERT INTO `jsh_function` VALUES ('209', '030104', '销售统计', '0301', '/re
 INSERT INTO `jsh_function` VALUES ('210', '040102', '零售出库', '0401', '/bill/retail_out', '/bill/RetailOutList', '\0', '0405', '', '电脑版', '1,2,3,7', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('211', '040104', '零售退货', '0401', '/bill/retail_back', '/bill/RetailBackList', '\0', '0407', '', '电脑版', '1,2,3,7', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('212', '070407', '收预付款', '0704', '/financial/advance_in', '/financial/AdvanceInList', '\0', '0495', '', '电脑版', '1,2,3,7', 'profile', '0');
-INSERT INTO `jsh_function` VALUES ('217', '01020102', '客户信息', '0102', '/system/customer', '/system/CustomerList', '\0', '0262', '', '电脑版', '1,3', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('218', '01020103', '会员信息', '0102', '/system/member', '/system/MemberList', '\0', '0263', '', '电脑版', '1,3', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('220', '010103', '计量单位', '0101', '/system/unit', '/system/UnitList', '\0', '0245', '', '电脑版', '1', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('225', '0401', '零售管理', '0', '/billC', '/layouts/TabLayout', '\0', '0101', '', '电脑版', '', 'gift', '0');
 INSERT INTO `jsh_function` VALUES ('226', '030106', '入库明细', '0301', '/report/in_detail', '/report/InDetail', '\0', '0640', '', '电脑版', '', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('227', '030107', '出库明细', '0301', '/report/out_detail', '/report/OutDetail', '\0', '0645', '', '电脑版', '', 'profile', '0');
-INSERT INTO `jsh_function` VALUES ('228', '030108', '入库汇总', '0301', '/report/in_material_count', '/report/InMaterialCount', '\0', '0650', '', '电脑版', '', 'profile', '0');
-INSERT INTO `jsh_function` VALUES ('229', '030109', '出库汇总', '0301', '/report/out_material_count', '/report/OutMaterialCount', '\0', '0655', '', '电脑版', '', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('232', '080109', '组装单', '0801', '/bill/assemble', '/bill/AssembleList', '\0', '0809', '', '电脑版', '1,2,3,7', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('233', '080111', '拆卸单', '0801', '/bill/disassemble', '/bill/DisassembleList', '\0', '0811', '', '电脑版', '1,2,3,7', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('234', '000105', '系统配置', '0001', '/system/system_config', '/system/SystemConfigList', '\0', '0165', '', '电脑版', '1', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('235', '030110', '客户对账', '0301', '/report/customer_account', '/report/CustomerAccount', '\0', '0660', '', '电脑版', '', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('236', '000106', '商品属性', '0001', '/material/material_property', '/material/MaterialPropertyList', '\0', '0168', '', '电脑版', '1', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('237', '030111', '供应商对账', '0301', '/report/vendor_account', '/report/VendorAccount', '\0', '0665', '', '电脑版', '', 'profile', '0');
-INSERT INTO `jsh_function` VALUES ('239', '0801', '仓库管理', '0', '/billD', '/layouts/TabLayout', '\0', '0420', '', '电脑版', '', 'hdd', '0');
-INSERT INTO `jsh_function` VALUES ('241', '050202', '采购订单', '0502', '/bill/purchase_order', '/bill/PurchaseOrderList', '\0', '0335', '', '电脑版', '1,2,3,7', 'profile', '0');
-INSERT INTO `jsh_function` VALUES ('242', '060301', '销售订单', '0603', '/bill/sale_order', '/bill/SaleOrderList', '\0', '0392', '', '电脑版', '1,2,3,7', 'profile', '0');
-INSERT INTO `jsh_function` VALUES ('243', '000108', '机构管理', '0001', '/system/organization', '/system/OrganizationList', '', '0150', '', '电脑版', '1', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('244', '030112', '库存预警', '0301', '/report/stock_warning_report', '/report/StockWarningReport', '\0', '0670', '', '电脑版', '', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('245', '000107', '插件管理', '0001', '/system/plugin', '/system/PluginList', '\0', '0170', '', '电脑版', '1', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('246', '030113', '商品库存', '0301', '/report/material_stock', '/report/MaterialStock', '\0', '0605', '', '电脑版', '', 'profile', '0');
@@ -1016,3 +1024,76 @@ INSERT INTO `jsh_user_business` VALUES ('57', 'UserCustomer', '121', '[56]', nul
 INSERT INTO `jsh_user_business` VALUES ('67', 'UserRole', '131', '[17]', null, '63', '0');
 INSERT INTO `jsh_user_business` VALUES ('68', 'RoleFunctions', '16', '[210]', null, '63', '0');
 INSERT INTO `jsh_user_business` VALUES ('69', 'RoleFunctions', '17', '[210][225][211][241][32][33][199][242][38][41][200][201][239][202][40][232][233][197][44][203][204][205][206][212]', '[{\"funId\":\"241\",\"btnStr\":\"1,2\"},{\"funId\":\"33\",\"btnStr\":\"1,2\"},{\"funId\":\"199\",\"btnStr\":\"1,2\"},{\"funId\":\"242\",\"btnStr\":\"1,2\"},{\"funId\":\"41\",\"btnStr\":\"1,2\"},{\"funId\":\"200\",\"btnStr\":\"1,2\"},{\"funId\":\"210\",\"btnStr\":\"1,2\"},{\"funId\":\"211\",\"btnStr\":\"1,2\"},{\"funId\":\"197\",\"btnStr\":\"1\"},{\"funId\":\"203\",\"btnStr\":\"1\"},{\"funId\":\"204\",\"btnStr\":\"1\"},{\"funId\":\"205\",\"btnStr\":\"1\"},{\"funId\":\"206\",\"btnStr\":\"1\"},{\"funId\":\"212\",\"btnStr\":\"1\"},{\"funId\":\"201\",\"btnStr\":\"1,2\"},{\"funId\":\"202\",\"btnStr\":\"1,2\"},{\"funId\":\"40\",\"btnStr\":\"1,2\"},{\"funId\":\"232\",\"btnStr\":\"1,2\"},{\"funId\":\"233\",\"btnStr\":\"1,2\"}]', '63', '0');
+
+
+CREATE TABLE `task` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `bill_no` varchar(255) NOT NULL COMMENT '成产单号',
+  `material_id` bigint(20) NOT NULL COMMENT '产品ID',
+  `quantity` varchar(50) DEFAULT NULL COMMENT '生产数量',
+  `over_time` datetime DEFAULT NULL COMMENT '完工时间',
+  `plan_over_time` datetime DEFAULT NULL COMMENT '计划完工时间',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `tenant_id` bigint(20) DEFAULT NULL COMMENT '租户id',
+  `creator` bigint(20) DEFAULT NULL COMMENT '操作员',
+  `status` varchar(1) DEFAULT NULL COMMENT '状态，0未审核、1已审核、2加工中、3已完工',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=188 DEFAULT CHARSET=utf8 COMMENT='任务表';
+
+CREATE TABLE `task_material` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `task_id` bigint(20) DEFAULT NULL COMMENT '任务id',
+  `material_id` bigint(20) NOT NULL COMMENT '产品id',
+  `material_need_number` bigint(20) DEFAULT NULL COMMENT '所需数量',
+  `material_has_number` bigint(20) DEFAULT NULL COMMENT '已有数量',
+  `material_get_number` bigint(20) DEFAULT NULL COMMENT '领料数',
+  `material_return_number` bigint(20) DEFAULT NULL COMMENT '已退数',
+  `material_use_number` bigint(20) DEFAULT NULL COMMENT '已用数',
+  `material_lost_number` bigint(20) DEFAULT NULL COMMENT '报废数',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `tenant_id` bigint(20) DEFAULT NULL COMMENT '租户id',
+  `creator` bigint(20) DEFAULT NULL COMMENT '操作员',
+  `template` varchar(1) DEFAULT NULL COMMENT '状态，0不是模板、1模板数据',
+  `status` varchar(1) DEFAULT NULL COMMENT '状态，0未审核、1已审核、2加工中、3已完工',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8 COMMENT='任务所需材料表';
+
+
+CREATE TABLE `task_processes` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `task_id` bigint(20) DEFAULT NULL COMMENT '任务id',
+  `user_id` bigint(20) DEFAULT NULL COMMENT '加工人id',
+  `parent_processes` bigint(20) DEFAULT NULL COMMENT '夫工序id',
+  `before_processes` varchar(255) DEFAULT NULL COMMENT '前序工序id',
+  `processes_name` varchar(255) NOT NULL COMMENT '工序名称',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `over_time` datetime DEFAULT NULL COMMENT '完工时间',
+  `plan_over_time` datetime DEFAULT NULL COMMENT '计划完工时间',
+  `tenant_id` bigint(20) DEFAULT NULL COMMENT '租户id',
+  `creator` bigint(20) DEFAULT NULL COMMENT '操作员',
+  `template` varchar(1) DEFAULT NULL COMMENT '状态，0不是模板、1模板数据',
+  `status` varchar(1) DEFAULT NULL COMMENT '状态，0未完成、1未验收、2已验收',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8 COMMENT='任务工序表';
+
+
+CREATE TABLE `task_report` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `processes_id` bigint(20) DEFAULT NULL COMMENT '工序id',
+  `task_id` bigint(20) DEFAULT NULL COMMENT '任务id',
+  `user_id` bigint(20) DEFAULT NULL COMMENT '加工人id',
+  `check_user_id` bigint(20) DEFAULT NULL COMMENT '验收人id',
+  `ok_number` int(10) DEFAULT NULL COMMENT '合格数量',
+  `lost_number` int(10) DEFAULT NULL COMMENT '报废数量',
+  `start_time` datetime DEFAULT NULL COMMENT '加工开始',
+  `end_time` datetime DEFAULT NULL COMMENT '加工结束',
+  `use_day` int(10) DEFAULT NULL COMMENT '合计用时',
+  `creator` bigint(20) DEFAULT NULL COMMENT '操作员',
+  `tenant_id` bigint(20) DEFAULT NULL COMMENT '租户id',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=136 DEFAULT CHARSET=utf8 COMMENT='工序汇报表';
