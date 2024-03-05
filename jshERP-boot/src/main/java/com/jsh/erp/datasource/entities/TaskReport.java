@@ -2,6 +2,10 @@ package com.jsh.erp.datasource.entities;
 
 import java.util.Date;
 
+/**
+ * 任务汇报
+ *
+ */
 public class TaskReport {
     private Long id;
     //工序id

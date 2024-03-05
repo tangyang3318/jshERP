@@ -2,6 +2,10 @@ package com.jsh.erp.datasource.entities;
 
 import java.util.Date;
 
+/**
+ * 任务耗材
+ *
+ */
 public class TaskMaterial {
     private Long id;
     //任务id

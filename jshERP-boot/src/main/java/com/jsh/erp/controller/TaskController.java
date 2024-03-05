@@ -1,15 +1,8 @@
 package com.jsh.erp.controller;
 
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
-import com.jsh.erp.datasource.entities.Account;
-import com.jsh.erp.datasource.vo.AccountVo4InOutList;
-import com.jsh.erp.datasource.vo.AccountVo4List;
-import com.jsh.erp.service.account.AccountService;
-import com.jsh.erp.service.systemConfig.SystemConfigService;
-import com.jsh.erp.utils.BaseResponseInfo;
+import com.jsh.erp.datasource.entities.Task;
+import com.jsh.erp.service.task.TaskService;
 import com.jsh.erp.utils.ErpInfo;
-import com.jsh.erp.utils.StringUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
@@ -17,8 +10,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,16 +24,62 @@ import static com.jsh.erp.utils.ResponseJsonUtil.returnJson;
 @Api(tags = {"任务管理"})
 public class TaskController {
     private Logger logger = LoggerFactory.getLogger(TaskController.class);
+
+    @Resource
+    private TaskService taskService;
     /**
-     * 获取所有任务
-     * @param jsonObject
-     * @param request
+     * 批量删除
+     * @param longs
      * @return
      */
-    @PostMapping(value = "/getAllTask")
-    @ApiOperation(value = "获取所有任务")
-    public String getAllTask(@RequestBody JSONObject jsonObject,
-                                 HttpServletRequest request)throws Exception {
-        return null;
+    @PostMapping(value = "/deleteByIds")
+    @ApiOperation(value = "批量删除")
+    public String deleteByIds(@RequestBody List<Long> longs) throws Exception {
+        Map<String, Object> objectMap = new HashMap<String, Object>();
+        int delete = taskService.deleteTaskByIds(longs);
+        if(delete > 0) {
+            return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
+        } else if(delete == -1) {
+            return returnJson(objectMap, ErpInfo.TEST_USER.name, ErpInfo.TEST_USER.code);
+        } else {
+            return returnJson(objectMap, ErpInfo.ERROR.name, ErpInfo.ERROR.code);
+        }
+    }
+
+
+    /**
+     * 新增
+     * @return
+     */
+    @PostMapping(value = "/insertTask")
+    @ApiOperation(value = "新增任务")
+    public String insertTask(@RequestBody Task task) {
+        Map<String, Object> objectMap = new HashMap<String, Object>();
+        int insertTask = taskService.insertTask(task);
+        if(insertTask > 0) {
+            return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
+        } else if(insertTask == -1) {
+            return returnJson(objectMap, ErpInfo.TEST_USER.name, ErpInfo.TEST_USER.code);
+        } else {
+            return returnJson(objectMap, ErpInfo.ERROR.name, ErpInfo.ERROR.code);
+        }
+    }
+
+    /**
+     * 删除
+     * @return
+     */
+    @PostMapping(value = "/updateTask")
+    @ApiOperation(value = "编辑任务")
+    public String updateTask(@RequestBody Task task) {
+        Map<String, Object> objectMap = new HashMap<String, Object>();
+        int updateTask = taskService.updateTask(task);
+        if(updateTask > 0) {
+            return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
+        } else if(updateTask == -1) {
+            return returnJson(objectMap, ErpInfo.TEST_USER.name, ErpInfo.TEST_USER.code);
+        } else {
+            return returnJson(objectMap, ErpInfo.ERROR.name, ErpInfo.ERROR.code);
+        }
     }
 }

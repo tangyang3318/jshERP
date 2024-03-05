@@ -5,10 +5,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.constants.ExceptionConstants;
 import com.jsh.erp.datasource.entities.*;
-import com.jsh.erp.datasource.mappers.DepotHeadMapperEx;
-import com.jsh.erp.datasource.mappers.DepotItemMapperEx;
-import com.jsh.erp.datasource.mappers.TaskMapper;
-import com.jsh.erp.datasource.mappers.TaskMapperEx;
+import com.jsh.erp.datasource.mappers.*;
 import com.jsh.erp.exception.BusinessRunTimeException;
 import com.jsh.erp.exception.JshException;
 import com.jsh.erp.service.log.LogService;
@@ -21,6 +18,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -39,9 +37,9 @@ public class TaskService {
     @Resource
     private TaskMapperEx taskMapperEx;
     @Resource
-    private UserService userService;
+    private TaskMaterialMapper taskMaterialMapper;
     @Resource
-    private SystemConfigService systemConfigService;
+    private TaskProcessesMapper taskProcessesMapper;
     @Resource
     private UserBusinessService userBusinessService;
     @Resource
@@ -121,6 +119,56 @@ public class TaskService {
             JshException.readFail(logger, e);
         }
         return result;
+    }
+
+    @Transactional(value = "transactionManager", rollbackFor = Exception.class)
+    public int deleteTaskByIds(List<Long> ids)throws Exception {
+        TaskExample taskExample = new TaskExample();
+        taskExample.createCriteria().andIdIn(ids);
+        //todo 还需要删除工序等
+        return  taskMapper.deleteByExample(taskExample);
+    }
+
+    @Transactional(value = "transactionManager", rollbackFor = Exception.class)
+    public int insertTask(Task task) {
+        List<TaskMaterial> taskMaterialList = task.getTaskMaterialList();
+        List<TaskProcesses> taskProcessesList = task.getTaskProcessesList();
+        // 1. 新增任务
+        taskMapper.insert(task);
+        // 2. 新增耗材
+        if(!CollectionUtils.isEmpty(taskMaterialList)){
+            for (TaskMaterial taskMaterial : taskMaterialList) {
+                taskMaterialMapper.insert(taskMaterial);
+            }
+        }
+        // 3. 新增工序
+        if(!CollectionUtils.isEmpty(taskProcessesList)){
+            for (TaskProcesses taskProcesses : taskProcessesList) {
+                taskProcessesMapper.insert(taskProcesses);
+            }
+        }
+        return 1;
+    }
+
+    @Transactional(value = "transactionManager", rollbackFor = Exception.class)
+    public int updateTask(Task task) {
+        List<TaskMaterial> taskMaterialList = task.getTaskMaterialList();
+        List<TaskProcesses> taskProcessesList = task.getTaskProcessesList();
+        // 1. 新增任务
+        taskMapper.insert(task);
+        // 2. 新增耗材
+        if(!CollectionUtils.isEmpty(taskMaterialList)){
+            for (TaskMaterial taskMaterial : taskMaterialList) {
+                taskMaterialMapper.insert(taskMaterial);
+            }
+        }
+        // 3. 新增工序
+        if(!CollectionUtils.isEmpty(taskProcessesList)){
+            for (TaskProcesses taskProcesses : taskProcessesList) {
+                taskProcessesMapper.insert(taskProcesses);
+            }
+        }
+        return 1;
     }
 
 //    @Transactional(value = "transactionManager", rollbackFor = Exception.class)

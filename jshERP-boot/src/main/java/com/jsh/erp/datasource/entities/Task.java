@@ -1,8 +1,12 @@
 package com.jsh.erp.datasource.entities;
 
-import java.math.BigDecimal;
-import java.util.Date;
+import com.baomidou.mybatisplus.annotation.TableField;
+import lombok.Data;
 
+import java.util.Date;
+import java.util.List;
+
+@Data
 public class Task {
     private Long id;
     //任务单号
@@ -28,99 +32,11 @@ public class Task {
     //租户
     private Long tenantId;
 
-    public Long getId() {
-        return id;
-    }
+    //耗材
+    @TableField(exist = false)
+    private List<TaskMaterial> taskMaterialList;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getBillNo() {
-        return billNo;
-    }
-
-    public void setBillNo(String billNo) {
-        this.billNo = billNo;
-    }
-
-    public Long getMaterialId() {
-        return materialId;
-    }
-
-    public void setMaterialId(Long materialId) {
-        this.materialId = materialId;
-    }
-
-    public String getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(String quantity) {
-        this.quantity = quantity;
-    }
-
-    public Date getOverTime() {
-        return overTime;
-    }
-
-    public void setOverTime(Date overTime) {
-        this.overTime = overTime;
-    }
-
-    public Date getPlanOverTime() {
-        return planOverTime;
-    }
-
-    public void setPlanOverTime(Date planOverTime) {
-        this.planOverTime = planOverTime;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Long getCreator() {
-        return creator;
-    }
-
-    public void setCreator(Long creator) {
-        this.creator = creator;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public Long getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(Long tenantId) {
-        this.tenantId = tenantId;
-    }
+    //工序
+    @TableField(exist = false)
+    private List<TaskProcesses> taskProcessesList;
 }
