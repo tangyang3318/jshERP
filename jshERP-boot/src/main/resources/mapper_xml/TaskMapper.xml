@@ -5,7 +5,8 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="bill_no" jdbcType="VARCHAR" property="billNo" />
     <result column="material_id" jdbcType="BIGINT" property="materialId" />
-    <result column="quantity" jdbcType="VARCHAR" property="quantity" />
+    <result column="quantity" jdbcType="DECIMAL" property="quantity" />
+    <result column="over_quantity" jdbcType="DECIMAL" property="overQuantity" />
     <result column="over_time" jdbcType="TIMESTAMP" property="overTime" />
     <result column="plan_over_time" jdbcType="TIMESTAMP" property="planOverTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
@@ -74,8 +75,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, bill_no, material_id, quantity, over_time, plan_over_time, create_time,
-    update_time, tenant_id, creator, status, remark
+    id, bill_no, material_id, quantity,over_quantity, over_time, plan_over_time, create_time,
+    update_time, creator, status, remark
   </sql>
   <select id="selectByExample" parameterType="com.jsh.erp.datasource.entities.TaskExample" resultMap="BaseResultMap">
     select
@@ -107,13 +108,13 @@
       <include refid="Example_Where_Clause" />
     </if>
   </delete>
-  <insert id="insert" parameterType="com.jsh.erp.datasource.entities.Task">
-    insert into task (id, bill_no, material_id, quantity, over_time, plan_over_time,
-    create_time, update_time, tenant_id, creator, status, remark)
+  <insert id="insert" parameterType="com.jsh.erp.datasource.entities.Task" useGeneratedKeys="true" keyProperty="id">
+    insert into task (id, bill_no, material_id, quantity,over_quantity, over_time, plan_over_time,
+    create_time, update_time, creator, status, remark)
     values (#{id,jdbcType=BIGINT}, #{billNo,jdbcType=VARCHAR}, #{materialId,jdbcType=BIGINT},
-      #{quantity,jdbcType=VARCHAR}, #{overTime,jdbcType=TIMESTAMP}, #{planOverTime,jdbcType=TIMESTAMP},
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR},
-      #{creator,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, #{tenantId,jdbcType=BIGINT})
+      #{quantity,jdbcType=DECIMAL},#{overQuantity,jdbcType=DECIMAL}, #{overTime,jdbcType=TIMESTAMP}, #{planOverTime,jdbcType=TIMESTAMP},
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},#{creator,jdbcType=BIGINT},
+       #{status,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.Task">
     insert into task
@@ -166,7 +167,7 @@
         #{materialId,jdbcType=BIGINT},
       </if>
       <if test="quantity != null">
-        #{quantity,jdbcType=VARCHAR},
+        #{quantity,jdbcType=DECIMAL},
       </if>
       <if test="overTime != null">
         #{overTime,jdbcType=TIMESTAMP},
@@ -213,7 +214,7 @@
         material_id = #{record.materialId,jdbcType=BIGINT},
       </if>
       <if test="record.quantity != null">
-        quantity = #{record.quantity,jdbcType=VARCHAR},
+        quantity = #{record.quantity,jdbcType=DECIMAL},
       </if>
       <if test="record.overTime != null">
         over_time = #{record.overTime,jdbcType=TIMESTAMP},
@@ -249,7 +250,8 @@
     set id = #{record.id,jdbcType=BIGINT},
     bill_no = #{record.billNo,jdbcType=VARCHAR},
     material_id = #{record.materialId,jdbcType=BIGINT},
-    quantity = #{record.quantity,jdbcType=VARCHAR},
+    quantity = #{record.quantity,jdbcType=DECIMAL},
+    overQuantity = #{record.overQuantity,jdbcType=DECIMAL},
     over_time = #{record.overTime,jdbcType=TIMESTAMP},
     plan_over_time = #{record.planOverTime,jdbcType=TIMESTAMP},
     create_time = #{record.createTime,jdbcType=TIMESTAMP},
@@ -272,7 +274,10 @@
         material_id = #{materialId,jdbcType=BIGINT},
       </if>
       <if test="quantity != null">
-        quantity = #{quantity,jdbcType=VARCHAR},
+        quantity = #{quantity,jdbcType=DECIMAL},
+      </if>
+      <if test="overQuantity != null">
+        over_quantity = #{overQuantity,jdbcType=DECIMAL},
       </if>
       <if test="overTime != null">
         over_time = #{overTime,jdbcType=TIMESTAMP},
@@ -305,7 +310,8 @@
     update task
     set bill_no = #{billNo,jdbcType=VARCHAR},
       material_id = #{materialId,jdbcType=BIGINT},
-      quantity = #{quantity,jdbcType=VARCHAR},
+      quantity = #{quantity,jdbcType=DECIMAL},
+      overQuantity = #{overQuantity,jdbcType=DECIMAL},
       over_time = #{overTime,jdbcType=TIMESTAMP},
       plan_over_time = #{planOverTime,jdbcType=TIMESTAMP},
       create_time = #{createTime,jdbcType=TIMESTAMP},

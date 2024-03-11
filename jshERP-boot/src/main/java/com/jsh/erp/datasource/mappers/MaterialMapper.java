@@ -20,6 +20,8 @@ public interface MaterialMapper {
 
     Material selectByPrimaryKey(Long id);
 
+    Material selectById(@Param("material_id") Long material_id);
+
     int updateByExampleSelective(@Param("record") Material record, @Param("example") MaterialExample example);
 
     int updateByExample(@Param("record") Material record, @Param("example") MaterialExample example);

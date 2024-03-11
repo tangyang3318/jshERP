@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.jsh.erp.datasource.mappers.TaskMaterialMapper">
-  <resultMap id="BaseResultMap" type="com.jsh.erp.datasource.entities.TaskMaterial">
+<mapper namespace="com.jsh.erp.datasource.mappers.TaskReportMapper">
+  <resultMap id="BaseResultMap" type="com.jsh.erp.datasource.entities.TaskReport">
     <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="processes_id" jdbcType="BIGINT" property="processesId" />
     <result column="task_id" jdbcType="BIGINT" property="taskId" />
-    <result column="material_id" jdbcType="BIGINT" property="materialId" />
-    <result column="material_need_number" jdbcType="DECIMAL" property="materialNeedNumber" />
-    <result column="material_has_number" jdbcType="DECIMAL" property="materialHasNumber" />
-    <result column="material_get_number" jdbcType="DECIMAL" property="materialGetNumber" />
-    <result column="material_return_number" jdbcType="DECIMAL" property="materialReturnNumber" />
-    <result column="material_use_number" jdbcType="DECIMAL" property="materialUseNumber" />
-    <result column="material_lost_number" jdbcType="DECIMAL" property="materialLostNumber" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="check_user_id" jdbcType="BIGINT" property="checkUserId" />
+    <result column="ok_number" jdbcType="DECIMAL" property="okNumber" />
+    <result column="lost_number" jdbcType="DECIMAL" property="lostNumber" />
+    <result column="scrap_number" jdbcType="DECIMAL" property="scrapNumber" />
+    <result column="start_time" jdbcType="TIMESTAMP" property="startTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="status" jdbcType="VARCHAR" property="status" />
-    <result column="bar_code" jdbcType="VARCHAR" property="barCode" />
-    <result column="template" jdbcType="VARCHAR" property="template" />
+    <result column="end_time" jdbcType="TIMESTAMP" property="endTime" />
+    <result column="use_day" jdbcType="INTEGER" property="useDay" />
     <result column="creator" jdbcType="BIGINT" property="creator" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
-    <association property="materialEntity" javaType="com.jsh.erp.datasource.entities.Material"
-                 column="material_id"
-                 select="com.jsh.erp.datasource.mappers.MaterialMapper.selectById" >
-    </association>
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -82,9 +77,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, task_id, material_id, material_need_number, material_has_number, material_get_number,
-    material_return_number, material_use_number, material_lost_number, create_time,
-    creator, template, status,barCode, remark
+    id, processes_id, task_id, user_id, check_user_id, ok_number,scrap_number, lost_number, start_time, end_time, use_day, creator, remark
   </sql>
 
 

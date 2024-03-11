@@ -1268,6 +1268,11 @@ public class MaterialService {
         return materialMapperEx.getMaterialByBarCode(barCodeArray);
     }
 
+    public List<MaterialVo4Unit> getMaterialByIds(String ids) {
+        String [] idArray=ids.split(",");
+        return materialMapperEx.getMaterialByIds(idArray);
+    }
+
     public List<MaterialVo4Unit> getMaterialByBarCodeAndWithOutMId(String barCode, Long mId) {
         String [] barCodeArray=barCode.split(",");
         return materialMapperEx.getMaterialByBarCodeAndWithOutMId(barCodeArray, mId);

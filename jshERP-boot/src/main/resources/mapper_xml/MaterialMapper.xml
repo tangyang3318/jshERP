@@ -84,8 +84,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, category_id, name, mfrs, model, standard, color, unit, remark, img_name, unit_id, 
-    expiry_num, weight, enabled, other_field1, other_field2, other_field3, enable_serial_number, 
+    id, category_id, name, mfrs, model, standard, color, unit, remark, img_name, unit_id,
+    expiry_num, weight, enabled, other_field1, other_field2, other_field3, enable_serial_number,
     enable_batch_number, position, tenant_id, delete_flag
   </sql>
   <select id="selectByExample" parameterType="com.jsh.erp.datasource.entities.MaterialExample" resultMap="BaseResultMap">
@@ -103,7 +103,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from jsh_material
     where id = #{id,jdbcType=BIGINT}
@@ -119,21 +119,21 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jsh.erp.datasource.entities.Material">
-    insert into jsh_material (id, category_id, name, 
-      mfrs, model, standard, 
-      color, unit, remark, 
-      img_name, unit_id, expiry_num, 
-      weight, enabled, other_field1, 
-      other_field2, other_field3, enable_serial_number, 
-      enable_batch_number, position, tenant_id, 
+    insert into jsh_material (id, category_id, name,
+      mfrs, model, standard,
+      color, unit, remark,
+      img_name, unit_id, expiry_num,
+      weight, enabled, other_field1,
+      other_field2, other_field3, enable_serial_number,
+      enable_batch_number, position, tenant_id,
       delete_flag)
-    values (#{id,jdbcType=BIGINT}, #{categoryId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
-      #{mfrs,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{standard,jdbcType=VARCHAR}, 
-      #{color,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
-      #{imgName,jdbcType=VARCHAR}, #{unitId,jdbcType=BIGINT}, #{expiryNum,jdbcType=INTEGER}, 
-      #{weight,jdbcType=DECIMAL}, #{enabled,jdbcType=BIT}, #{otherField1,jdbcType=VARCHAR}, 
-      #{otherField2,jdbcType=VARCHAR}, #{otherField3,jdbcType=VARCHAR}, #{enableSerialNumber,jdbcType=VARCHAR}, 
-      #{enableBatchNumber,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{tenantId,jdbcType=BIGINT}, 
+    values (#{id,jdbcType=BIGINT}, #{categoryId,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR},
+      #{mfrs,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{standard,jdbcType=VARCHAR},
+      #{color,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR},
+      #{imgName,jdbcType=VARCHAR}, #{unitId,jdbcType=BIGINT}, #{expiryNum,jdbcType=INTEGER},
+      #{weight,jdbcType=DECIMAL}, #{enabled,jdbcType=BIT}, #{otherField1,jdbcType=VARCHAR},
+      #{otherField2,jdbcType=VARCHAR}, #{otherField3,jdbcType=VARCHAR}, #{enableSerialNumber,jdbcType=VARCHAR},
+      #{enableBatchNumber,jdbcType=VARCHAR}, #{position,jdbcType=VARCHAR}, #{tenantId,jdbcType=BIGINT},
       #{deleteFlag,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.Material">
@@ -280,6 +280,12 @@
     <if test="_parameter != null">
       <include refid="Example_Where_Clause" />
     </if>
+  </select>
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from jsh_material
+    where id = #{material_id,jdbcType=BIGINT}
   </select>
   <update id="updateByExampleSelective" parameterType="map">
     update jsh_material

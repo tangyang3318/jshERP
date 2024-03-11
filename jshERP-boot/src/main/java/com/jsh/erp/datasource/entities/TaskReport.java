@@ -1,12 +1,20 @@
 package com.jsh.erp.datasource.entities;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+
+import javax.xml.crypto.Data;
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * 任务汇报
  *
  */
+@TableName(value = "task_report", resultMap = "com.jsh.erp.datasource.mappers.TaskReportMapper.BaseResultMap")
 public class TaskReport {
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     //工序id
     private Long processesId;
@@ -17,9 +25,11 @@ public class TaskReport {
     //校验人id
     private Long checkUserId;
     //合格数量
-    private int okNumber;
+    private BigDecimal okNumber;
     //报废数量
-    private int lostNumber;
+    private BigDecimal lostNumber;
+    //报废数量
+    private BigDecimal scrapNumber;
     //开始时间
     private Date startTime;
     //结束时间
@@ -28,6 +38,8 @@ public class TaskReport {
     private int useDay;
     //租户
     private Long tenantId;
+    //租户
+    private Date createTime;
     //创建人
     private Long creator;
     //备注
@@ -65,6 +77,14 @@ public class TaskReport {
         this.userId = userId;
     }
 
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
     public Long getCheckUserId() {
         return checkUserId;
     }
@@ -73,20 +93,28 @@ public class TaskReport {
         this.checkUserId = checkUserId;
     }
 
-    public int getOkNumber() {
+    public BigDecimal getOkNumber() {
         return okNumber;
     }
 
-    public void setOkNumber(int okNumber) {
+    public void setOkNumber(BigDecimal okNumber) {
         this.okNumber = okNumber;
     }
 
-    public int getLostNumber() {
+    public BigDecimal getLostNumber() {
         return lostNumber;
     }
 
-    public void setLostNumber(int lostNumber) {
+    public void setLostNumber(BigDecimal lostNumber) {
         this.lostNumber = lostNumber;
+    }
+
+    public BigDecimal getScrapNumber() {
+        return scrapNumber;
+    }
+
+    public void setScrapNumber(BigDecimal scrapNumber) {
+        this.scrapNumber = scrapNumber;
     }
 
     public Date getStartTime() {

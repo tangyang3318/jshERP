@@ -72,6 +72,13 @@ public class BusinessConstants {
     public static final String BILLS_STATUS_AUDIT = "1";
     public static final String BILLS_STATUS_SKIPED = "2";
     public static final String BILLS_STATUS_SKIPING = "3";
+
+    /**
+     * 工序状态 状态，0未完成、1未验收、2已验收
+     * */
+    public static final String PROCESSES_NO_COM = "0";
+    public static final String PROCESSES_NO_SELECT = "1";
+    public static final String PROCESSES_YES_SELECT = "2";
     /**
      * 单据-采购状态 purchaseStatus '0'未采购、'2'完成采购、'3'部分采购
      * */
@@ -101,6 +108,24 @@ public class BusinessConstants {
      * 生产入库
      * */
     public static final String BILL_TYPE_PRODUCE_IN = "生产入库";
+    /**
+     * 任务是否是模板
+     * */
+    public static final String IS_TEMPLETE = "1";
+    public static final String IS_NOT_TEMPLETE = "0";
+    /**
+     * 工序完成状态
+     * */
+    public static final String PROCESSES_STATE_STATUS_UN_AUDIT = "0" ;//未完成
+    public static final String PROCESSES_STATE_STATUS_AUDIT = "1";//未验收
+    public static final String PROCESSES_STATE_STATUS_SKIPED = "2";//已验收
+    /**
+     * 任务状态
+     * */
+    public static final String TASK_STATE_STATUS_UN_AUDIT = "0" ;//未审核
+    public static final String TASK_STATE_STATUS_AUDIT = "1";//加工中
+    public static final String TASK_STATE_STATUS_SKIPED = "2";//未验收
+    public static final String TASK_STATE_STATUS_END = "2";//已完工
     /**
      * 财务单据分类
      * 收款、付款

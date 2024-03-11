@@ -1,31 +1,44 @@
 package com.jsh.erp.datasource.entities;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
+import org.apache.ibatis.annotations.ResultMap;
+import org.mapstruct.BeanMapping;
+
+import java.math.BigDecimal;
 import java.util.Date;
 
 /**
  * 任务耗材
  *
  */
+
+@TableName(value = "task_material", resultMap = "com.jsh.erp.datasource.mappers.TaskMaterialMapper.BaseResultMap")
 public class TaskMaterial {
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     //任务id
     private Long taskId;
     //商品ID
     private Long materialId;
     //需要物料
-    private Long materialNeedNumber;
+    private BigDecimal materialNeedNumber;
     //已有数量
-    private Long materialHasNumber;
+    private BigDecimal materialHasNumber;
     //获取物料
-    private Long materialGetNumber;
+    private BigDecimal materialGetNumber;
     //用料
-    private Long materialUseNumber;
+    private BigDecimal materialUseNumber;
     //废料
-    private Long materialLostNumber;
+    private BigDecimal materialLostNumber;
     //退料
-    private Long materialReturnNumber;
+    private BigDecimal materialReturnNumber;
     //租户
+    @TableField(exist = false)
     private String tenantId;
+    private String barCode;
     //创建时间
     private Date createTime;
     //状态状态，0未审核、1已审核、2加工中、3已完工
@@ -36,6 +49,9 @@ public class TaskMaterial {
     private Long creator;
     //备注
     private String remark;
+    //商品
+    @TableField(exist = false)
+    private Material materialEntity;
 
     public Long getId() {
         return id;
@@ -61,52 +77,61 @@ public class TaskMaterial {
         this.materialId = materialId;
     }
 
-    public Long getMaterialNeedNumber() {
+    public BigDecimal getMaterialNeedNumber() {
         return materialNeedNumber;
     }
 
-    public void setMaterialNeedNumber(Long materialNeedNumber) {
+    public void setMaterialNeedNumber(BigDecimal materialNeedNumber) {
         this.materialNeedNumber = materialNeedNumber;
     }
 
-    public Long getMaterialHasNumber() {
+    public BigDecimal getMaterialHasNumber() {
         return materialHasNumber;
     }
 
-    public void setMaterialHasNumber(Long materialHasNumber) {
+    public void setMaterialHasNumber(BigDecimal materialHasNumber) {
         this.materialHasNumber = materialHasNumber;
     }
 
-    public Long getMaterialGetNumber() {
+    public BigDecimal getMaterialGetNumber() {
         return materialGetNumber;
     }
 
-    public void setMaterialGetNumber(Long materialGetNumber) {
+    public void setMaterialGetNumber(BigDecimal materialGetNumber) {
         this.materialGetNumber = materialGetNumber;
     }
 
-    public Long getMaterialUseNumber() {
+    public BigDecimal getMaterialUseNumber() {
         return materialUseNumber;
     }
 
-    public void setMaterialUseNumber(Long materialUseNumber) {
+    public void setMaterialUseNumber(BigDecimal materialUseNumber) {
         this.materialUseNumber = materialUseNumber;
     }
 
-    public Long getMaterialLostNumber() {
+    public BigDecimal getMaterialLostNumber() {
         return materialLostNumber;
     }
 
-    public void setMaterialLostNumber(Long materialLostNumber) {
+    public void setMaterialLostNumber(BigDecimal materialLostNumber) {
         this.materialLostNumber = materialLostNumber;
     }
 
-    public Long getMaterialReturnNumber() {
+    public BigDecimal getMaterialReturnNumber() {
         return materialReturnNumber;
     }
 
-    public void setMaterialReturnNumber(Long materialReturnNumber) {
+    public void setMaterialReturnNumber(BigDecimal materialReturnNumber) {
         this.materialReturnNumber = materialReturnNumber;
+    }
+
+
+    public String getBarCode() {
+        return barCode;
+    }
+
+    public void setBarCode(String barCode) {
+        this.barCode = barCode;
     }
 
     public String getTenantId() {
@@ -155,5 +180,13 @@ public class TaskMaterial {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public Material getMaterialEntity() {
+        return materialEntity;
+    }
+
+    public void setMaterialEntity(Material materialEntity) {
+        this.materialEntity = materialEntity;
     }
 }

@@ -1,20 +1,26 @@
 package com.jsh.erp.datasource.entities;
 
+import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
 @Data
 public class Task {
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     //任务单号
     private String billNo;
     //商品ID
     private Long materialId;
+    //目标生产数量
+    private BigDecimal quantity;
     //生产数量
-    private String quantity;
+    private BigDecimal overQuantity;
     //实际结束时间
     private Date overTime;
     //计划结束时间

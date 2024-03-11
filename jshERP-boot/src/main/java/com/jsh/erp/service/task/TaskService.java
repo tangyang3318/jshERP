@@ -2,6 +2,8 @@ package com.jsh.erp.service.task;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.constants.ExceptionConstants;
 import com.jsh.erp.datasource.entities.*;
@@ -10,6 +12,7 @@ import com.jsh.erp.exception.BusinessRunTimeException;
 import com.jsh.erp.exception.JshException;
 import com.jsh.erp.service.log.LogService;
 import com.jsh.erp.service.systemConfig.SystemConfigService;
+import com.jsh.erp.service.taskProcesses.TaskProcessesService;
 import com.jsh.erp.service.user.UserService;
 import com.jsh.erp.service.userBusiness.UserBusinessService;
 import com.jsh.erp.utils.StringUtil;
@@ -24,9 +27,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TaskService {
@@ -36,6 +41,8 @@ public class TaskService {
     private TaskMapper taskMapper;
     @Resource
     private TaskMapperEx taskMapperEx;
+    @Resource
+    private UserService userService;
     @Resource
     private TaskMaterialMapper taskMaterialMapper;
     @Resource
@@ -97,6 +104,10 @@ public class TaskService {
         return list;
     }
 
+    public Task selectById(Long id){
+        return taskMapper.selectByPrimaryKey(id);
+    }
+
     public List<TaskEx> select( TaskEx taskEx, String planBeginTime,
                                 String planEndTime, String beginTime,
                                 String endTime, int offset, int rows)throws Exception {
@@ -130,20 +141,34 @@ public class TaskService {
     }
 
     @Transactional(value = "transactionManager", rollbackFor = Exception.class)
-    public int insertTask(Task task) {
+    public int insertTask(Task task) throws Exception {
         List<TaskMaterial> taskMaterialList = task.getTaskMaterialList();
         List<TaskProcesses> taskProcessesList = task.getTaskProcessesList();
+        User userInfo=userService.getCurrentUser();
+        task.setCreator(userInfo.getId());
+        task.setStatus(BusinessConstants.TASK_STATE_STATUS_UN_AUDIT);
+        task.setCreateTime(new Date());
+        task.setOverQuantity(new BigDecimal(0));
         // 1. 新增任务
-        taskMapper.insert(task);
+        int insert = taskMapper.insert(task);
         // 2. 新增耗材
         if(!CollectionUtils.isEmpty(taskMaterialList)){
             for (TaskMaterial taskMaterial : taskMaterialList) {
+                taskMaterial.setCreateTime(new Date());
+                taskMaterial.setCreator(userInfo.getId());
+                taskMaterial.setTaskId(task.getId());
+                taskMaterial.setTemplate(BusinessConstants.IS_NOT_TEMPLETE);
                 taskMaterialMapper.insert(taskMaterial);
             }
         }
         // 3. 新增工序
         if(!CollectionUtils.isEmpty(taskProcessesList)){
             for (TaskProcesses taskProcesses : taskProcessesList) {
+                taskProcesses.setCreateTime(new Date());
+                taskProcesses.setCreator(userInfo.getId());
+                taskProcesses.setTaskId(task.getId());
+                taskProcesses.setTemplate(BusinessConstants.IS_NOT_TEMPLETE);
+                taskProcesses.setStatus(BusinessConstants.PROCESSES_STATE_STATUS_UN_AUDIT);
                 taskProcessesMapper.insert(taskProcesses);
             }
         }
@@ -152,23 +177,34 @@ public class TaskService {
 
     @Transactional(value = "transactionManager", rollbackFor = Exception.class)
     public int updateTask(Task task) {
-        List<TaskMaterial> taskMaterialList = task.getTaskMaterialList();
-        List<TaskProcesses> taskProcessesList = task.getTaskProcessesList();
-        // 1. 新增任务
-        taskMapper.insert(task);
-        // 2. 新增耗材
-        if(!CollectionUtils.isEmpty(taskMaterialList)){
-            for (TaskMaterial taskMaterial : taskMaterialList) {
-                taskMaterialMapper.insert(taskMaterial);
+        return taskMapper.updateByPrimaryKeySelective(task);
+    }
+
+    public BigDecimal getCanWarehousing(Long taskId) {
+        Task task = taskMapper.selectByPrimaryKey(taskId);
+        return task.getOverQuantity();
+    }
+
+    public void overTask(Long taskId) throws Exception {
+        // 1. 任务排查是否数量够了。
+        Task task = this.getTask(taskId);
+        if(task.getQuantity().subtract(task.getOverQuantity()).compareTo(new BigDecimal(0)) > 0 ){
+            throw new BusinessRunTimeException(ExceptionConstants.QUANTITY_NOT_ENOUGH_ERROR_CODE,
+                    ExceptionConstants.QUANTITY_NOT_ENOUGH_ERROR_MSG);
+        }
+        // 2. 排查下面工序任务是否都已完成
+        QueryWrapper<TaskProcesses> taskProcessesQueryWrapper = new QueryWrapper<>();
+        taskProcessesQueryWrapper.eq("task_id",taskId);
+        List<TaskProcesses> taskProcesses = taskProcessesMapper.selectList(taskProcessesQueryWrapper);
+        if(!CollectionUtils.isEmpty(taskProcesses)){
+            List<TaskProcesses> collect = taskProcesses.stream().filter(item -> "1".equals(item.getStatus())).collect(Collectors.toList());
+            if(collect.size() > 0){
+                throw new BusinessRunTimeException(ExceptionConstants.QUANTITY_NOT_COMPLETE_ERROR_CODE,
+                        ExceptionConstants.QUANTITY_NOT_COMPLETE_ERROR_MSG);
             }
         }
-        // 3. 新增工序
-        if(!CollectionUtils.isEmpty(taskProcessesList)){
-            for (TaskProcesses taskProcesses : taskProcessesList) {
-                taskProcessesMapper.insert(taskProcesses);
-            }
-        }
-        return 1;
+        task.setStatus(BusinessConstants.TASK_STATE_STATUS_END);
+        this.updateTask(task);
     }
 
 //    @Transactional(value = "transactionManager", rollbackFor = Exception.class)

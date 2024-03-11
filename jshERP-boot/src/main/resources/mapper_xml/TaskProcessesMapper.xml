@@ -1,16 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.jsh.erp.datasource.mappers.TaskProcessesMapper">
-  <resultMap id="BaseResultMap" type="com.jsh.erp.datasource.entities.Task">
+  <resultMap id="BaseResultMap" type="com.jsh.erp.datasource.entities.TaskProcesses">
     <id column="id" jdbcType="BIGINT" property="id" />
-    <result column="bill_no" jdbcType="VARCHAR" property="billNo" />
-    <result column="material_id" jdbcType="BIGINT" property="materialId" />
-    <result column="quantity" jdbcType="VARCHAR" property="quantity" />
+    <result column="task_id" jdbcType="BIGINT" property="taskId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="parent_processes" jdbcType="BIGINT" property="parentProcesses" />
+    <result column="before_processes" jdbcType="VARCHAR" property="beforeProcesses" />
+    <result column="processes_name" jdbcType="VARCHAR" property="processesName" />
     <result column="over_time" jdbcType="TIMESTAMP" property="overTime" />
     <result column="plan_over_time" jdbcType="TIMESTAMP" property="planOverTime" />
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
-    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="template" jdbcType="VARCHAR" property="template" />
     <result column="creator" jdbcType="BIGINT" property="creator" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
@@ -74,246 +76,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, bill_no, material_id, quantity, over_time, plan_over_time, create_time,
-    update_time, tenant_id, creator, status, remark
+    id, task_id, user_id, parent_processes, before_processes, processes_name, create_time, over_time, plan_over_time, creator, template, status, remark
   </sql>
-  <select id="selectByExample" parameterType="com.jsh.erp.datasource.entities.TaskExample" resultMap="BaseResultMap">
-    select
-    <if test="distinct">
-      distinct
-    </if>
-    <include refid="Base_Column_List" />
-    from task
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-    <if test="orderByClause != null">
-      order by ${orderByClause}
-    </if>
-  </select>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select
-    <include refid="Base_Column_List" />
-    from task
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from task
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
-  <delete id="deleteByExample" parameterType="com.jsh.erp.datasource.entities.TaskExample">
-    delete from task
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </delete>
-  <insert id="insert" parameterType="com.jsh.erp.datasource.entities.Task">
-    insert into task (id, bill_no, material_id, quantity, over_time, plan_over_time,
-    create_time, update_time, tenant_id, creator, status, remark)
-    values (#{id,jdbcType=BIGINT}, #{billNo,jdbcType=VARCHAR}, #{materialId,jdbcType=BIGINT},
-      #{quantity,jdbcType=VARCHAR}, #{overTime,jdbcType=TIMESTAMP}, #{planOverTime,jdbcType=TIMESTAMP},
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, #{status,jdbcType=VARCHAR},
-      #{creator,jdbcType=BIGINT}, #{remark,jdbcType=VARCHAR}, #{tenantId,jdbcType=BIGINT})
-  </insert>
-  <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.Task">
-    insert into task
-    <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        id,
-      </if>
-      <if test="billNo != null">
-        bill_no,
-      </if>
-      <if test="materialId != null">
-        material_id,
-      </if>
-      <if test="quantity != null">
-        quantity,
-      </if>
-      <if test="overTime != null">
-        over_time,
-      </if>
-      <if test="planOverTime != null">
-        plan_over_time,
-      </if>
-      <if test="createTime != null">
-        create_time,
-      </if>
-      <if test="updateTime != null">
-        update_time,
-      </if>
-      <if test="status != null">
-        status,
-      </if>
-      <if test="creator != null">
-        creator,
-      </if>
-      <if test="remark != null">
-        remark,
-      </if>
-      <if test="tenantId != null">
-        tenant_id,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="id != null">
-        #{id,jdbcType=BIGINT},
-      </if>
-      <if test="billNo != null">
-        #{billNo,jdbcType=VARCHAR},
-      </if>
-      <if test="materialId != null">
-        #{materialId,jdbcType=BIGINT},
-      </if>
-      <if test="quantity != null">
-        #{quantity,jdbcType=VARCHAR},
-      </if>
-      <if test="overTime != null">
-        #{overTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="planOverTime != null">
-        #{planOverTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createTime != null">
-        #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="status != null">
-        #{status,jdbcType=VARCHAR},
-      </if>
-      <if test="creator != null">
-        #{creator,jdbcType=BIGINT},
-      </if>
-      <if test="remark != null">
-        #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="tenantId != null">
-        #{tenantId,jdbcType=BIGINT},
-      </if>
-    </trim>
-  </insert>
-  <select id="countByExample" parameterType="com.jsh.erp.datasource.entities.TaskExample" resultType="java.lang.Long">
-    select count(*) from task
-    <if test="_parameter != null">
-      <include refid="Example_Where_Clause" />
-    </if>
-  </select>
-  <update id="updateByExampleSelective" parameterType="map">
-    update task
-    <set>
-      <if test="record.id != null">
-        id = #{record.id,jdbcType=BIGINT},
-      </if>
-      <if test="record.billNo != null">
-        bill_no = #{record.billNo,jdbcType=VARCHAR},
-      </if>
-      <if test="record.materialId != null">
-        material_id = #{record.materialId,jdbcType=BIGINT},
-      </if>
-      <if test="record.quantity != null">
-        quantity = #{record.quantity,jdbcType=VARCHAR},
-      </if>
-      <if test="record.overTime != null">
-        over_time = #{record.overTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.planOverTime != null">
-        plan_over_time = #{record.planOverTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.createTime != null">
-        create_time = #{record.createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.updateTime != null">
-        update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.status != null">
-        status = #{record.status,jdbcType=VARCHAR},
-      </if>
-      <if test="record.creator != null">
-        creator = #{record.creator,jdbcType=BIGINT},
-      </if>
-      <if test="record.remark != null">
-        remark = #{record.remark,jdbcType=TIMESTAMP},
-      </if>
-      <if test="record.tenantId != null">
-        tenant_id = #{record.tenantId,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByExample" parameterType="map">
-    update task
-    set id = #{record.id,jdbcType=BIGINT},
-    bill_no = #{record.billNo,jdbcType=VARCHAR},
-    material_id = #{record.materialId,jdbcType=BIGINT},
-    quantity = #{record.quantity,jdbcType=VARCHAR},
-    over_time = #{record.overTime,jdbcType=TIMESTAMP},
-    plan_over_time = #{record.planOverTime,jdbcType=TIMESTAMP},
-    create_time = #{record.createTime,jdbcType=TIMESTAMP},
-    update_time = #{record.updateTime,jdbcType=TIMESTAMP},
-    status = #{record.status,jdbcType=VARCHAR},
-    creator = #{record.creator,jdbcType=BIGINT},
-    remark = #{record.remark,jdbcType=VARCHAR},
-    tenant_id = #{record.tenantId,jdbcType=BIGINT}
-    <if test="_parameter != null">
-      <include refid="Update_By_Example_Where_Clause" />
-    </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.jsh.erp.datasource.entities.Task">
-    update task
-    <set>
-      <if test="billNo != null">
-        bill_no = #{billNo,jdbcType=VARCHAR},
-      </if>
-      <if test="materialId != null">
-        material_id = #{materialId,jdbcType=BIGINT},
-      </if>
-      <if test="quantity != null">
-        quantity = #{quantity,jdbcType=VARCHAR},
-      </if>
-      <if test="overTime != null">
-        over_time = #{overTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="planOverTime != null">
-        plan_over_time = #{planOverTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createTime != null">
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updateTime != null">
-        update_time = #{updateTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="status != null">
-        status = #{status,jdbcType=VARCHAR},
-      </if>
-      <if test="creator != null">
-        creator = #{creator,jdbcType=BIGINT},
-      </if>
-      <if test="remark != null">
-        remark = #{remark,jdbcType=VARCHAR},
-      </if>
-      <if test="tenantId != null">
-        tenant_id = #{tenantId,jdbcType=BIGINT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.jsh.erp.datasource.entities.Task">
-    update task
-    set bill_no = #{billNo,jdbcType=VARCHAR},
-      material_id = #{materialId,jdbcType=BIGINT},
-      quantity = #{quantity,jdbcType=VARCHAR},
-      over_time = #{overTime,jdbcType=TIMESTAMP},
-      plan_over_time = #{planOverTime,jdbcType=TIMESTAMP},
-      create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP},
-      status = #{status,jdbcType=VARCHAR},
-      creator = #{creator,jdbcType=BIGINT},
-      remark = #{remark,jdbcType=VARCHAR},
-      tenant_id = #{tenantId,jdbcType=BIGINT}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+
+
 </mapper>

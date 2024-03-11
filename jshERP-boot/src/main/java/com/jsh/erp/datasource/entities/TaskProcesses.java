@@ -1,21 +1,26 @@
 package com.jsh.erp.datasource.entities;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+
 import java.util.Date;
 
 /**
  * 任务工序
  */
 public class TaskProcesses {
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
     //任务id
     private Long taskId;
     //商品ID
     private Long userId;
-    //需要物料
+    //父工序id
     private Long parentProcesses;
-    //已有数量
+    //前序节点
     private String beforeProcesses;
-    //获取物料
+    //工序名称
     private String processesName;
     //创建时间
     private Date createTime;
@@ -24,6 +29,7 @@ public class TaskProcesses {
     //创建时间
     private Date planOverTime;
     //租户
+    @TableField(exist = false)
     private Long tenantId;
     //状态，0未完成、1未验收、2已验收
     private String status;

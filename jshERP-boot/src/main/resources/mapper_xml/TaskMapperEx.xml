@@ -3,7 +3,7 @@
 <mapper namespace="com.jsh.erp.datasource.mappers.TaskMapperEx">
     <resultMap extends="com.jsh.erp.datasource.mappers.TaskMapper.BaseResultMap" id="ResultMapEx" type="com.jsh.erp.datasource.entities.TaskEx">
         <result column="creatorName" jdbcType="VARCHAR" property="creatorName" />
-        <association property="material" javaType="java.lang.Long" column="material"
+        <association property="material" javaType="com.jsh.erp.datasource.entities.Material" column="material"
                      select="com.jsh.erp.datasource.mappers.MaterialMapper.selectByPrimaryKey">
         </association>
     </resultMap>

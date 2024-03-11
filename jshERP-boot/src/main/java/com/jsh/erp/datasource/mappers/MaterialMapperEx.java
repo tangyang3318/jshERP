@@ -114,6 +114,7 @@ public interface MaterialMapperEx {
     int setExpiryNumToNull(@Param("id") Long id);
 
     List<MaterialVo4Unit> getMaterialByBarCode(@Param("barCodeArray") String [] barCodeArray);
+    List<MaterialVo4Unit> getMaterialByIds(@Param("idArray") String [] idArray);
 
     List<MaterialVo4Unit> getMaterialByBarCodeAndWithOutMId(
             @Param("barCodeArray") String [] barCodeArray,

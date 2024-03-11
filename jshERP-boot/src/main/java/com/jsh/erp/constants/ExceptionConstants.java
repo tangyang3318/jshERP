@@ -341,6 +341,18 @@ public class ExceptionConstants {
     //基本条码为空
     public static final int MATERIAL_BARCODE_EMPTY_CODE = 8000027;
     public static final String MATERIAL_BARCODE_EMPTY_MSG = "第%s行基本条码为空";
+    //商品库存不足
+    public static final int MATERIAL_GET_ERROR_CODE = 8000028;
+    public static final String MATERIAL_GET_ERROR_MSG = "抱歉，没有物料需要进行领料！";
+    //商品库存不足
+    public static final int MATERIAL_USE_ERROR_CODE = 8000029;
+    public static final String MATERIAL_USE_ERROR_MSG = "抱歉，本次用料超出可用数量！";
+    //商品完工异常
+    public static final int QUANTITY_NOT_ENOUGH_ERROR_CODE = 8000030;
+    public static final String QUANTITY_NOT_ENOUGH_ERROR_MSG = "抱歉，生产产品未达到数量!";
+    //商品完工异常
+    public static final int QUANTITY_NOT_COMPLETE_ERROR_CODE = 8000030;
+    public static final String QUANTITY_NOT_COMPLETE_ERROR_MSG = "抱歉，还有工序未完成！";
 
     /**
      *  单据信息
