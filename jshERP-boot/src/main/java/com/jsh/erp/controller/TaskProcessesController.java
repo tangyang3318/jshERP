@@ -4,16 +4,14 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.jsh.erp.datasource.entities.TaskProcesses;
+import com.jsh.erp.datasource.entities.TaskProcessesEX;
 import com.jsh.erp.service.taskProcesses.TaskProcessesService;
 import com.jsh.erp.utils.ErpInfo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -72,6 +70,70 @@ public class TaskProcessesController {
         Map<String, Object> objectMap = new HashMap<String, Object>();
         taskProcessesService.updateTaskProcesses(taskProcesses);
         objectMap.put("data",taskProcesses);
+        return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
+    }
+
+    /**
+     * 删除
+     * @return
+     */
+    @PostMapping(value = "/deleteTaskProcesses")
+    @ApiOperation(value = "删除")
+    public String deleteTaskProcesses(@RequestBody List ids) throws Exception {
+        Map<String, Object> objectMap = new HashMap<String, Object>();
+        taskProcessesService.deleteTaskProcesses(ids);
+        return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
+    }
+
+
+    /**
+     * 查询所需工序树形
+     * @return
+     */
+    @PostMapping(value = "/searchTaskProcessesTree")
+    @ApiOperation(value = "查询所需工序树形")
+    public String searchTaskProcessesTree(@RequestBody TaskProcesses taskProcesses) throws Exception {
+        Map<String, Object> objectMap = new HashMap<String, Object>();
+        List<TaskProcesses> list = taskProcessesService.searchTaskProcessesTree(taskProcesses);
+        objectMap.put("data",list);
+        return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
+    }
+
+    /**
+     * 查询所需工序
+     * @return
+     */
+    @PostMapping(value = "/searchTaskProcesses")
+    @ApiOperation(value = "查询所需工序")
+    public String searchTaskProcesses(@RequestBody TaskProcessesEX taskProcessesEX) throws Exception {
+        Map<String, Object> objectMap = new HashMap<String, Object>();
+        objectMap.put("data",taskProcessesService.searchTaskProcesses(taskProcessesEX,taskProcessesEX.getPageNo(),taskProcessesEX.getPageSize()));
+        return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
+    }
+
+
+    /**
+     * 获取我的工序完成情况
+     * @return
+     */
+    @GetMapping(value = "/getMyTaskProcessesMessage")
+    @ApiOperation(value = "获取我的工序完成情况")
+    public String getMyTaskProcessesMessage() throws Exception {
+        Map<String, Object> objectMap = new HashMap<String, Object>();
+        objectMap.put("data",taskProcessesService.getTaskFinishMessage());
+        return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
+    }
+
+
+    /**
+     * 获取任务完成情况
+     * @return
+     */
+    @GetMapping(value = "/getTaskPostponeList")
+    @ApiOperation(value = "获取任务完成情况")
+    public String getTaskPostponeList() throws Exception {
+        Map<String, Object> objectMap = new HashMap<String, Object>();
+        objectMap.put("data",taskProcessesService.getTaskPostponeList());
         return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
     }
 }

@@ -3,6 +3,7 @@ package com.jsh.erp.datasource.entities;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -22,12 +23,16 @@ public class Task {
     //生产数量
     private BigDecimal overQuantity;
     //实际结束时间
+
     private Date overTime;
     //计划结束时间
+
     private Date planOverTime;
     //创建时间
+
     private Date createTime;
     //修改时间
+
     private Date updateTime;
     //状态状态，0未审核、1已审核、2加工中、3已完工
     private String status;

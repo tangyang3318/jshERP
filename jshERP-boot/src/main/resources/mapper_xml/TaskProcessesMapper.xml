@@ -78,6 +78,59 @@
   <sql id="Base_Column_List">
     id, task_id, user_id, parent_processes, before_processes, processes_name, create_time, over_time, plan_over_time, creator, template, status, remark
   </sql>
+    <select id="searchTaskProcesses" resultType="com.jsh.erp.datasource.entities.TaskProcessesEX" resultMap="BaseResultMap">
+      select * from task_processes
+        where 1= 1
+      <if test="taskProcesses.taskId != null">
+        and task_id = #{taskProcesses.taskId,jdbcType=BIGINT}
+      </if>
+      <if test="taskProcesses.creator != null">
+        and creator = #{taskProcesses.creator,jdbcType=BIGINT}
+      </if>
+      <if test="taskProcesses.template != null">
+        and template = #{taskProcesses.template,jdbcType=VARCHAR}
+      </if>
+      <if test="taskProcesses.status != null">
+        and status = #{taskProcesses.status,jdbcType=VARCHAR}
+      </if>
+      <if test="taskProcesses.searchKey != null">
+        <bind name="bindName" value="'%'+taskProcesses.searchKey+'%'"/>
+        and (
+        processes_name like #{bindName}
+        or remark like #{bindName}
+        )
+      </if>
+    </select>
+    <select id="getTaskPostponeList" resultType="java.util.Map">
+      SELECT
+      ju.username,
+      cun.postponeNumber ,
+      tot.total
+      FROM
+      (
+      SELECT
+      count(*) AS postponeNumber,
+      user_id
+      FROM
+      task_processes
+      WHERE
+      ((
+      over_time IS NULL
+      AND plan_over_time&lt;now()
+      )
+      OR ( over_time IS NOT NULL AND plan_over_time &lt; over_time))
+      GROUP BY
+      user_id
+      ) cun
+      left JOIN  jsh_user ju ON cun.user_id = ju.id
+      left JOIN  (SELECT
+      count(*) AS total,
+      user_id
+      FROM
+      task_processes GROUP BY user_id ) tot on tot.user_id =  cun.user_id
+      ORDER BY
+      cun.postponeNumber/tot.total limit 5
+    </select>
 
 
 </mapper>

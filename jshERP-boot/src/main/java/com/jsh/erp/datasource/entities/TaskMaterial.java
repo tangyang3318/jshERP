@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.ibatis.annotations.ResultMap;
 import org.mapstruct.BeanMapping;
 
@@ -40,6 +41,7 @@ public class TaskMaterial {
     private String tenantId;
     private String barCode;
     //创建时间
+
     private Date createTime;
     //状态状态，0未审核、1已审核、2加工中、3已完工
     private String status;
@@ -49,6 +51,9 @@ public class TaskMaterial {
     private Long creator;
     //备注
     private String remark;
+    //搜索ke'y值
+    @TableField(exist = false)
+    private String searchKey;
     //商品
     @TableField(exist = false)
     private Material materialEntity;
@@ -188,5 +193,13 @@ public class TaskMaterial {
 
     public void setMaterialEntity(Material materialEntity) {
         this.materialEntity = materialEntity;
+    }
+
+    public void setSearchKey(String searchKey) {
+        this.searchKey = searchKey;
+    }
+
+    public String getSearchKey() {
+        return searchKey;
     }
 }

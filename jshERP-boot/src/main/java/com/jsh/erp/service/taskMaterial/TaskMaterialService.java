@@ -213,7 +213,11 @@ public class TaskMaterialService {
         taskMaterial.setCreateTime(new Date());
         User userInfo=userService.getCurrentUser();
         taskMaterial.setCreator(userInfo.getId());
-        taskMaterial.setTemplate(BusinessConstants.IS_NOT_TEMPLETE);
+        if(taskMaterial.getTemplate() == null || taskMaterial.getTemplate().equals(BusinessConstants.IS_NOT_TEMPLETE)){
+            taskMaterial.setTemplate(BusinessConstants.IS_NOT_TEMPLETE);
+        }else{
+            taskMaterial.setTemplate(BusinessConstants.IS_TEMPLETE);
+        }
         taskMaterialMapper.insert(taskMaterial);
     }
 
@@ -287,5 +291,30 @@ public class TaskMaterialService {
         // 3. 修改任务表。
         taskService.updateTask(task);
         depotItemService.saveDetials(JSONObject.toJSONString(list),depotHead.getId(), "add",null);
+    }
+
+    public void deleteTaskMaterial(List<Long> ids) {
+        if(!CollectionUtils.isEmpty(ids)){
+            taskMaterialMapper.deleteBatchIds(ids);
+        }
+    }
+
+    /**
+     * 查询所需物料
+     * @param taskMaterial
+     * @param pageNo
+     * @param pageSize
+     * @return
+     */
+    public Page<TaskMaterial> searchTaskMaterial(TaskMaterial taskMaterial, Integer pageNo, Integer pageSize) {
+        IPage<TaskMaterial> page = new Page();
+        if(pageNo != null && pageSize != null){
+            page = new Page(pageNo,pageSize);
+        }
+        return taskMaterialMapper.searchTaskMaterial(page,taskMaterial);
+    }
+
+    public void setPurchaseOrder(JSONObject jsonObject) {
+
     }
 }

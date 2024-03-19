@@ -28,9 +28,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -205,6 +203,36 @@ public class TaskService {
         }
         task.setStatus(BusinessConstants.TASK_STATE_STATUS_END);
         this.updateTask(task);
+    }
+
+    public Map<String,Integer> getTaskFinishMessage() {
+        Map<String,Integer> returnmap = new HashMap<>();
+        // 获取
+        List<Task> tasks = taskMapper.selectByExample(new TaskExample());
+        returnmap.put("taskTotalNumber",tasks.size());
+        Integer notFinishNumber = 0 , finishNumberNumber = 0
+                ,postponeNumber = 0,onScheduleNumber = 0;
+        for (Task task : tasks) {
+            if(task.getStatus().equals(BusinessConstants.TASK_STATE_STATUS_END)){
+                finishNumberNumber++;
+                //已完工的。
+                if(task.getOverTime().after(task.getPlanOverTime())) {
+                    postponeNumber ++;
+                }else{
+                    onScheduleNumber ++;
+                }
+            }else{
+                notFinishNumber ++;
+                if(task.getPlanOverTime() != null && new Date().after(task.getPlanOverTime())) {
+                    postponeNumber ++;
+                }
+            }
+        }
+        returnmap.put("notFinishNumber",notFinishNumber);
+        returnmap.put("finishNumberNumber",finishNumberNumber);
+        returnmap.put("postponeNumber",postponeNumber);
+        returnmap.put("onScheduleNumber",onScheduleNumber);
+        return returnmap;
     }
 
 //    @Transactional(value = "transactionManager", rollbackFor = Exception.class)

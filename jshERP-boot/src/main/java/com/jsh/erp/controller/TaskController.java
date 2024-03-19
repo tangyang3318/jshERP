@@ -58,6 +58,7 @@ public class TaskController {
     public String insertTask(@RequestBody Task task) throws Exception {
         Map<String, Object> objectMap = new HashMap<String, Object>();
         int insertTask = taskService.insertTask(task);
+        objectMap.put("data",task);
         if(insertTask > 0) {
             return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
         } else if(insertTask == -1) {
@@ -111,4 +112,18 @@ public class TaskController {
         taskService.overTask(taskId);
         return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
     }
+
+
+    /**
+     * 获取任务完成情况
+     * @return
+     */
+    @GetMapping(value = "/getTaskFinishMessage")
+    @ApiOperation(value = "获取任务完成情况")
+    public String getTaskFinishMessage() throws Exception {
+        Map<String, Object> objectMap = new HashMap<String, Object>();
+        objectMap.put("data",taskService.getTaskFinishMessage());
+        return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
+    }
+
 }

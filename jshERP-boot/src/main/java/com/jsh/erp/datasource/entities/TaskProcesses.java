@@ -3,8 +3,10 @@ package com.jsh.erp.datasource.entities;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 任务工序
@@ -39,6 +41,11 @@ public class TaskProcesses {
     private Long creator;
     //备注
     private String remark;
+    @TableField(exist = false)
+    private List<TaskProcesses> taskProcessesList;
+    //租户
+    @TableField(exist = false)
+    private String searchKey;
 
     public Long getId() {
         return id;
@@ -150,5 +157,21 @@ public class TaskProcesses {
 
     public void setRemark(String remark) {
         this.remark = remark;
+    }
+
+    public List<TaskProcesses> getTaskProcessesList() {
+        return taskProcessesList;
+    }
+
+    public void setTaskProcessesList(List<TaskProcesses> taskProcessesList) {
+        this.taskProcessesList = taskProcessesList;
+    }
+
+    public String getSearchKey() {
+        return searchKey;
+    }
+
+    public void setSearchKey(String searchKey) {
+        this.searchKey = searchKey;
     }
 }

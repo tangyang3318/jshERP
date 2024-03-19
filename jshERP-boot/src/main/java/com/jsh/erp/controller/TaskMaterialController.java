@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.jsh.erp.datasource.entities.Task;
 import com.jsh.erp.datasource.entities.TaskMaterial;
+import com.jsh.erp.datasource.entities.TaskMaterialEx;
 import com.jsh.erp.service.task.TaskService;
 import com.jsh.erp.service.taskMaterial.TaskMaterialService;
 import com.jsh.erp.utils.ErpInfo;
@@ -88,7 +89,19 @@ public class TaskMaterialController {
 
 
     /**
-     * 领料接口
+     * 一键生成采购订单
+     * @return
+     */
+    @PostMapping(value = "/setPurchaseOrder")
+    @ApiOperation(value = "一键生成采购订单")
+    public String setPurchaseOrder(@RequestBody JSONObject jsonObject) throws Exception {
+        taskMaterialService.setPurchaseOrder(jsonObject);
+        return returnJson(new HashMap<>(), ErpInfo.OK.name, ErpInfo.OK.code);
+    }
+
+
+    /**
+     * 材料入库
      * @return
      */
     @PostMapping(value = "/warehousingProduct")
@@ -119,5 +132,27 @@ public class TaskMaterialController {
     public String useMaterialByNumber(@RequestBody JSONObject jsonObject) throws Exception {
         taskMaterialService.useMaterialByNumber(jsonObject);
         return returnJson(new HashMap<>(), ErpInfo.OK.name, ErpInfo.OK.code);
+    }
+    /**
+     * 删除所需物料
+     * @return
+     */
+    @PostMapping(value = "/deleteTaskMaterial")
+    @ApiOperation(value = "删除所需物料")
+    public String deleteTaskMaterial(@RequestBody List<Long> ids) throws Exception {
+        taskMaterialService.deleteTaskMaterial(ids);
+        return returnJson(new HashMap<>(), ErpInfo.OK.name, ErpInfo.OK.code);
+    }
+
+    /**
+     * 删除所需物料
+     * @return
+     */
+    @PostMapping(value = "/searchTaskMaterial")
+    @ApiOperation(value = "删除所需物料")
+    public String searchTaskMaterial(@RequestBody TaskMaterialEx taskMaterial) throws Exception {
+        Map<String, Object> objectMap = new HashMap<String, Object>();
+        objectMap.put("data",taskMaterialService.searchTaskMaterial(taskMaterial,taskMaterial.getPageNo(),taskMaterial.getPageSize()));
+        return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
     }
 }

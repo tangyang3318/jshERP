@@ -87,5 +87,26 @@
     creator, template, status,barCode, remark
   </sql>
 
+  <select id="searchTaskMaterial" resultType="com.jsh.erp.datasource.entities.TaskMaterialEx" resultMap="BaseResultMap">
+    select tm.*,jm.* from task_material tm left join jsh_material jm on tm.material_id = jm.id
+      where 1 = 1
+    <if test="taskMaterial.taskId != null">
+      and task_id = #{taskMaterial.taskId,jdbcType=BIGINT}
+    </if>
+    <if test="taskMaterial.template != null">
+      and template = #{taskMaterial.template,jdbcType=VARCHAR}
+    </if>
+    <if test="taskMaterial.searchKey != null">
+      <bind name="bindName" value="'%'+taskMaterial.searchKey+'%'"/>
+      and (
+      tm.bar_code = #{taskMaterial.searchKey,jdbcType=VARCHAR}
+      or jm.model like #{bindName}
+      OR jm.name LIKE #{bindName}
+      or jm.standard like #{bindName}
+      or jm.color like #{bindName}
+      )
+    </if>
+  </select>
+
 
 </mapper>
