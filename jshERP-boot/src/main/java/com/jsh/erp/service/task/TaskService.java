@@ -11,6 +11,7 @@ import com.jsh.erp.datasource.mappers.*;
 import com.jsh.erp.exception.BusinessRunTimeException;
 import com.jsh.erp.exception.JshException;
 import com.jsh.erp.service.log.LogService;
+import com.jsh.erp.service.material.MaterialService;
 import com.jsh.erp.service.systemConfig.SystemConfigService;
 import com.jsh.erp.service.taskProcesses.TaskProcessesService;
 import com.jsh.erp.service.user.UserService;
@@ -43,6 +44,8 @@ public class TaskService {
     private UserService userService;
     @Resource
     private TaskMaterialMapper taskMaterialMapper;
+    @Resource
+    private MaterialService materialService;
     @Resource
     private TaskProcessesMapper taskProcessesMapper;
     @Resource
@@ -233,6 +236,24 @@ public class TaskService {
         returnmap.put("postponeNumber",postponeNumber);
         returnmap.put("onScheduleNumber",onScheduleNumber);
         return returnmap;
+    }
+
+    public void batchSetStatus(String status, String idsStr) {
+        if(StringUtil.isNotEmpty(idsStr) && StringUtil.isNotEmpty(status)){
+            List<String> strings = Arrays.asList(idsStr.split(","));
+            List<Long> ids = new ArrayList<>();
+            strings.forEach(item -> ids.add(Long.parseLong(item)));
+            Task task = new Task();
+            task.setStatus(status);
+            TaskExample taskExample = new TaskExample();
+            taskExample.createCriteria().andIdIn(ids);
+            taskMapper.updateByExampleSelective(task,taskExample);
+        }
+    }
+
+    public TaskEx getTaskById(Long taskId) throws Exception {
+        TaskEx task = taskMapperEx.selectById(taskId);
+        return task;
     }
 
 //    @Transactional(value = "transactionManager", rollbackFor = Exception.class)

@@ -3,8 +3,8 @@
 <mapper namespace="com.jsh.erp.datasource.mappers.TaskMapperEx">
     <resultMap extends="com.jsh.erp.datasource.mappers.TaskMapper.BaseResultMap" id="ResultMapEx" type="com.jsh.erp.datasource.entities.TaskEx">
         <result column="creatorName" jdbcType="VARCHAR" property="creatorName" />
-        <association property="material" javaType="com.jsh.erp.datasource.entities.Material" column="material"
-                     select="com.jsh.erp.datasource.mappers.MaterialMapper.selectByPrimaryKey">
+        <association property="material" javaType="com.jsh.erp.datasource.entities.Material" column="material_id"
+                     select="com.jsh.erp.datasource.mappers.MaterialMapper.selectById">
         </association>
     </resultMap>
 
@@ -46,5 +46,9 @@
             <bind name="bindRemark" value="'%'+taskEx.remark+'%'"/>
             and ta.remark like #{bindRemark}
         </if>
+    </select>
+    <select id="selectById" resultType="com.jsh.erp.datasource.entities.TaskEx" resultMap="ResultMapEx">
+        select *
+        FROM task where id = #{id}
     </select>
 </mapper>

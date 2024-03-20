@@ -71,7 +71,7 @@ public class TaskController {
      * 编辑
      * @return
      */
-    @PostMapping(value = "/updateTask")
+    @PutMapping(value = "/updateTask")
     @ApiOperation(value = "编辑")
     public String updateTask(@RequestBody Task task) throws Exception {
         Map<String, Object> objectMap = new HashMap<String, Object>();
@@ -98,6 +98,39 @@ public class TaskController {
         BigDecimal count = taskService.getCanWarehousing(taskId);
         objectMap.put("data", count);
         return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
+    }
+
+
+
+    /**
+     * 获取任务明细
+     * @return
+     */
+    @PostMapping(value = "/getTaskById")
+    @ApiOperation(value = "获取任务明细")
+    public String getTaskById(@RequestBody JSONObject jsonObject) throws Exception {
+        Map<String, Object> objectMap = new HashMap<String, Object>();
+        Long taskId = jsonObject.getLong("taskId");
+        Task task= taskService.getTaskById(taskId);
+        objectMap.put("data", task);
+        return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
+    }
+
+    /**
+     * 获取可入库数量
+     * @return
+     */
+    @PostMapping(value = "/batchSetStatus")
+    @ApiOperation(value = "分页获取数据")
+    public String batchSetStatus(@RequestBody JSONObject jsonObject) throws Exception {
+        String status = jsonObject.getString("status");
+        String idsStr = jsonObject.getString("ids");
+        try {
+            taskService.batchSetStatus(status,idsStr);
+            return returnJson(new HashMap<>(), ErpInfo.OK.name, ErpInfo.OK.code);
+        }catch (Exception e){
+            return returnJson(new HashMap<>(), ErpInfo.ERROR.name, ErpInfo.ERROR.code);
+        }
     }
 
     /**
