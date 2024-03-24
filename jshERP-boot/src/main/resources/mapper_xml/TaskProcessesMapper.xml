@@ -17,6 +17,17 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
   </resultMap>
+
+
+  <resultMap id="BaseTaskMap" type="com.jsh.erp.datasource.entities.TaskProcesses" extends="BaseResultMap">
+    <association property="parentProcessesEntity" javaType="com.jsh.erp.datasource.entities.TaskProcesses"
+                 column="parent_processes"
+                 select="com.jsh.erp.datasource.mappers.TaskProcessesMapper.selectById" ></association>
+    <association property="task" javaType="com.jsh.erp.datasource.entities.Task"
+                 column="task_id"
+                 select="com.jsh.erp.datasource.mappers.TaskMapper.selectByPrimaryKey" >
+    </association>
+  </resultMap>
   <sql id="Example_Where_Clause">
     <where>
       <foreach collection="oredCriteria" item="criteria" separator="or">
@@ -78,7 +89,7 @@
   <sql id="Base_Column_List">
     id, task_id, user_id, parent_processes, before_processes, processes_name, create_time, over_time, plan_over_time, creator, template, status, remark
   </sql>
-    <select id="searchTaskProcesses" resultType="com.jsh.erp.datasource.entities.TaskProcessesEX" resultMap="BaseResultMap">
+    <select id="searchTaskProcesses" resultType="com.jsh.erp.datasource.entities.TaskProcessesEX" resultMap="BaseTaskMap">
       select * from task_processes
         where 1= 1
       <if test="taskProcesses.taskId != null">

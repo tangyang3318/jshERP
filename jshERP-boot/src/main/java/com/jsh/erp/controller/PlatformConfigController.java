@@ -53,6 +53,27 @@ public class PlatformConfigController {
         return res;
     }
 
+
+    /**
+     * 获取平台版本号
+     * @param request
+     * @return
+     */
+    @GetMapping(value = "/getPlatform/verion")
+    @ApiOperation(value = "获取平台名称")
+    public String getPlatformVerion(HttpServletRequest request)throws Exception {
+        String res;
+        try {
+            String platformKey = "platform_verion";
+            PlatformConfig platformConfig = platformConfigService.getInfoByKey(platformKey);
+            res = platformConfig.getPlatformValue();
+        } catch(Exception e){
+            e.printStackTrace();
+            res = "ERP系统";
+        }
+        return res;
+    }
+
     /**
      * 获取官方网站地址
      * @param request

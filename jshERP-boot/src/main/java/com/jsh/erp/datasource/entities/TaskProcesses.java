@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import lombok.Data;
 
 import java.util.Date;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 /**
  * 任务工序
  */
+@Data
 public class TaskProcesses {
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
@@ -43,135 +45,13 @@ public class TaskProcesses {
     private String remark;
     @TableField(exist = false)
     private List<TaskProcesses> taskProcessesList;
+    @TableField(exist = false)
+    private TaskProcesses parentProcessesEntity;
+    @TableField(exist = false)
+    private List<TaskProcesses> beforeProcessesEntity;
+    @TableField(exist = false)
+    private Task task;
     //租户
     @TableField(exist = false)
     private String searchKey;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Long getTaskId() {
-        return taskId;
-    }
-
-    public void setTaskId(Long taskId) {
-        this.taskId = taskId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    public Long getParentProcesses() {
-        return parentProcesses;
-    }
-
-    public void setParentProcesses(Long parentProcesses) {
-        this.parentProcesses = parentProcesses;
-    }
-
-    public String getBeforeProcesses() {
-        return beforeProcesses;
-    }
-
-    public void setBeforeProcesses(String beforeProcesses) {
-        this.beforeProcesses = beforeProcesses;
-    }
-
-    public String getProcessesName() {
-        return processesName;
-    }
-
-    public void setProcessesName(String processesName) {
-        this.processesName = processesName;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
-    public Date getOverTime() {
-        return overTime;
-    }
-
-    public void setOverTime(Date overTime) {
-        this.overTime = overTime;
-    }
-
-    public Date getPlanOverTime() {
-        return planOverTime;
-    }
-
-    public void setPlanOverTime(Date planOverTime) {
-        this.planOverTime = planOverTime;
-    }
-
-    public Long getTenantId() {
-        return tenantId;
-    }
-
-    public void setTenantId(Long tenantId) {
-        this.tenantId = tenantId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getTemplate() {
-        return template;
-    }
-
-    public void setTemplate(String template) {
-        this.template = template;
-    }
-
-    public Long getCreator() {
-        return creator;
-    }
-
-    public void setCreator(Long creator) {
-        this.creator = creator;
-    }
-
-    public String getRemark() {
-        return remark;
-    }
-
-    public void setRemark(String remark) {
-        this.remark = remark;
-    }
-
-    public List<TaskProcesses> getTaskProcessesList() {
-        return taskProcessesList;
-    }
-
-    public void setTaskProcessesList(List<TaskProcesses> taskProcessesList) {
-        this.taskProcessesList = taskProcessesList;
-    }
-
-    public String getSearchKey() {
-        return searchKey;
-    }
-
-    public void setSearchKey(String searchKey) {
-        this.searchKey = searchKey;
-    }
 }
