@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jsh.erp.constants.BusinessConstants;
-import com.jsh.erp.constants.ExceptionConstants;
 import com.jsh.erp.datasource.entities.TaskProcesses;
 import com.jsh.erp.datasource.entities.User;
 import com.jsh.erp.datasource.mappers.TaskProcessesMapper;
@@ -21,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -137,7 +135,7 @@ public class TaskProcessesService implements ICommonQuery {
             collect = processesList.stream().map(item -> {
                 item.setTaskProcessesList(ProcessesUtils.getChildList(processesList, item.getId()));
                 return item;
-            }).filter(item -> item.getParentProcesses().longValue() == 0).collect(Collectors.toList());
+            }).filter(item ->  item.getParentProcesses() == null || item.getParentProcesses().longValue() == 0).collect(Collectors.toList());
         }
         return collect;
     }
@@ -193,8 +191,8 @@ public class TaskProcessesService implements ICommonQuery {
 
     private IPage<TaskProcesses> getTaskList(Map<String, String> map)throws Exception {
         String search = map.get(Constants.SEARCH);
-        Page<TaskProcesses> page = new Page<>(QueryUtils.offset(map), QueryUtils.rows(map));
-        String taskId = StringUtil.getInfo(search, "taskId");
+        Page<TaskProcesses> page = new Page<>(QueryUtils.currentPage(map), QueryUtils.rows(map));
+        String billNo = StringUtil.getInfo(search, "billNo");
         String userId = StringUtil.getInfo(search, "userId");
         String planBeginTime = StringUtil.getInfo(search, "planBeginTime");
         String planEndTime = StringUtil.getInfo(search, "planEndTime");
@@ -202,14 +200,14 @@ public class TaskProcessesService implements ICommonQuery {
         String endTime = StringUtil.getInfo(search, "endTime");
         String status = StringUtil.getInfo(search, "status");
         LambdaQueryWrapper<TaskProcesses> queryWrapper = new LambdaQueryWrapper();
-        if(StringUtil.isNotEmpty(taskId)){
-            queryWrapper.ge(TaskProcesses::getTaskId,Long.parseLong(taskId));
+        if(StringUtil.isNotEmpty(billNo)){
+            queryWrapper.eq(TaskProcesses::getBillNo,billNo);
         }
         if(StringUtil.isNotEmpty(userId)){
-            queryWrapper.ge(TaskProcesses::getUserId,Long.parseLong(userId));
+            queryWrapper.eq(TaskProcesses::getUserId,Long.parseLong(userId));
         }
         if(StringUtil.isNotEmpty(status)){
-            queryWrapper.ge(TaskProcesses::getStatus,status);
+            queryWrapper.eq(TaskProcesses::getStatus,status);
         }
         if(StringUtil.isNotEmpty(planBeginTime) && StringUtil.isNotEmpty(planEndTime)){
             queryWrapper.between(TaskProcesses::getPlanOverTime,planBeginTime,planEndTime);
@@ -217,7 +215,9 @@ public class TaskProcessesService implements ICommonQuery {
         if(StringUtil.isNotEmpty(beginTime) && StringUtil.isNotEmpty(endTime)){
             queryWrapper.between(TaskProcesses::getOverTime,beginTime,endTime);
         }
-        return taskProcessesMapper.selectPage(page, queryWrapper);
+        IPage<TaskProcesses> taskProcessesIPage = taskProcessesMapper.selectPage(page, queryWrapper);
+        taskProcessesIPage.setRecords(setBeforeProcesses(taskProcessesIPage.getRecords()));
+        return taskProcessesIPage;
     }
 
     @Override

@@ -11,6 +11,6 @@ import java.util.stream.Collectors;
 public class ProcessesUtils {
 
     public static List<TaskProcesses> getChildList(List<TaskProcesses> processesList, Long id) {
-        return processesList.stream().filter(item -> item.getParentProcesses().longValue() == id.longValue()).collect(Collectors.toList());
+        return processesList.stream().filter(item -> item.getParentProcesses()!= null && item.getParentProcesses().longValue() == id.longValue()).collect(Collectors.toList());
     }
 }

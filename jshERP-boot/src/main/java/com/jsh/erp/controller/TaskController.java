@@ -71,7 +71,7 @@ public class TaskController {
      * 编辑
      * @return
      */
-    @PutMapping(value = "/updateTask")
+    @RequestMapping(value = "/updateTask")
     @ApiOperation(value = "编辑")
     public String updateTask(@RequestBody Task task) throws Exception {
         Map<String, Object> objectMap = new HashMap<String, Object>();

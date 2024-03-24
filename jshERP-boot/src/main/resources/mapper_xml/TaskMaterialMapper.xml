@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.jsh.erp.datasource.entities.TaskMaterial">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="task_id" jdbcType="BIGINT" property="taskId" />
+    <result column="bill_no" jdbcType="VARCHAR" property="billNo" />
     <result column="material_id" jdbcType="BIGINT" property="materialId" />
     <result column="material_need_number" jdbcType="DECIMAL" property="materialNeedNumber" />
     <result column="material_has_number" jdbcType="DECIMAL" property="materialHasNumber" />

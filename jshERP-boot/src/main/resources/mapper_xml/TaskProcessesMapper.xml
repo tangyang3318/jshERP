@@ -4,6 +4,7 @@
   <resultMap id="BaseResultMap" type="com.jsh.erp.datasource.entities.TaskProcesses">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="task_id" jdbcType="BIGINT" property="taskId" />
+    <result column="bill_no" jdbcType="VARCHAR" property="billNo" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="parent_processes" jdbcType="BIGINT" property="parentProcesses" />
     <result column="before_processes" jdbcType="VARCHAR" property="beforeProcesses" />

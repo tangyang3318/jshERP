@@ -16,6 +16,8 @@ public class Task {
     private Long id;
     //任务单号
     private String billNo;
+
+    private String barCode;
     //商品ID
     private Long materialId;
     //目标生产数量
