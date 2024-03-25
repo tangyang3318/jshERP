@@ -5,6 +5,7 @@
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="task_id" jdbcType="BIGINT" property="taskId" />
     <result column="bill_no" jdbcType="VARCHAR" property="billNo" />
+    <result column="bar_code" jdbcType="VARCHAR" property="barCode" />
     <result column="user_id" jdbcType="BIGINT" property="userId" />
     <result column="parent_processes" jdbcType="BIGINT" property="parentProcesses" />
     <result column="before_processes" jdbcType="VARCHAR" property="beforeProcesses" />
@@ -101,6 +102,9 @@
       </if>
       <if test="taskProcesses.template != null">
         and template = #{taskProcesses.template,jdbcType=VARCHAR}
+      </if>
+      <if test="taskProcesses.barCode != null">
+        and bar_code = #{taskProcesses.barCode,jdbcType=VARCHAR}
       </if>
       <if test="taskProcesses.status != null">
         and status = #{taskProcesses.status,jdbcType=VARCHAR}

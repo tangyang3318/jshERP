@@ -64,6 +64,19 @@ public class TaskMaterialController {
     }
 
     /**
+     * 查询模板
+     * @returnT
+     */
+    @PostMapping(value = "/searchTaskMaterialTempByBarCode")
+    @ApiOperation(value = "查询模板")
+    public String searchTaskMaterialTempByBarCode(@RequestBody JSONObject jsonObject) throws Exception {
+        String barCord = jsonObject.getString("barCode");
+        Map<String, Object> objectMap = new HashMap<String, Object>();
+        objectMap.put("data",taskMaterialService.searchTaskMaterialTempByBarCode(barCord));
+        return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
+    }
+
+    /**
      * 新增用料
      * @return
      */

@@ -317,4 +317,11 @@ public class TaskMaterialService {
     public void setPurchaseOrder(JSONObject jsonObject) {
 
     }
+
+    public List<TaskMaterial> searchTaskMaterialTempByBarCode(String barCord) {
+        QueryWrapper<TaskMaterial> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("bar_code",barCord);
+        queryWrapper.eq("template",BusinessConstants.IS_TEMPLETE);
+        return taskMaterialMapper.selectList(queryWrapper);
+    }
 }

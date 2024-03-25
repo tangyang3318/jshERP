@@ -250,4 +250,13 @@ public class TaskProcessesService implements ICommonQuery {
     public int checkIsNameExist(Long id, String name) throws Exception {
         return 0;
     }
+
+
+    public List<TaskProcesses> searchTaskProcessesTempByBarCode(String barCord) {
+        TaskProcesses taskProcesses = new TaskProcesses();
+        taskProcesses.setBarCode(barCord);
+        taskProcesses.setTemplate(BusinessConstants.IS_TEMPLETE);
+        List<TaskProcesses> processes = searchTaskProcessesTree(taskProcesses);
+        return processes;
+    }
 }

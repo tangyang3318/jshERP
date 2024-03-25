@@ -113,6 +113,21 @@ public class TaskProcessesController {
 
 
     /**
+     * 查询模板
+     * @returnT
+     */
+    @PostMapping(value = "/searchTaskProcessesTempByBarCode")
+    @ApiOperation(value = "查询模板")
+    public String searchTaskProcessesTempByBarCode(@RequestBody JSONObject jsonObject) throws Exception {
+        String barCord = jsonObject.getString("barCode");
+        Map<String, Object> objectMap = new HashMap<String, Object>();
+        objectMap.put("data",taskProcessesService.searchTaskProcessesTempByBarCode(barCord));
+        return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
+    }
+
+
+
+    /**
      * 获取我的工序完成情况
      * @return
      */

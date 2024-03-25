@@ -22,6 +22,8 @@ public class TaskProcesses {
     private Long taskId;
     //任务单号
     private String billNo;
+    //任务单号
+    private String barCode;
     //商品ID
     private Long userId;
     //父工序id

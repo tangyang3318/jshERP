@@ -86,7 +86,7 @@ public class TaskController {
     }
 
 
-    /**
+    /**pi/plugin/produce/bom/getGoodsList
      * 获取可入库数量
      * @return
      */
