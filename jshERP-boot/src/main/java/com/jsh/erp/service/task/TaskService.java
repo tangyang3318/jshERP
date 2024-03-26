@@ -13,7 +13,9 @@ import com.jsh.erp.exception.JshException;
 import com.jsh.erp.service.log.LogService;
 import com.jsh.erp.service.material.MaterialService;
 import com.jsh.erp.service.systemConfig.SystemConfigService;
+import com.jsh.erp.service.taskMaterial.TaskMaterialService;
 import com.jsh.erp.service.taskProcesses.TaskProcessesService;
+import com.jsh.erp.service.taskReport.TaskReportService;
 import com.jsh.erp.service.user.UserService;
 import com.jsh.erp.service.userBusiness.UserBusinessService;
 import com.jsh.erp.utils.StringUtil;
@@ -45,11 +47,15 @@ public class TaskService {
     @Resource
     private TaskMaterialMapper taskMaterialMapper;
     @Resource
+    private TaskMaterialService taskMaterialService;
+    @Resource
     private MaterialService materialService;
     @Resource
     private TaskProcessesMapper taskProcessesMapper;
     @Resource
-    private UserBusinessService userBusinessService;
+    private TaskProcessesService taskProcessesService;
+    @Resource
+    private TaskReportService taskReportService;
     @Resource
     private LogService logService;
     @Resource
@@ -137,7 +143,12 @@ public class TaskService {
     public int deleteTaskByIds(List<Long> ids)throws Exception {
         TaskExample taskExample = new TaskExample();
         taskExample.createCriteria().andIdIn(ids);
-        //todo 还需要删除工序等
+        //删除所有汇报
+        taskReportService.deleteByTaskIds(ids);
+        //删除所有工序
+        taskProcessesService.deleteTaskProcessesByTaskIds(ids);
+        //删除所有材料
+        taskMaterialService.deleteMaterialByTaskIds(ids);
         return  taskMapper.deleteByExample(taskExample);
     }
 
@@ -178,12 +189,25 @@ public class TaskService {
 
     @Transactional(value = "transactionManager", rollbackFor = Exception.class)
     public int updateTask(Task task) {
-        return taskMapper.updateByPrimaryKeySelective(task);
+        int i = taskMapper.updateByPrimaryKeySelective(task);
+        List<TaskMaterial> taskMaterialList = task.getTaskMaterialList();
+        List<TaskProcesses> taskProcessesList = task.getTaskProcessesList();
+        if(!CollectionUtils.isEmpty(taskMaterialList)){
+            for (TaskMaterial taskMaterial : taskMaterialList) {
+                taskMaterialMapper.updateById(taskMaterial);
+            }
+        }
+        if(!CollectionUtils.isEmpty(taskProcessesList)){
+            for (TaskProcesses taskProcesses : taskProcessesList) {
+                taskProcessesMapper.updateById(taskProcesses);
+            }
+        }
+        return i;
     }
 
     public BigDecimal getCanWarehousing(Long taskId) {
         Task task = taskMapper.selectByPrimaryKey(taskId);
-        return task.getOverQuantity();
+        return task == null ? new BigDecimal(0) : task.getOverQuantity();
     }
 
     public void overTask(Long taskId) throws Exception {

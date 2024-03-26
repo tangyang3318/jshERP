@@ -12,18 +12,31 @@
         select ta.*,usr.username as creatorName
         FROM task ta
         left join jsh_user usr on usr.id=ta.creator and ifnull(usr.status,'0') not in('1','2')
+        left join jsh_material_extend jme on jme.bar_code = ta.bar_code
+        left join jsh_material jm on jm.id = jme.material_id
         where 1=1
+        <if test="taskEx.billNo != null">
+            and ta.bill_no = #{taskEx.billNo}
+        </if>
+        <if test="taskEx.key != null">
+            <bind name="bindKey" value="'%'+taskEx.key+'%'"/>
+            and (jme.bar_code  =  #{taskEx.key} or jm.name like #{bindKey}
+            or jm.standard like #{bindKey} or jm.model like #{bindKey} )
+        </if>
+        <if test="taskEx.status != null">
+            and ta.status = #{taskEx.status}
+        </if>
         <if test="planBeginTime != null and planEndTime != null">
-            and plan_over_time between #{planBeginTime} and #{planEndTime}
+            and ta.plan_over_time between #{planBeginTime} and #{planEndTime}
         </if>
         <if test="beginTime != null and endTime != null">
-            and over_time between #{beginTime} and #{endTime}
+            and ta.create_time between #{beginTime} and #{endTime}
         </if>
         <if test="taskEx.remark != null">
             <bind name="bindRemark" value="'%'+taskEx.remark+'%'"/>
             and ta.remark like #{bindRemark}
         </if>
-        order by create_time
+        order by ta.create_time
         <if test="offset != null and rows != null">
             limit #{offset},#{rows}
         </if>

@@ -21,4 +21,7 @@ public class TaskEx extends Task {
     //商品
     @TableField(exist = false)
     private Material material;
+    //商品
+    @TableField(exist = false)
+    private String key;
 }

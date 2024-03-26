@@ -72,6 +72,13 @@ public class TaskProcessesService implements ICommonQuery {
             taskProcessesMapper.deleteBatchIds(ids);
         }
     }
+    public void deleteTaskProcessesByTaskIds(List ids) {
+        if(!CollectionUtils.isEmpty(ids)){
+            QueryWrapper<TaskProcesses> taskProcessesQueryWrapper = new QueryWrapper<>();
+            taskProcessesQueryWrapper.in("task_id",ids);
+            taskProcessesMapper.delete(taskProcessesQueryWrapper);
+        }
+    }
 
     public List<TaskProcesses> setBeforeProcesses(List<TaskProcesses> taskProcessesList){
         // 1. 遍历获取所有的前置节点id.
@@ -94,7 +101,7 @@ public class TaskProcessesService implements ICommonQuery {
         });
         // 2. 查询所有前置节点
         if(CollectionUtils.isEmpty(ids)){
-            return null;
+            return taskProcessesList;
         }
         List<TaskProcesses> processes = taskProcessesMapper.selectBatchIds(ids);
         // 3. 返回所有前置节点集合

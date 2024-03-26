@@ -16,6 +16,7 @@ import com.jsh.erp.exception.JshException;
 import com.jsh.erp.service.depotItem.DepotItemService;
 import com.jsh.erp.service.log.LogService;
 import com.jsh.erp.service.material.MaterialService;
+import com.jsh.erp.service.materialExtend.MaterialExtendService;
 import com.jsh.erp.service.sequence.SequenceService;
 import com.jsh.erp.service.task.TaskService;
 import com.jsh.erp.service.user.UserService;
@@ -51,6 +52,8 @@ public class TaskMaterialService {
     private DepotItemService depotItemService;
     @Resource
     private UserService userService;
+    @Resource
+    private MaterialExtendService materialExtendService;
 
     public IPage<TaskMaterial> getListByPage(Long taskId,Integer pageNo,Integer pageSize) {
         IPage page = new Page();
@@ -231,7 +234,8 @@ public class TaskMaterialService {
         Long depotId = jsonObject.getLong("depotId");
         Long taskId = jsonObject.getLong("taskId");
         String barCode = jsonObject.getString("barCode");
-        String unit = jsonObject.getString("unit");
+        MaterialExtend infoByBarCode = materialExtendService.getInfoByBarCode(barCode);
+        String unit = infoByBarCode.getCommodityUnit();
         BigDecimal operNumber = jsonObject.getBigDecimal("operNumber");
         Task task = taskService.getTask(taskId);
         if(task == null){
@@ -323,5 +327,13 @@ public class TaskMaterialService {
         queryWrapper.eq("bar_code",barCord);
         queryWrapper.eq("template",BusinessConstants.IS_TEMPLETE);
         return taskMaterialMapper.selectList(queryWrapper);
+    }
+
+    public void deleteMaterialByTaskIds(List<Long> ids) {
+        if(!CollectionUtils.isEmpty(ids)){
+            QueryWrapper<TaskMaterial> queryWrapper = new QueryWrapper<>();
+            queryWrapper.in("task_id",ids);
+            taskMaterialMapper.delete(queryWrapper);
+        }
     }
 }

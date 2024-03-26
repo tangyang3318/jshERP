@@ -36,7 +36,8 @@ public class TaskComponent implements ICommonQuery {
         TaskEx taskEx = new TaskEx();
         taskEx.setBillNo(StringUtil.getInfo(search, "billNo"));
         taskEx.setStatus(StringUtil.getInfo(search, "status"));
-        taskEx.setStatus(StringUtil.getInfo(search, "remark"));
+        taskEx.setRemark(StringUtil.getInfo(search, "remark"));
+        taskEx.setKey(StringUtil.getInfo(search, "key"));
         taskEx.setMaterialId(StringUtils.isEmpty(StringUtil.getInfo(search, "materialId")) ? null: Long.parseLong(StringUtil.getInfo(search, "materialId")));
         String planBeginTime = StringUtil.getInfo(search, "planBeginTime");
         String planEndTime = StringUtil.getInfo(search, "planEndTime");
