@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.constants.ExceptionConstants;
 import com.jsh.erp.datasource.entities.*;
@@ -160,7 +161,7 @@ public class TaskService {
         task.setCreator(userInfo.getId());
         task.setStatus(BusinessConstants.TASK_STATE_STATUS_UN_AUDIT);
         task.setCreateTime(new Date());
-        task.setOverQuantity(new BigDecimal(0));
+        task.setQuantity(new BigDecimal(0));
         // 1. 新增任务
         int insert = taskMapper.insert(task);
         // 2. 新增耗材
@@ -168,8 +169,14 @@ public class TaskService {
             for (TaskMaterial taskMaterial : taskMaterialList) {
                 taskMaterial.setCreateTime(new Date());
                 taskMaterial.setCreator(userInfo.getId());
+                taskMaterial.setBillNo(task.getBillNo());
                 taskMaterial.setTaskId(task.getId());
                 taskMaterial.setTemplate(BusinessConstants.IS_NOT_TEMPLETE);
+                taskMaterial.setMaterialLostNumber(new BigDecimal(0));
+                taskMaterial.setMaterialUseNumber(new BigDecimal(0));
+                taskMaterial.setMaterialReturnNumber(new BigDecimal(0));
+                taskMaterial.setMaterialGetNumber(new BigDecimal(0));
+                taskMaterial.setMaterialHasNumber(new BigDecimal(0));
                 taskMaterialMapper.insert(taskMaterial);
             }
         }
@@ -179,6 +186,8 @@ public class TaskService {
                 taskProcesses.setCreateTime(new Date());
                 taskProcesses.setCreator(userInfo.getId());
                 taskProcesses.setTaskId(task.getId());
+                taskProcesses.setBillNo(task.getBillNo());
+                taskProcesses.setBarCode(task.getBarCode());
                 taskProcesses.setTemplate(BusinessConstants.IS_NOT_TEMPLETE);
                 taskProcesses.setStatus(BusinessConstants.PROCESSES_STATE_STATUS_UN_AUDIT);
                 taskProcessesMapper.insert(taskProcesses);
@@ -188,18 +197,35 @@ public class TaskService {
     }
 
     @Transactional(value = "transactionManager", rollbackFor = Exception.class)
-    public int updateTask(Task task) {
+    public int updateTask(Task task) throws Exception {
+        //先查询数据是否存在如果存在，那么编辑，如果不存在，新增
+        List<Long> processesIdlist = new ArrayList<>();
+        TaskProcesses taskProcesses1 = new TaskProcesses();
+        taskProcesses1.setTaskId(task.getId());
+        Page<TaskProcesses> taskProcessesPage = taskProcessesService.searchTaskProcesses(taskProcesses1, null, null);
+        List<TaskProcesses> records = taskProcessesPage.getRecords();
+        if(!CollectionUtils.isEmpty(records)){
+            processesIdlist = records.stream().map(TaskProcesses::getId).collect(Collectors.toList());
+        }
         int i = taskMapper.updateByPrimaryKeySelective(task);
         List<TaskMaterial> taskMaterialList = task.getTaskMaterialList();
         List<TaskProcesses> taskProcessesList = task.getTaskProcessesList();
         if(!CollectionUtils.isEmpty(taskMaterialList)){
             for (TaskMaterial taskMaterial : taskMaterialList) {
-                taskMaterialMapper.updateById(taskMaterial);
+                if(taskMaterial.getId() == null){
+                    taskMaterialMapper.insert(taskMaterial);
+                }else{
+                    taskMaterialMapper.updateById(taskMaterial);
+                }
             }
         }
         if(!CollectionUtils.isEmpty(taskProcessesList)){
             for (TaskProcesses taskProcesses : taskProcessesList) {
-                taskProcessesMapper.updateById(taskProcesses);
+                if(processesIdlist.contains(taskProcesses.getId())){
+                    taskProcessesMapper.updateById(taskProcesses);
+                }else{
+                    taskProcessesMapper.insert(taskProcesses);
+                }
             }
         }
         return i;

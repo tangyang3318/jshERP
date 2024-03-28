@@ -131,7 +131,7 @@ public class TaskMaterialController {
      */
     @PostMapping(value = "/useMaterial")
     @ApiOperation(value = "一键用料")
-    public String returnMaterial(@RequestBody List<Long> ids) throws Exception {
+    public String useMaterial(@RequestBody List<Long> ids) throws Exception {
         taskMaterialService.useMaterial(ids);
         return returnJson(new HashMap<>(), ErpInfo.OK.name, ErpInfo.OK.code);
     }

@@ -137,6 +137,12 @@ public class TaskProcessesService implements ICommonQuery {
 
     public List<TaskProcesses> searchTaskProcessesTree(TaskProcesses taskProcesses) {
         List<TaskProcesses> collect = new ArrayList<>();
+        if(taskProcesses == null){
+            return collect;
+        }
+        if(BusinessConstants.IS_TEMPLETE.equals(taskProcesses.getTemplate())){
+            taskProcesses.setTemplate(BusinessConstants.IS_TEMPLETE);
+        }
         List<TaskProcesses> processesList = taskProcessesMapper.searchTaskProcesses(taskProcesses);
         if(!CollectionUtils.isEmpty(processesList)){
             collect = processesList.stream().map(item -> {

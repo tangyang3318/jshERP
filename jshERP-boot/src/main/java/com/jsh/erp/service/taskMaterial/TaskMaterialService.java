@@ -85,9 +85,18 @@ public class TaskMaterialService {
     public void getMaterial(JSONObject jsonObject) throws Exception {
         JSONArray taskMaterialList = jsonObject.getJSONArray("taskMaterialList");
         List<TaskMaterial> taskMaterialList1 = taskMaterialList.toJavaList(TaskMaterial.class);
-        Map<Long, String> collect = taskMaterialList1.stream().collect(Collectors.toMap(TaskMaterial::getId, item -> {
-            return item.getMaterialEntity() != null ? item.getMaterialEntity().getUnit() : null;
-        }));
+        Map<Long, String> collect = new HashMap<>();
+        if(!CollectionUtils.isEmpty(taskMaterialList1)){
+            List<Long> collect1 = taskMaterialList1.stream().map(TaskMaterial::getId).collect(Collectors.toList());
+            if(!CollectionUtils.isEmpty(collect1)){
+                QueryWrapper<TaskMaterial> queryWrapper = new QueryWrapper<>();
+                queryWrapper.in("id",collect1);
+                List<TaskMaterial> taskMaterialList2 = taskMaterialMapper.selectList(queryWrapper);
+                collect = taskMaterialList2.stream().collect(Collectors.toMap(TaskMaterial::getId, item -> {
+                    return item.getMaterialEntity() != null ? item.getMaterialEntity().getUnit() : null;
+                }));
+            }
+        }
         Long depotId = jsonObject.getLong("depotId");
         Long taskId = jsonObject.getLong("taskId");
         BigDecimal getMaterialNumber = jsonObject.getBigDecimal("getMaterial");

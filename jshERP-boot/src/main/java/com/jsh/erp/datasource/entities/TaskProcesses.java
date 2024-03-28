@@ -16,7 +16,7 @@ import java.util.List;
 @Data
 @TableName(value = "task_processes", resultMap = "com.jsh.erp.datasource.mappers.TaskProcessesMapper.BaseTaskMap")
 public class TaskProcesses {
-    @TableId(value = "id", type = IdType.AUTO)
+    @TableId(value = "id")
     private Long id;
     //任务id
     private Long taskId;
