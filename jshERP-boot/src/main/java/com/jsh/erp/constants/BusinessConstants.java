@@ -124,7 +124,7 @@ public class BusinessConstants {
      * */
     public static final String TASK_STATE_STATUS_UN_AUDIT = "0" ;//未审核
     public static final String TASK_STATE_STATUS_AUDIT = "1";//加工中
-    public static final String TASK_STATE_STATUS_SKIPED = "2";//未验收
+    public static final String TASK_STATE_STATUS_SKIPED = "2";//已验收
     public static final String TASK_STATE_STATUS_END = "3";//已完工
     /**
      * 财务单据分类

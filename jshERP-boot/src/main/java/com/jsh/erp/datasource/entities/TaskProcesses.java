@@ -52,6 +52,8 @@ public class TaskProcesses {
     @TableField(exist = false)
     private List<TaskProcesses> taskProcessesList;
     @TableField(exist = false)
+    private List<TaskProcesses> children;
+    @TableField(exist = false)
     private TaskProcesses parentProcessesEntity;
     @TableField(exist = false)
     private List<TaskProcesses> beforeProcessesEntity;

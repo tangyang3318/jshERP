@@ -124,6 +124,18 @@ public class TaskMaterialController {
         return returnJson(new HashMap<>(), ErpInfo.OK.name, ErpInfo.OK.code);
     }
 
+    /**
+     * 退料
+     * @return
+     */
+    @PostMapping(value = "/returnProduct")
+    @ApiOperation(value = "退料")
+    public String returnProduct(@RequestBody JSONObject jsonObject) throws Exception {
+        taskMaterialService.returnProduct(jsonObject);
+        return returnJson(new HashMap<>(), ErpInfo.OK.name, ErpInfo.OK.code);
+    }
+
+
 
     /**
      * 用料

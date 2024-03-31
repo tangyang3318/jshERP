@@ -3,12 +3,13 @@ package com.jsh.erp.service.taskReport;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.constants.ExceptionConstants;
 import com.jsh.erp.datasource.entities.Task;
 import com.jsh.erp.datasource.entities.TaskReport;
 import com.jsh.erp.datasource.entities.User;
+import com.jsh.erp.datasource.mappers.TaskMapper;
 import com.jsh.erp.datasource.mappers.TaskReportMapper;
-import com.jsh.erp.exception.BusinessRunTimeException;
 import com.jsh.erp.service.task.TaskService;
 import com.jsh.erp.service.user.UserService;
 import org.slf4j.Logger;
@@ -29,20 +30,33 @@ public class TaskReportService {
     @Resource
     private TaskService taskService;
     @Resource
+    private TaskMapper taskMapper;
+    @Resource
     private UserService userService;
 
     @Transactional(value = "transactionManager", rollbackFor = Exception.class)
     public  void insertTaskReport(TaskReport taskReport) throws Exception {
         // 1. 新增汇报
+        if(taskReport == null || taskReport.getOkNumber() == null || taskReport.getCheckUserId() == null){
+            return;
+        }
         taskReport.setCreateTime(new Date());
         User userInfo=userService.getCurrentUser();
         taskReport.setCreator(userInfo.getId());
+        if(taskReport.getCreateTime() == null){
+            taskReport.setCreateTime(new Date());
+        }
         taskReportMapper.insert(taskReport);
         // 2. 判断如果是任务验收，那么添加完成数量
         if(taskReport.getTaskId() != null && taskReport.getProcessesId() == null){
             Task task = taskService.getTask(taskReport.getTaskId());
-            task.setOverQuantity(task.getOverQuantity().add(taskReport.getOkNumber()));
-            taskService.updateTask(task);
+            if(task.getOverQuantity() == null){
+                task.setOverQuantity(taskReport.getOkNumber());
+            }else{
+                task.setOverQuantity(task.getOverQuantity().add(taskReport.getOkNumber()));
+            }
+            task.setStatus(BusinessConstants.TASK_STATE_STATUS_SKIPED);
+            taskMapper.updateByPrimaryKeySelective(task);
         }
     }
 

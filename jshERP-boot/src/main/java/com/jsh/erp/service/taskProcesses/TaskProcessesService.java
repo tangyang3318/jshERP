@@ -147,6 +147,7 @@ public class TaskProcessesService implements ICommonQuery {
         if(!CollectionUtils.isEmpty(processesList)){
             collect = processesList.stream().map(item -> {
                 item.setTaskProcessesList(ProcessesUtils.getChildList(processesList, item.getId()));
+                item.setChildren(ProcessesUtils.getChildList(processesList, item.getId()));
                 return item;
             }).filter(item ->  item.getParentProcesses() == null || item.getParentProcesses().longValue() == 0).collect(Collectors.toList());
         }
@@ -187,7 +188,7 @@ public class TaskProcessesService implements ICommonQuery {
         return returnmap;
     }
 
-    public Map<String,Object> getTaskPostponeList() {
+    public List<Map<String,Object>> getTaskPostponeList() {
        return taskProcessesMapper.getTaskPostponeList();
     }
 
@@ -271,5 +272,11 @@ public class TaskProcessesService implements ICommonQuery {
         taskProcesses.setTemplate(BusinessConstants.IS_TEMPLETE);
         List<TaskProcesses> processes = searchTaskProcessesTree(taskProcesses);
         return processes;
+    }
+
+    public void removeByIds(List<Long> processesIdlist) {
+        if(!CollectionUtils.isEmpty(processesIdlist)){
+            taskProcessesMapper.deleteBatchIds(processesIdlist);
+        }
     }
 }

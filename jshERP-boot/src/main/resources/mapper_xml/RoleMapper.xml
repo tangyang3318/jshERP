@@ -242,7 +242,7 @@
     </if>
   </update>
   <update id="updateByPrimaryKeySelective" parameterType="com.jsh.erp.datasource.entities.Role">
-    update jsh_rolejsh_role
+    update jsh_role
     <set>
       <if test="name != null">
         name = #{name,jdbcType=VARCHAR},

@@ -314,6 +314,7 @@ INSERT INTO `jsh_function` VALUES ('199', '050204', '采购退货', '0502', '/bi
 INSERT INTO `jsh_function` VALUES ('241', '050202', '采购订单', '0502', '/bill/purchase_order', '/bill/PurchaseOrderList', '\0', '0335', '', '电脑版', '1,2,3', 'profile', '0');
 
 
+INSERT INTO `tyerp`.`jsh_function`(`id`, `number`, `name`, `parent_number`, `url`, `component`, `state`, `sort`, `enabled`, `type`, `push_btn`, `icon`, `delete_flag`) VALUES (402, '090202', 'BOM设置', '0901', '/task/bomSetting', '/task/bomSettingList', b'0', '0002', b'1', '电脑版', '1,2,3', 'profile', '0');
 
 INSERT INTO `jsh_function` VALUES ('400', '0901', '生产管理', '0', '/task', '/system/task', '\0', '0330', '', '电脑版', '', 'retweet', '0');
 INSERT INTO `jsh_function` VALUES ('401', '090201', '任务管理', '0901', '/task/taskManage', '/task/TaskManageList', '\0', '0001', '', '电脑版', '1,2,3', 'profile', '0');

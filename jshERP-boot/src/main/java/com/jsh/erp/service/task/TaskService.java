@@ -13,6 +13,7 @@ import com.jsh.erp.exception.BusinessRunTimeException;
 import com.jsh.erp.exception.JshException;
 import com.jsh.erp.service.log.LogService;
 import com.jsh.erp.service.material.MaterialService;
+import com.jsh.erp.service.materialExtend.MaterialExtendService;
 import com.jsh.erp.service.systemConfig.SystemConfigService;
 import com.jsh.erp.service.taskMaterial.TaskMaterialService;
 import com.jsh.erp.service.taskProcesses.TaskProcessesService;
@@ -51,6 +52,8 @@ public class TaskService {
     private TaskMaterialService taskMaterialService;
     @Resource
     private MaterialService materialService;
+    @Resource
+    private MaterialExtendService materialExtendService;
     @Resource
     private TaskProcessesMapper taskProcessesMapper;
     @Resource
@@ -161,7 +164,7 @@ public class TaskService {
         task.setCreator(userInfo.getId());
         task.setStatus(BusinessConstants.TASK_STATE_STATUS_UN_AUDIT);
         task.setCreateTime(new Date());
-        task.setQuantity(new BigDecimal(0));
+        task.setOverQuantity(new BigDecimal(0));
         // 1. 新增任务
         int insert = taskMapper.insert(task);
         // 2. 新增耗材
@@ -200,22 +203,51 @@ public class TaskService {
     public int updateTask(Task task) throws Exception {
         //先查询数据是否存在如果存在，那么编辑，如果不存在，新增
         List<Long> processesIdlist = new ArrayList<>();
+        List<Long> taskIdList = new ArrayList<>();
+        List<Long> updateId = new ArrayList<>();
+        List<Long> updateprocessesId = new ArrayList<>();
         TaskProcesses taskProcesses1 = new TaskProcesses();
         taskProcesses1.setTaskId(task.getId());
+        User userInfo=userService.getCurrentUser();
+        //1. 获取已经存在程序和材料
         Page<TaskProcesses> taskProcessesPage = taskProcessesService.searchTaskProcesses(taskProcesses1, null, null);
+        List<TaskMaterial> taskMaterial = taskMaterialService.getByTaskIds(Arrays.asList(task.getId()));
         List<TaskProcesses> records = taskProcessesPage.getRecords();
+
         if(!CollectionUtils.isEmpty(records)){
             processesIdlist = records.stream().map(TaskProcesses::getId).collect(Collectors.toList());
         }
+        if(!CollectionUtils.isEmpty(taskMaterial)){
+            taskIdList = taskMaterial.stream().map(TaskMaterial::getId).collect(Collectors.toList());
+        }
         int i = taskMapper.updateByPrimaryKeySelective(task);
+        //修改其中所有的材料和工序
         List<TaskMaterial> taskMaterialList = task.getTaskMaterialList();
         List<TaskProcesses> taskProcessesList = task.getTaskProcessesList();
         if(!CollectionUtils.isEmpty(taskMaterialList)){
-            for (TaskMaterial taskMaterial : taskMaterialList) {
-                if(taskMaterial.getId() == null){
-                    taskMaterialMapper.insert(taskMaterial);
+            for (TaskMaterial taskMaterial1 : taskMaterialList) {
+                if(taskMaterial1.getId() == null || taskIdList.contains(taskMaterial1.getId())){
+                    if(StringUtil.isNotEmpty(taskMaterial1.getBarCode()) && taskMaterial1.getMaterialId() ==null){
+                        MaterialExtend infoByBarCode = materialExtendService.getInfoByBarCode(taskMaterial1.getBarCode());
+                        if(infoByBarCode != null){
+                            taskMaterial1.setMaterialId(infoByBarCode.getMaterialId());
+                        }
+                    }
+                    //填充数据
+                    taskMaterial1.setCreateTime(new Date());
+                    taskMaterial1.setCreator(userInfo.getId());
+                    taskMaterial1.setBillNo(task.getBillNo());
+                    taskMaterial1.setTaskId(task.getId());
+                    taskMaterial1.setTemplate(BusinessConstants.IS_NOT_TEMPLETE);
+                    taskMaterial1.setMaterialLostNumber(new BigDecimal(0));
+                    taskMaterial1.setMaterialUseNumber(new BigDecimal(0));
+                    taskMaterial1.setMaterialReturnNumber(new BigDecimal(0));
+                    taskMaterial1.setMaterialGetNumber(new BigDecimal(0));
+                    taskMaterial1.setMaterialHasNumber(new BigDecimal(0));
+                    taskMaterialMapper.insert(taskMaterial1);
                 }else{
-                    taskMaterialMapper.updateById(taskMaterial);
+                    taskMaterialMapper.updateById(taskMaterial1);
+                    updateId.add(taskMaterial1.getId());
                 }
             }
         }
@@ -223,10 +255,32 @@ public class TaskService {
             for (TaskProcesses taskProcesses : taskProcessesList) {
                 if(processesIdlist.contains(taskProcesses.getId())){
                     taskProcessesMapper.updateById(taskProcesses);
+                    updateprocessesId.add(taskProcesses.getId());
                 }else{
+                    taskProcesses.setCreateTime(new Date());
+                    taskProcesses.setCreator(userInfo.getId());
+                    taskProcesses.setTaskId(task.getId());
+                    taskProcesses.setBillNo(task.getBillNo());
+                    taskProcesses.setBarCode(task.getBarCode());
+                    taskProcesses.setTemplate(BusinessConstants.IS_NOT_TEMPLETE);
+                    taskProcesses.setStatus(BusinessConstants.PROCESSES_STATE_STATUS_UN_AUDIT);
                     taskProcessesMapper.insert(taskProcesses);
                 }
             }
+        }
+        if(!CollectionUtils.isEmpty(updateId)){
+            taskIdList.removeAll(updateId);
+        }
+        if(!CollectionUtils.isEmpty(updateprocessesId)){
+            processesIdlist.removeAll(updateprocessesId);
+        }
+        if(taskIdList.size() > 0){
+            //删除多余的
+            taskMaterialService.removeByIds(taskIdList);
+        }
+        if(processesIdlist.size() > 0){
+            //删除多余的
+            taskProcessesService.removeByIds(processesIdlist);
         }
         return i;
     }
@@ -239,23 +293,23 @@ public class TaskService {
     public void overTask(Long taskId) throws Exception {
         // 1. 任务排查是否数量够了。
         Task task = this.getTask(taskId);
-        if(task.getQuantity().subtract(task.getOverQuantity()).compareTo(new BigDecimal(0)) > 0 ){
-            throw new BusinessRunTimeException(ExceptionConstants.QUANTITY_NOT_ENOUGH_ERROR_CODE,
-                    ExceptionConstants.QUANTITY_NOT_ENOUGH_ERROR_MSG);
-        }
+//        if(task.getOverQuantity().subtract(task.getQuantity()).compareTo(new BigDecimal(0)) > 0 ){
+//            throw new BusinessRunTimeException(ExceptionConstants.QUANTITY_NOT_ENOUGH_ERROR_CODE,
+//                    ExceptionConstants.QUANTITY_NOT_ENOUGH_ERROR_MSG);
+//        }
         // 2. 排查下面工序任务是否都已完成
-        QueryWrapper<TaskProcesses> taskProcessesQueryWrapper = new QueryWrapper<>();
-        taskProcessesQueryWrapper.eq("task_id",taskId);
-        List<TaskProcesses> taskProcesses = taskProcessesMapper.selectList(taskProcessesQueryWrapper);
-        if(!CollectionUtils.isEmpty(taskProcesses)){
-            List<TaskProcesses> collect = taskProcesses.stream().filter(item -> "1".equals(item.getStatus())).collect(Collectors.toList());
-            if(collect.size() > 0){
-                throw new BusinessRunTimeException(ExceptionConstants.QUANTITY_NOT_COMPLETE_ERROR_CODE,
-                        ExceptionConstants.QUANTITY_NOT_COMPLETE_ERROR_MSG);
-            }
-        }
+//        QueryWrapper<TaskProcesses> taskProcessesQueryWrapper = new QueryWrapper<>();
+//        taskProcessesQueryWrapper.eq("task_id",taskId);
+//        List<TaskProcesses> taskProcesses = taskProcessesMapper.selectList(taskProcessesQueryWrapper);
+//        if(!CollectionUtils.isEmpty(taskProcesses)){
+//            List<TaskProcesses> collect = taskProcesses.stream().filter(item -> "1".equals(item.getStatus())).collect(Collectors.toList());
+//            if(collect.size() > 0){
+//                throw new BusinessRunTimeException(ExceptionConstants.QUANTITY_NOT_COMPLETE_ERROR_CODE,
+//                        ExceptionConstants.QUANTITY_NOT_COMPLETE_ERROR_MSG);
+//            }
+//        }
         task.setStatus(BusinessConstants.TASK_STATE_STATUS_END);
-        this.updateTask(task);
+        taskMapper.updateByPrimaryKeySelective(task);
     }
 
     public Map<String,Integer> getTaskFinishMessage() {
@@ -269,7 +323,7 @@ public class TaskService {
             if(task.getStatus().equals(BusinessConstants.TASK_STATE_STATUS_END)){
                 finishNumberNumber++;
                 //已完工的。
-                if(task.getOverTime().after(task.getPlanOverTime())) {
+                if(task.getOverTime() != null && task.getOverTime().after(task.getPlanOverTime())) {
                     postponeNumber ++;
                 }else{
                     onScheduleNumber ++;

@@ -18,5 +18,5 @@ public interface TaskProcessesMapper extends BaseMapper<TaskProcesses> {
 
     List<TaskProcesses> searchTaskProcesses(@Param("taskProcesses") TaskProcesses taskProcesses);
 
-    Map<String, Object> getTaskPostponeList();
+    List<Map<String, Object>> getTaskPostponeList();
 }

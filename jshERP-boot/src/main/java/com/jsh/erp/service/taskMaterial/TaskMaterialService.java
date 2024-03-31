@@ -45,6 +45,8 @@ public class TaskMaterialService {
     @Resource
     private TaskService taskService;
     @Resource
+    private TaskMapper taskMapper;
+    @Resource
     private MaterialService materialService;
     @Resource
     private SequenceService sequenceService;
@@ -205,7 +207,7 @@ public class TaskMaterialService {
             return;
         }
         TaskMaterial taskMaterialByid = this.getTaskMaterialByid(taskMaterialId);
-        if(taskMaterialByid.getMaterialHasNumber().compareTo(useNumber) < 0){
+        if(taskMaterialByid.getMaterialHasNumber().compareTo(useNumber.add(lostNumber)) < 0){
             throw new BusinessRunTimeException(ExceptionConstants.MATERIAL_USE_ERROR_CODE, ExceptionConstants.MATERIAL_USE_ERROR_MSG);
         }
         taskMaterialByid.setMaterialHasNumber(taskMaterialByid.getMaterialHasNumber().subtract(useNumber));
@@ -302,7 +304,7 @@ public class TaskMaterialService {
         //设置领料后的值
         task.setOverQuantity(task.getOverQuantity().add(operNumber));
         // 3. 修改任务表。
-        taskService.updateTask(task);
+        taskMapper.updateByPrimaryKeySelective(task);
         depotItemService.saveDetials(JSONObject.toJSONString(list),depotHead.getId(), "add",null);
     }
 
@@ -344,5 +346,93 @@ public class TaskMaterialService {
             queryWrapper.in("task_id",ids);
             taskMaterialMapper.delete(queryWrapper);
         }
+    }
+    public List<TaskMaterial> getByTaskIds(List<Long> ids) {
+        if(!CollectionUtils.isEmpty(ids)){
+            QueryWrapper<TaskMaterial> queryWrapper = new QueryWrapper<>();
+            queryWrapper.in("task_id",ids);
+            queryWrapper.eq("template",BusinessConstants.IS_NOT_TEMPLETE);
+           return taskMaterialMapper.selectList(queryWrapper);
+        }else {
+            return null;
+        }
+    }
+    public void removeByIds(List<Long> ids) {
+        if(!CollectionUtils.isEmpty(ids)){
+            taskMaterialMapper.deleteBatchIds(ids);
+        }
+    }
+
+    public void returnProduct(JSONObject jsonObject) throws Exception {
+        Long depotId = jsonObject.getLong("depotId");
+        Long taskId = jsonObject.getLong("taskId");
+        Long taskMaterialId = jsonObject.getLong("taskMaterialId");
+        String barCode = jsonObject.getString("barCode");
+        MaterialExtend infoByBarCode = materialExtendService.getInfoByBarCode(barCode);
+        String unit = infoByBarCode.getCommodityUnit();
+        BigDecimal operNumber = jsonObject.getBigDecimal("operNumber");
+        Task task = taskService.getTask(taskId);
+        TaskMaterial taskMaterial = taskMaterialMapper.selectById(taskMaterialId);
+        if(task == null){
+            return;
+        }
+        if(taskMaterial == null || taskMaterial.getMaterialHasNumber().compareTo(operNumber) < 1){
+            throw new BusinessRunTimeException(1000001,
+                    "已存材料不足");
+        }
+        Long materialId = task.getMaterialId();
+        Material material = materialService.getMaterial(materialId);
+        BigDecimal currentStockByParam = depotItemService.getCurrentStockByParam(depotId, material.getId());
+        User userInfo=userService.getCurrentUser();
+        String prefixNo = "QTRK";
+        // 1. 创建其他出库订单。
+        DepotHead depotHead = new DepotHead();
+        depotHead.setLinkNumber(task.getBillNo() + "材料退货");
+        String number = prefixNo + sequenceService.buildOnlyNumber() ;
+        depotHead.setNumber(number);
+        depotHead.setDefaultNumber(number);
+        depotHead.setOperTime(new Date());
+        depotHead.setSubType(BusinessConstants.SUB_TYPE_OTHER);
+        depotHead.setType(BusinessConstants.DEPOTHEAD_TYPE_IN);
+        depotHead.setChangeAmount(BigDecimal.ZERO);
+        depotHead.setTotalPrice(BigDecimal.ZERO);
+        depotHead.setDiscountLastMoney(BigDecimal.ZERO);
+        depotHead.setCreator(userInfo==null?null:userInfo.getId());
+        depotHead.setOrganId(null);
+        depotHead.setAccountId(null);
+        depotHead.setStatus(BusinessConstants.BILLS_STATUS_UN_AUDIT);
+        depotHead.setTenantId(null);
+        depotHead.setId(null);
+        depotHeadMapper.insert(depotHead);
+        List<Map<String,Object>> list = new ArrayList();
+        // 2.2 生成出库订单子表信息
+        Map<String,Object> map = new HashMap<>();
+        map.put("name",material.getName());
+        map.put("standard",null);
+        map.put("model",null);
+        map.put("color",null);
+        map.put("materialOther",null);
+        map.put("stock",currentStockByParam);
+        map.put("unit",unit);
+        map.put("snList","");
+        map.put("batchNumber","");
+        map.put("expirationDate","");
+        map.put("sku","");
+        map.put("preNumber","");
+        map.put("finishNumber","");
+        map.put("operNumber",operNumber);
+        map.put("unitPrice",null);
+        map.put("allPrice",null);
+        map.put("remark","");
+        map.put("linkId","");
+        map.put("depotId",depotId);
+        map.put("barCode",barCode);
+        map.put("orderNum",1);
+        list.add(map);
+        //设置退料后的值
+        taskMaterial.setMaterialHasNumber(taskMaterial.getMaterialHasNumber().subtract(operNumber));
+        // 3. 修改任务表。
+        taskMaterialMapper.updateById(taskMaterial);
+        depotItemService.saveDetials(JSONObject.toJSONString(list),depotHead.getId(), "add",null);
     }
 }

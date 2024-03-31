@@ -35,11 +35,28 @@ public class RoleController {
     @Resource
     private UserBusinessService userBusinessService;
 
+
     /**
      * 角色对应应用显示
-     * @param request
+     * @param role
      * @return
      */
+    @PostMapping(value = "/updateRole")
+    @ApiOperation(value = "查询用户的角色")
+    public String updateRole(@RequestBody JSONObject role,HttpServletRequest request) throws Exception {
+        int res =  roleService.updateRole(role,request );
+        Map<String, Object> objectMap = new HashMap<>();
+        if(res > 0) {
+            return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
+        } else {
+            return returnJson(objectMap, ErpInfo.ERROR.name, ErpInfo.ERROR.code);
+        }
+    }
+                                  /**
+                                   * 角色对应应用显示
+                                   * @param request
+                                   * @return
+                                   */
     @GetMapping(value = "/findUserRole")
     @ApiOperation(value = "查询用户的角色")
     public JSONArray findUserRole(@RequestParam("UBType") String type, @RequestParam("UBKeyId") String keyId,
