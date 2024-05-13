@@ -44,6 +44,8 @@ public class Task {
     private String remark;
     //租户
     private Long tenantId;
+    //文件名称
+    private String fileName;
 
     //耗材
     @TableField(exist = false)

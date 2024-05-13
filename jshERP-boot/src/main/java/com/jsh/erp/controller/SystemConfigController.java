@@ -176,6 +176,8 @@ public class SystemConfigController {
                 imgPath = imgPath.substring(0, imgPath.length() - 1);
             }
             String fileUrl = "";
+            System.out.println("fileUrl is :" + imgPath);
+            System.out.println("fileUploadType is :" + fileUploadType);
             if(fileUploadType == 1) {
                 fileUrl = systemConfigService.getFileUrlLocal(imgPath);
                 inputStream = new BufferedInputStream(new FileInputStream(fileUrl));

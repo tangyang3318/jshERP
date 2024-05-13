@@ -360,6 +360,23 @@ public class TaskService {
         return task;
     }
 
+    public void submitForAcceptance(Long id) throws Exception {
+        Task task = this.getTask(id);
+        QueryWrapper<TaskProcesses> taskProcessesQueryWrapper = new QueryWrapper<>();
+        taskProcessesQueryWrapper.eq("task_id",id);
+        List<TaskProcesses> taskProcesses = taskProcessesMapper.selectList(taskProcessesQueryWrapper);
+        if(!CollectionUtils.isEmpty(taskProcesses)){
+            List<TaskProcesses> collect = taskProcesses.stream().filter(item -> !BusinessConstants.PROCESSES_YES_SELECT.equals(item.getStatus())).collect(Collectors.toList());
+            if(collect.size() > 0){
+                throw new BusinessRunTimeException(ExceptionConstants.QUANTITY_NOT_COMPLETE_ERROR_CODE,
+                        ExceptionConstants.QUANTITY_NOT_COMPLETE_ERROR_MSG);
+            }
+        }
+        //任务提交验收
+        task.setStatus(BusinessConstants.TASK_STATE_STATUS_SKIPED);
+        taskMapper.updateByPrimaryKeySelective(task);
+    }
+
 //    @Transactional(value = "transactionManager", rollbackFor = Exception.class)
 //    public int insertTask(JSONObject obj, HttpServletRequest request)throws Exception {
 //        Task task = JSONObject.parseObject(obj.toJSONString(), Task.class);

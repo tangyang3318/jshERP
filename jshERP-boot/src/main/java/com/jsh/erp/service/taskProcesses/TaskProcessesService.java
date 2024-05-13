@@ -6,9 +6,11 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.jsh.erp.constants.BusinessConstants;
+import com.jsh.erp.constants.ExceptionConstants;
 import com.jsh.erp.datasource.entities.TaskProcesses;
 import com.jsh.erp.datasource.entities.User;
 import com.jsh.erp.datasource.mappers.TaskProcessesMapper;
+import com.jsh.erp.exception.BusinessRunTimeException;
 import com.jsh.erp.service.ICommonQuery;
 import com.jsh.erp.service.user.UserService;
 import com.jsh.erp.utils.Constants;
@@ -20,6 +22,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -277,6 +280,56 @@ public class TaskProcessesService implements ICommonQuery {
     public void removeByIds(List<Long> processesIdlist) {
         if(!CollectionUtils.isEmpty(processesIdlist)){
             taskProcessesMapper.deleteBatchIds(processesIdlist);
+        }
+    }
+
+    public void submitForAcceptance(Long id) {
+        TaskProcesses taskProcesses = taskProcessesMapper.selectById(id);
+        if(taskProcesses != null){
+            String beforeProcesses = taskProcesses.getBeforeProcesses();
+            if(StringUtil.isNotEmpty(beforeProcesses)){
+                List<Long> longs =  new ArrayList<>();
+                if (beforeProcesses.contains(",")) {
+                    List<String> strings1 = Arrays.asList(beforeProcesses.split(","));
+                    strings1.forEach(item -> {
+                        if(StringUtil.isNumeric(item)){
+                            longs.add(Long.parseLong(item));
+                        }
+                    } );
+                }else{
+                    if(StringUtil.isNumeric(beforeProcesses)){
+                        longs.add(Long.parseLong(beforeProcesses));
+                    }
+                }
+                if(!CollectionUtils.isEmpty(longs)){
+                    QueryWrapper<TaskProcesses> queryWrapper = new QueryWrapper<>();
+                    queryWrapper.in("id",longs);
+                    List<TaskProcesses> processes = taskProcessesMapper.selectList(queryWrapper);
+                    if(!CollectionUtils.isEmpty(processes)){
+                        List<TaskProcesses> collect = processes.stream().filter(item -> !BusinessConstants.PROCESSES_YES_SELECT.equalsIgnoreCase(item.getStatus())).collect(Collectors.toList());
+                        if(!CollectionUtils.isEmpty(collect)){
+                            throw new BusinessRunTimeException(ExceptionConstants.QUANTITY_NOT_COMPLETE_ERROR_CODE,
+                                    ExceptionConstants.QUANTITY_NOT_COMPLETE_ERROR_MSG);
+                        }
+                    }
+                }
+            }
+            //修改状态
+            taskProcesses.setStatus(BusinessConstants.PROCESSES_NO_SELECT);
+            taskProcessesMapper.updateById(taskProcesses);
+        }
+    }
+
+    public TaskProcesses getProcessesById(Long processesId) {
+        if(processesId == null){
+            return null ;
+        }
+        return  taskProcessesMapper.selectById(processesId);
+    }
+
+    public void updateById(TaskProcesses taskProcesses) {
+        if(taskProcesses != null && taskProcesses.getId() != null){
+            taskProcessesMapper.updateById(taskProcesses);
         }
     }
 }

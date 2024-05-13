@@ -113,6 +113,20 @@ public class TaskProcessesController {
 
 
     /**
+     * 提交验收
+     * @return
+     */
+    @PostMapping(value = "/submitForAcceptance")
+    @ApiOperation(value = "提交验收")
+    public String overTask(@RequestBody JSONObject jsonObject) throws Exception {
+        Map<String, Object> objectMap = new HashMap<String, Object>();
+        Long id = jsonObject.getLong("id");
+        taskProcessesService.submitForAcceptance(id);
+        return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
+    }
+
+
+    /**
      * 查询模板
      * @returnT
      */

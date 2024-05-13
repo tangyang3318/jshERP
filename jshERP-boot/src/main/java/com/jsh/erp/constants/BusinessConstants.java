@@ -74,7 +74,7 @@ public class BusinessConstants {
     public static final String BILLS_STATUS_SKIPING = "3";
 
     /**
-     * 工序状态 状态，0未完成、1未验收、2已验收
+     * 工序状态 状态，0未完成、1待验收、2已经完成
      * */
     public static final String PROCESSES_NO_COM = "0";
     public static final String PROCESSES_NO_SELECT = "1";
@@ -124,7 +124,7 @@ public class BusinessConstants {
      * */
     public static final String TASK_STATE_STATUS_UN_AUDIT = "0" ;//未审核
     public static final String TASK_STATE_STATUS_AUDIT = "1";//加工中
-    public static final String TASK_STATE_STATUS_SKIPED = "2";//已验收
+    public static final String TASK_STATE_STATUS_SKIPED = "2";//待验收
     public static final String TASK_STATE_STATUS_END = "3";//已完工
     /**
      * 财务单据分类

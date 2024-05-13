@@ -637,24 +637,24 @@ public class MaterialService {
                     }
                     m.setExpiryNum(Integer.parseInt(expiryNum));
                 }
-                String manyUnit = ExcelUtils.getContent(src, i, 8); //副单位
-                String barCode = ExcelUtils.getContent(src, i, 9); //基础条码
-                String manyBarCode = ExcelUtils.getContent(src, i, 10); //副条码
-                String ratio = ExcelUtils.getContent(src, i, 11); //比例
-                String sku = ExcelUtils.getContent(src, i, 12); //多属性
-                String purchaseDecimal = ExcelUtils.getContent(src, i, 13); //采购价
-                String commodityDecimal = ExcelUtils.getContent(src, i, 14); //零售价
-                String wholesaleDecimal = ExcelUtils.getContent(src, i, 15); //销售价
-                String lowDecimal = ExcelUtils.getContent(src, i, 16); //最低售价
-                String enabled = ExcelUtils.getContent(src, i, 17); //状态
-                String enableSerialNumber = ExcelUtils.getContent(src, i, 18); //序列号
-                String enableBatchNumber = ExcelUtils.getContent(src, i, 19); //批号
-                String position = ExcelUtils.getContent(src, i, 20); //仓位货架
-                String mfrs = ExcelUtils.getContent(src, i, 21); //制造商
-                String otherField1 = ExcelUtils.getContent(src, i, 22); //自定义1
-                String otherField2 = ExcelUtils.getContent(src, i, 23); //自定义2
-                String otherField3 = ExcelUtils.getContent(src, i, 24); //自定义3
-                String remark = ExcelUtils.getContent(src, i, 25); //备注
+//                String manyUnit = ExcelUtils.getContent(src, i, 8); //副单位
+                String barCode = ExcelUtils.getContent(src, i, 8); //基础条码
+//                String manyBarCode = ExcelUtils.getContent(src, i, 10); //副条码
+//                String ratio = ExcelUtils.getContent(src, i, 11); //比例
+                String sku =  "";//ExcelUtils.getContent(src, i, 12); 多属性
+//                String purchaseDecimal = ExcelUtils.getContent(src, i, 13); //采购价
+//                String commodityDecimal = ExcelUtils.getContent(src, i, 14); //零售价
+//                String wholesaleDecimal = ExcelUtils.getContent(src, i, 15); //销售价
+//                String lowDecimal = ExcelUtils.getContent(src, i, 16); //最低售价
+                String enabled = ExcelUtils.getContent(src, i, 9); //状态
+                String enableSerialNumber = ExcelUtils.getContent(src, i, 10); //序列号
+                String enableBatchNumber = ExcelUtils.getContent(src, i, 11); //批号
+                String position = ExcelUtils.getContent(src, i, 12); //仓位货架
+                String mfrs = ExcelUtils.getContent(src, i, 13); //制造商
+                String otherField1 = ExcelUtils.getContent(src, i, 14); //自定义1
+                String otherField2 = ExcelUtils.getContent(src, i, 15); //自定义2
+                String otherField3 = ExcelUtils.getContent(src, i, 16); //自定义3
+                String remark = ExcelUtils.getContent(src, i, 17); //备注
                 m.setPosition(StringUtil.isNotEmpty(position)?position:null);
                 m.setMfrs(StringUtil.isNotEmpty(mfrs)?mfrs:null);
                 m.setOtherField1(StringUtil.isNotEmpty(otherField1)?otherField1:null);
@@ -677,48 +677,50 @@ public class MaterialService {
                             String.format(ExceptionConstants.MATERIAL_BARCODE_LENGTH_ERROR_MSG, barCode));
                 }
                 //校验副条码长度为4到40位
-                if(StringUtil.isNotEmpty(manyBarCode) && !StringUtil.checkBarCodeLength(manyBarCode)) {
-                    throw new BusinessRunTimeException(ExceptionConstants.MATERIAL_BARCODE_LENGTH_ERROR_CODE,
-                            String.format(ExceptionConstants.MATERIAL_BARCODE_LENGTH_ERROR_MSG, manyBarCode));
-                }
+//                if(StringUtil.isNotEmpty(manyBarCode) && !StringUtil.checkBarCodeLength(manyBarCode)) {
+//                    throw new BusinessRunTimeException(ExceptionConstants.MATERIAL_BARCODE_LENGTH_ERROR_CODE,
+//                            String.format(ExceptionConstants.MATERIAL_BARCODE_LENGTH_ERROR_MSG, manyBarCode));
+//                }
                 //批量校验excel中有无重复商品，是指名称、规格、型号、颜色、单位、多属性
                 batchCheckExistMaterialListByParam(mList, name, standard, model, color, unit, sku);
                 //批量校验excel中有无重复条码
-                batchCheckExistBarCodeByParam(mList, barCode, manyBarCode);
+//                batchCheckExistBarCodeByParam(mList, barCode, manyBarCode);
+                batchCheckExistBarCodeByParam(mList, barCode, null);
                 JSONObject materialExObj = new JSONObject();
                 JSONObject basicObj = new JSONObject();
                 basicObj.put("barCode", barCode);
                 basicObj.put("commodityUnit", unit);
                 basicObj.put("sku", sku);
-                basicObj.put("purchaseDecimal", purchaseDecimal);
-                basicObj.put("commodityDecimal", commodityDecimal);
-                basicObj.put("wholesaleDecimal", wholesaleDecimal);
-                basicObj.put("lowDecimal", lowDecimal);
+//                basicObj.put("purchaseDecimal", purchaseDecimal);
+//                basicObj.put("commodityDecimal", commodityDecimal);
+//                basicObj.put("wholesaleDecimal", wholesaleDecimal);
+//                basicObj.put("lowDecimal", lowDecimal);
                 materialExObj.put("basic", basicObj);
-                if(StringUtil.isNotEmpty(manyUnit) && StringUtil.isNotEmpty(ratio)){ //多单位
-                    //校验比例是否是数字（含小数）
-                    if(!StringUtil.isPositiveBigDecimal(ratio.trim())) {
-                        throw new BusinessRunTimeException(ExceptionConstants.MATERIAL_RATIO_NOT_INTEGER_CODE,
-                                String.format(ExceptionConstants.MATERIAL_RATIO_NOT_INTEGER_MSG, i+1));
-                    }
-                    Long unitId = unitService.getUnitIdByParam(unit, manyUnit, new BigDecimal(ratio.trim()));
-                    if(unitId != null) {
-                        m.setUnitId(unitId);
-                    } else {
-                        throw new BusinessRunTimeException(ExceptionConstants.MATERIAL_UNIT_MATE_CODE,
-                                String.format(ExceptionConstants.MATERIAL_UNIT_MATE_MSG, manyBarCode));
-                    }
-                    JSONObject otherObj = new JSONObject();
-                    otherObj.put("barCode", manyBarCode);
-                    otherObj.put("commodityUnit", manyUnit);
-                    otherObj.put("purchaseDecimal", parsePrice(purchaseDecimal,ratio));
-                    otherObj.put("commodityDecimal", parsePrice(commodityDecimal,ratio));
-                    otherObj.put("wholesaleDecimal", parsePrice(wholesaleDecimal,ratio));
-                    otherObj.put("lowDecimal", parsePrice(lowDecimal,ratio));
-                    materialExObj.put("other", otherObj);
-                } else {
-                    m.setUnit(unit);
-                }
+                m.setUnit(unit);
+//                if(StringUtil.isNotEmpty(manyUnit) && StringUtil.isNotEmpty(ratio)){ //多单位
+//                    //校验比例是否是数字（含小数）
+//                    if(!StringUtil.isPositiveBigDecimal(ratio.trim())) {
+//                        throw new BusinessRunTimeException(ExceptionConstants.MATERIAL_RATIO_NOT_INTEGER_CODE,
+//                                String.format(ExceptionConstants.MATERIAL_RATIO_NOT_INTEGER_MSG, i+1));
+//                    }
+//                    Long unitId = unitService.getUnitIdByParam(unit, manyUnit, new BigDecimal(ratio.trim()));
+//                    if(unitId != null) {
+//                        m.setUnitId(unitId);
+//                    } else {
+//                        throw new BusinessRunTimeException(ExceptionConstants.MATERIAL_UNIT_MATE_CODE,
+//                                String.format(ExceptionConstants.MATERIAL_UNIT_MATE_MSG, manyBarCode));
+//                    }
+//                    JSONObject otherObj = new JSONObject();
+//                    otherObj.put("barCode", manyBarCode);
+//                    otherObj.put("commodityUnit", manyUnit);
+//                    otherObj.put("purchaseDecimal", parsePrice(purchaseDecimal,ratio));
+//                    otherObj.put("commodityDecimal", parsePrice(commodityDecimal,ratio));
+//                    otherObj.put("wholesaleDecimal", parsePrice(wholesaleDecimal,ratio));
+//                    otherObj.put("lowDecimal", parsePrice(lowDecimal,ratio));
+//                    materialExObj.put("other", otherObj);
+//                } else {
+//                    m.setUnit(unit);
+//                }
                 m.setMaterialExObj(materialExObj);
                 m.setEnabled("1".equals(enabled));
                 if(StringUtil.isNotEmpty(enableSerialNumber) && "1".equals(enableSerialNumber)) {

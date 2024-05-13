@@ -38,6 +38,8 @@ public class TaskProcesses {
     private Date overTime;
     //创建时间
     private Date planOverTime;
+    //文件名称
+    private String fileName;
     //租户
     @TableField(exist = false)
     private Long tenantId;

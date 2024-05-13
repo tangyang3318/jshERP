@@ -134,15 +134,15 @@ public class TaskController {
     }
 
     /**
-     * 任务完工
+     * 提交验收
      * @return
      */
-    @PostMapping(value = "/overTask")
-    @ApiOperation(value = "任务完工")
+    @PostMapping(value = "/submitForAcceptance")
+    @ApiOperation(value = "提交验收")
     public String overTask(@RequestBody JSONObject jsonObject) throws Exception {
         Map<String, Object> objectMap = new HashMap<String, Object>();
-        Long taskId = jsonObject.getLong("taskId");
-        taskService.overTask(taskId);
+        Long id = jsonObject.getLong("id");
+        taskService.submitForAcceptance(id);
         return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
     }
 

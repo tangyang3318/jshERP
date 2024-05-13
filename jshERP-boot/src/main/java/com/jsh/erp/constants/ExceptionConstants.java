@@ -352,7 +352,10 @@ public class ExceptionConstants {
     public static final String QUANTITY_NOT_ENOUGH_ERROR_MSG = "抱歉，生产产品未达到数量!";
     //商品完工异常
     public static final int QUANTITY_NOT_COMPLETE_ERROR_CODE = 8000030;
-    public static final String QUANTITY_NOT_COMPLETE_ERROR_MSG = "抱歉，还有工序未完成！";
+    public static final String QUANTITY_NOT_COMPLETE_ERROR_MSG = "提交失败，还有工序未完成，请检查工序完成情况！";
+    //商品完工异常
+    public static final int QUANTITY_PROCESSES_ERROR_CODE = 8000031;
+    public static final String QUANTITY_PROCESSES_ERROR_MSG = "提交失败，还有前序工序未完成，请检查！";
 
     /**
      *  单据信息

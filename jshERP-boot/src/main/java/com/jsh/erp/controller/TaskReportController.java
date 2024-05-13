@@ -46,6 +46,21 @@ public class TaskReportController {
         return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
     }
 
+
+
+    /**
+     * 新增
+     * @return
+     */
+    @PostMapping(value = "/acceptanceCheck")
+    @ApiOperation(value = "验收")
+    public String acceptanceCheck(@RequestBody TaskReport taskReport) throws Exception {
+        Map<String, Object> objectMap = new HashMap<String, Object>();
+        taskReportService.acceptanceCheck(taskReport);
+        objectMap.put("data",taskReport);
+        return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
+    }
+
     /**
      * 分页获取数据
      * @return

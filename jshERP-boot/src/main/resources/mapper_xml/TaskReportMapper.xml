@@ -17,6 +17,7 @@
     <result column="creator" jdbcType="BIGINT" property="creator" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
+    <result column="file_name" jdbcType="VARCHAR" property="fileName" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>

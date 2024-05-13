@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -364,6 +365,13 @@ public class StringUtil {
      */
     public static String safeSqlParse(String originStr){
         return originStr.replaceAll("(?i)" + regex, "");
+    }
+
+    public static boolean isNumeric(String str) {
+        String numberPattern = "^[-+]?\\d*\\.?\\d*(e[-+]\\d+)?$";
+        Pattern pattern = Pattern.compile(numberPattern);
+        Matcher matcher = pattern.matcher(str);
+        return matcher.matches();
     }
 
     public static void main(String[] args) {
