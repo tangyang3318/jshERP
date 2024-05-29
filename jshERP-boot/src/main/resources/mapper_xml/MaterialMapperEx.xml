@@ -76,6 +76,9 @@
         <if test="enabled != null and enabled !=''">
             and m.enabled = #{enabled}
         </if>
+        <if test="type != null and type !=''">
+            and m.pub_or_mat_type = #{type}
+        </if>
         <if test="remark != null and remark !=''">
             <bind name="bindRemark" value="'%'+remark+'%'"/>
             and m.remark like #{bindRemark}
@@ -118,6 +121,9 @@
         </if>
         <if test="weight != null and weight !=''">
             and m.weight = #{weight}
+        </if>
+        <if test="type != null and type !=''">
+            and m.pub_or_mat_type = #{type}
         </if>
         <if test="expiryNum != null and expiryNum !=''">
             and m.expiry_num = #{expiryNum}
@@ -217,6 +223,9 @@
             <if test="deleteFlag != null">
                 delete_flag,
             </if>
+            <if test="type != null">
+                pub_or_mat_type,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -284,6 +293,9 @@
             </if>
             <if test="deleteFlag != null">
                 #{deleteFlag,jdbcType=VARCHAR},
+            </if>
+            <if test="type != null">
+                #{type,jdbcType=INTEGER},
             </if>
         </trim>
     </insert>

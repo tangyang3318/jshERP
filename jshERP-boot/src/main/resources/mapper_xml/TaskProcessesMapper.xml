@@ -25,9 +25,9 @@
     <association property="parentProcessesEntity" javaType="com.jsh.erp.datasource.entities.TaskProcesses"
                  column="parent_processes"
                  select="com.jsh.erp.datasource.mappers.TaskProcessesMapper.selectById" ></association>
-    <association property="task" javaType="com.jsh.erp.datasource.entities.Task"
+    <association property="task" javaType="com.jsh.erp.datasource.entities.TaskEx"
                  column="task_id"
-                 select="com.jsh.erp.datasource.mappers.TaskMapper.selectByPrimaryKey" >
+                 select="com.jsh.erp.datasource.mappers.TaskMapperEx.selectExById" >
     </association>
   </resultMap>
   <sql id="Example_Where_Clause">

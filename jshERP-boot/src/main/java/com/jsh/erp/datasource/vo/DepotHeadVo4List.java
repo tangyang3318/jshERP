@@ -23,6 +23,8 @@ public class DepotHeadVo4List extends DepotHead{
 
     private String operTimeStr;
 
+    private String overTimeStr;
+
     private BigDecimal finishDebt;
 
     private String depotHeadType;
@@ -223,5 +225,13 @@ public class DepotHeadVo4List extends DepotHead{
 
     public void setRealNeedDebt(BigDecimal realNeedDebt) {
         this.realNeedDebt = realNeedDebt;
+    }
+
+    public String getOverTimeStr() {
+        return overTimeStr;
+    }
+
+    public void setOverTimeStr(String overTimeStr) {
+        this.overTimeStr = overTimeStr;
     }
 }

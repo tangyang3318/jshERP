@@ -24,6 +24,10 @@ public class Constants {
 
     //级联类别
     public final static String TYPE = "type";
+    //材料
+    public final static Integer MATERIAL = 0;
+    //产品
+    public final static Integer PRODUCT = 1;
 
     //转发
     public final static String TEAM = "team";

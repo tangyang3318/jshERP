@@ -66,6 +66,8 @@ public class DepotHead {
 
     private String deleteFlag;
 
+    private Date overTime;
+
     public Long getId() {
         return id;
     }
@@ -312,5 +314,13 @@ public class DepotHead {
 
     public void setDeleteFlag(String deleteFlag) {
         this.deleteFlag = deleteFlag == null ? null : deleteFlag.trim();
+    }
+
+    public Date getOverTime() {
+        return overTime;
+    }
+
+    public void setOverTime(Date overTime) {
+        this.overTime = overTime;
     }
 }

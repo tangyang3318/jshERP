@@ -31,7 +31,8 @@ public interface MaterialMapperEx {
             @Param("idList") List<Long> idList,
             @Param("mpList") String mpList,
             @Param("offset") Integer offset,
-            @Param("rows") Integer rows);
+            @Param("rows") Integer rows,
+            @Param("type") Integer type);
 
     Long countsByMaterial(
             @Param("materialParam") String materialParam,
@@ -45,7 +46,8 @@ public interface MaterialMapperEx {
             @Param("enabled") String enabled,
             @Param("remark") String remark,
             @Param("idList") List<Long> idList,
-            @Param("mpList") String mpList);
+            @Param("mpList") String mpList,
+            @Param("type") Integer type);
 
     Long insertSelectiveEx(Material record);
 

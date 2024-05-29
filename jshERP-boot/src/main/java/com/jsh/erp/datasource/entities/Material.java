@@ -1,5 +1,7 @@
 package com.jsh.erp.datasource.entities;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.math.BigDecimal;
 
 public class Material {
@@ -46,6 +48,9 @@ public class Material {
     private Long tenantId;
 
     private String deleteFlag;
+
+    @TableField(value = "pub_or_mat_type")
+    private Integer type;
 
     public Long getId() {
         return id;
@@ -221,5 +226,13 @@ public class Material {
 
     public void setDeleteFlag(String deleteFlag) {
         this.deleteFlag = deleteFlag == null ? null : deleteFlag.trim();
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

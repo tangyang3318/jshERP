@@ -1,5 +1,7 @@
 package com.jsh.erp.datasource.entities;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+
 import java.util.Date;
 
 public class MaterialCategory {
@@ -24,6 +26,9 @@ public class MaterialCategory {
     private Long tenantId;
 
     private String deleteFlag;
+
+    @TableField(value = "pub_or_mat_type")
+    private Integer type;
 
     public Long getId() {
         return id;
@@ -103,6 +108,14 @@ public class MaterialCategory {
 
     public void setTenantId(Long tenantId) {
         this.tenantId = tenantId;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public String getDeleteFlag() {

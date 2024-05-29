@@ -1,5 +1,6 @@
 package com.jsh.erp.datasource.mappers;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.jsh.erp.datasource.entities.MaterialCategory;
 import com.jsh.erp.datasource.vo.TreeNode;
 import org.apache.ibatis.annotations.Param;
@@ -14,7 +15,7 @@ import java.util.Map;
  * @Author: cjl
  * @Date: 2019/2/18 17:23
  */
-public interface MaterialCategoryMapperEx {
+public interface MaterialCategoryMapperEx  extends BaseMapper<MaterialCategory> {
     List<MaterialCategory> selectByConditionMaterialCategory(
             @Param("name") String name,
             @Param("parentId") Integer parentId,
@@ -39,4 +40,6 @@ public interface MaterialCategoryMapperEx {
     List<MaterialCategory> getMaterialCategoryListByCategoryIds(@Param("parentIds") String[] categoryIds);
 
     List<MaterialCategory> getListByParentId(@Param("parentId") Long parentId);
+
+    List<TreeNode> getNodeTreeByType(@Param("currentId")Long currentId ,@Param("type") Integer type);
 }

@@ -117,6 +117,53 @@ public class MaterialCategoryController {
     /**
      * create by: cjl
      * description:
+     * 获取根据类别获取树
+     * create time: 2019/2/19 11:49
+     * @Param:
+     * @return com.alibaba.fastjson.JSONArray
+     */
+    @RequestMapping(value = "/getMaterialCategoryTreeForType")
+    @ApiOperation(value = "获取商品类别树数据")
+    public JSONArray getMaterialCategoryTreeForType(@RequestParam("id") Long id,@RequestParam(required = false,value="type") Integer type) throws Exception{
+       JSONArray arr=new JSONArray();
+       List<TreeNode> materialCategoryTree = materialCategoryService.getMaterialCategoryTreeByType(id,type);
+       if(materialCategoryTree!=null&&materialCategoryTree.size()>0){
+           for(TreeNode node:materialCategoryTree){
+               String str=JSON.toJSONString(node);
+               JSONObject obj=JSON.parseObject(str);
+               arr.add(obj) ;
+           }
+       }
+        return arr;
+    }
+
+
+    /**
+     * 获取树节点
+     * @param id   树节点id
+     * @param noShowId  不展示的id
+     * @param flag  是否展示当前树id
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/getMaterialCategoryChilrenTree")
+    @ApiOperation(value = "获取id下面的树节点信息")
+    public JSONArray getMaterialCategoryChilrenTree(@RequestParam("id") Long id,@RequestParam("noShowId") Long noShowId,@RequestParam("flag") Boolean flag) throws Exception{
+        JSONArray arr=new JSONArray();
+        List<TreeNode> allMaterialCategoryTree = materialCategoryService.getAllMaterialCategoryTree(id,noShowId,flag);
+        if(allMaterialCategoryTree!=null&&allMaterialCategoryTree.size()>0){
+            for(TreeNode node:allMaterialCategoryTree){
+                String str=JSON.toJSONString(node);
+                JSONObject obj=JSON.parseObject(str);
+                arr.add(obj) ;
+            }
+        }
+        return arr;
+    }
+
+    /**
+     * create by: cjl
+     * description:
      *  新增商品类别数据
      * create time: 2019/2/19 17:17
      * @Param: beanJson

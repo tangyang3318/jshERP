@@ -13,6 +13,7 @@
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
     <result column="delete_flag" jdbcType="VARCHAR" property="deleteFlag" />
+    <result column="pub_or_mat_type" jdbcType="INTEGER" property="type" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -73,8 +74,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, name, category_level, parent_id, sort, serial_no, remark, create_time, update_time, 
-    tenant_id, delete_flag
+    id, name, category_level, parent_id, sort, serial_no, remark, create_time, update_time,
+    tenant_id, delete_flag,pub_or_mat_type
   </sql>
   <select id="selectByExample" parameterType="com.jsh.erp.datasource.entities.MaterialCategoryExample" resultMap="BaseResultMap">
     select
@@ -91,7 +92,7 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from jsh_material_category
     where id = #{id,jdbcType=BIGINT}
@@ -107,14 +108,14 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jsh.erp.datasource.entities.MaterialCategory">
-    insert into jsh_material_category (id, name, category_level, 
-      parent_id, sort, serial_no, 
-      remark, create_time, update_time, 
-      tenant_id, delete_flag)
-    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{categoryLevel,jdbcType=SMALLINT}, 
-      #{parentId,jdbcType=BIGINT}, #{sort,jdbcType=VARCHAR}, #{serialNo,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{tenantId,jdbcType=BIGINT}, #{deleteFlag,jdbcType=VARCHAR})
+    insert into jsh_material_category (id, name, category_level,
+      parent_id, sort, serial_no,
+      remark, create_time, update_time,
+      tenant_id, delete_flag,pub_or_mat_type)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{categoryLevel,jdbcType=SMALLINT},
+      #{parentId,jdbcType=BIGINT}, #{sort,jdbcType=VARCHAR}, #{serialNo,jdbcType=VARCHAR},
+      #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+      #{tenantId,jdbcType=BIGINT}, #{deleteFlag,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER})
   </insert>
   <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.MaterialCategory">
     insert into jsh_material_category
@@ -152,6 +153,9 @@
       <if test="deleteFlag != null">
         delete_flag,
       </if>
+      <if test="type != null">
+        pub_or_mat_type,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -186,6 +190,9 @@
       </if>
       <if test="deleteFlag != null">
         #{deleteFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
       </if>
     </trim>
   </insert>
@@ -231,6 +238,9 @@
       <if test="record.deleteFlag != null">
         delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
       </if>
+      <if test="record.type != null">
+        pub_or_mat_type = #{record.type,jdbcType=INTEGER},
+      </if>
     </set>
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
@@ -248,7 +258,8 @@
       create_time = #{record.createTime,jdbcType=TIMESTAMP},
       update_time = #{record.updateTime,jdbcType=TIMESTAMP},
       tenant_id = #{record.tenantId,jdbcType=BIGINT},
-      delete_flag = #{record.deleteFlag,jdbcType=VARCHAR}
+      delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
+    pub_or_mat_type = #{record.type,jdbcType=INTEGER}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -286,6 +297,9 @@
       <if test="deleteFlag != null">
         delete_flag = #{deleteFlag,jdbcType=VARCHAR},
       </if>
+      <if test="type != null">
+        pub_or_mat_type = #{type,jdbcType=INTEGER},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -300,7 +314,8 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       tenant_id = #{tenantId,jdbcType=BIGINT},
-      delete_flag = #{deleteFlag,jdbcType=VARCHAR}
+      delete_flag = #{deleteFlag,jdbcType=VARCHAR},
+      pub_or_mat_type = #{type,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

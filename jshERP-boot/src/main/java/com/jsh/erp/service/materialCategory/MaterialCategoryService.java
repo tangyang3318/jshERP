@@ -1,6 +1,7 @@
 package com.jsh.erp.service.materialCategory;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.constants.ExceptionConstants;
@@ -14,6 +15,7 @@ import com.jsh.erp.exception.JshException;
 import com.jsh.erp.service.log.LogService;
 import com.jsh.erp.service.user.UserService;
 import com.jsh.erp.utils.StringUtil;
+import io.swagger.models.auth.In;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class MaterialCategoryService {
@@ -237,13 +240,12 @@ public class MaterialCategoryService {
         }
         return list;
     }
+
     /**
-     * create by: cjl
-     * description:
-     *获取商品类别树数据
-     * create time: 2019/2/19 14:30
-     * @Param:
-     * @return java.util.List<com.jsh.erp.datasource.vo.TreeNode>
+     *
+     * @param id
+     * @return
+     * @throws Exception
      */
     public List<TreeNode> getMaterialCategoryTree(Long id) throws Exception{
         List<TreeNode> list=null;
@@ -252,8 +254,73 @@ public class MaterialCategoryService {
         }catch(Exception e){
             JshException.readFail(logger, e);
         }
-       return list;
+        return list;
     }
+
+    /**
+     *
+     * @param id
+     * @return
+     * @throws Exception
+     */
+    public List<TreeNode> getMaterialCategoryTreeByType(Long id, Integer type) throws Exception{
+        List<TreeNode> list=null;
+        try{
+            list=materialCategoryMapperEx.getNodeTreeByType(id,type);
+        }catch(Exception e){
+            JshException.readFail(logger, e);
+        }
+        return list;
+    }
+
+    /**
+     * @param id
+     * @param noShowId  不展示的下面节点
+     * @return
+     * @throws Exception
+     */
+    public List<TreeNode> getAllMaterialCategoryTree(Long id,Long noShowId,Boolean flag) throws Exception{
+        List<TreeNode> list=null;
+        try{
+            List<MaterialCategory> materialCategory = getMaterialCategory();
+            if(materialCategory!=null&&materialCategory.size()>0 && id != null){
+                list = materialCategory.stream().filter(item -> (flag && item.getId().longValue() == id.longValue())
+                        || ((item.getParentId() == null && id == null) ||
+                        (!flag && item.getParentId() != null && item.getParentId().longValue() == id.longValue()
+                                && (noShowId == null || item.getParentId().longValue() != noShowId.longValue())))
+                ).map(item -> {
+                    TreeNode treeNode = null;
+//                    TreeNode treeNode = new TreeNode(item.getId(),item.getId(),item.getId(),item.getName());
+                    return treeNode;
+                }).collect(Collectors.toList());
+                if(CollectionUtils.isNotEmpty(list)){
+                    list.stream().forEach(item -> {
+                        item.setChildren(getChildrenTreeNode(item,noShowId,materialCategory));
+                    });
+                }
+            }
+        }catch(Exception e){
+            JshException.readFail(logger, e);
+        }
+        return list;
+    }
+
+    private List<TreeNode> getChildrenTreeNode(TreeNode treeNode,Long noShowId, List<MaterialCategory> materialCategory) {
+        List<TreeNode> treeNodes = new ArrayList<>();
+        if(CollectionUtils.isNotEmpty(materialCategory) && treeNode != null ){
+            treeNodes = materialCategory.stream().filter(item ->
+                    item.getParentId() != null && item.getParentId().longValue() == treeNode.getId()
+                            && (noShowId !=null && noShowId.longValue() == item.getId().longValue()))
+                    .map(item -> {
+                        TreeNode treeNode1 = new TreeNode();
+//                        TreeNode treeNode1 = new TreeNode(item.getId(), item.getId(), item.getId(), item.getName());
+                        treeNode1.setChildren(getChildrenTreeNode(treeNode1,noShowId,materialCategory));
+                        return treeNode1;
+                    }).collect(Collectors.toList());
+        }
+        return treeNodes;
+    }
+
     /**
      * create by: cjl
      * description:

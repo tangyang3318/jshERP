@@ -40,6 +40,8 @@ import java.io.File;
 import java.math.BigDecimal;
 import java.util.*;
 
+import static java.lang.Integer.*;
+
 @Service
 public class MaterialService {
     private Logger logger = LoggerFactory.getLogger(MaterialService.class);
@@ -119,7 +121,7 @@ public class MaterialService {
 
     public List<MaterialVo4Unit> select(String materialParam, String color, String materialOther, String weight, String expiryNum,
                                         String enableSerialNumber, String enableBatchNumber, String position, String enabled,
-                                        String remark, String categoryId, String mpList, int offset, int rows)
+                                        String remark, String categoryId, String mpList, int offset, int rows,Integer type)
             throws Exception{
         String[] mpArr = new String[]{};
         if(StringUtil.isNotEmpty(mpList)){
@@ -133,7 +135,7 @@ public class MaterialService {
                 idList = getListByParentId(Long.parseLong(categoryId));
             }
             list= materialMapperEx.selectByConditionMaterial(materialParam, color, materialOther, weight, expiryNum,
-                    enableSerialNumber, enableBatchNumber, position, enabled, remark, idList, mpList, offset, rows);
+                    enableSerialNumber, enableBatchNumber, position, enabled, remark, idList, mpList, offset, rows,type);
             if (null != list && list.size()>0) {
                 Map<Long,BigDecimal> currentStockMap = getCurrentStockMapByMaterialList(list);
                 for (MaterialVo4Unit m : list) {
@@ -155,7 +157,7 @@ public class MaterialService {
 
     public Long countMaterial(String materialParam, String color, String materialOther, String weight, String expiryNum,
                               String enableSerialNumber, String enableBatchNumber, String position, String enabled,
-                              String remark, String categoryId,String mpList)throws Exception {
+                              String remark, String categoryId,String mpList,Integer type)throws Exception {
         Long result =null;
         try{
             List<Long> idList = new ArrayList<>();
@@ -163,7 +165,7 @@ public class MaterialService {
                 idList = getListByParentId(Long.parseLong(categoryId));
             }
             result= materialMapperEx.countsByMaterial(materialParam, color, materialOther, weight, expiryNum,
-                    enableSerialNumber, enableBatchNumber, position, enabled, remark, idList, mpList);
+                    enableSerialNumber, enableBatchNumber, position, enabled, remark, idList, mpList,type);
         }catch(Exception e){
             JshException.readFail(logger, e);
         }
@@ -635,7 +637,7 @@ public class MaterialService {
                         throw new BusinessRunTimeException(ExceptionConstants.MATERIAL_EXPIRY_NUM_NOT_INTEGER_CODE,
                                 String.format(ExceptionConstants.MATERIAL_EXPIRY_NUM_NOT_INTEGER_MSG, i+1));
                     }
-                    m.setExpiryNum(Integer.parseInt(expiryNum));
+                    m.setExpiryNum(parseInt(expiryNum));
                 }
 //                String manyUnit = ExcelUtils.getContent(src, i, 8); //副单位
                 String barCode = ExcelUtils.getContent(src, i, 8); //基础条码
@@ -654,13 +656,15 @@ public class MaterialService {
                 String otherField1 = ExcelUtils.getContent(src, i, 14); //自定义1
                 String otherField2 = ExcelUtils.getContent(src, i, 15); //自定义2
                 String otherField3 = ExcelUtils.getContent(src, i, 16); //自定义3
-                String remark = ExcelUtils.getContent(src, i, 17); //备注
+                String type = ExcelUtils.getContent(src, i, 17); //材料产品
+                String remark = ExcelUtils.getContent(src, i, 18); //备注
                 m.setPosition(StringUtil.isNotEmpty(position)?position:null);
                 m.setMfrs(StringUtil.isNotEmpty(mfrs)?mfrs:null);
                 m.setOtherField1(StringUtil.isNotEmpty(otherField1)?otherField1:null);
                 m.setOtherField2(StringUtil.isNotEmpty(otherField2)?otherField2:null);
                 m.setOtherField3(StringUtil.isNotEmpty(otherField3)?otherField3:null);
                 m.setRemark(remark);
+                m.setType("产品".equals(type)?1:0);
                 //状态格式错误
                 if(!"1".equals(enabled) && !"0".equals(enabled)) {
                     throw new BusinessRunTimeException(ExceptionConstants.MATERIAL_ENABLED_ERROR_CODE,
@@ -870,7 +874,7 @@ public class MaterialService {
     private Map<Long, BigDecimal> getStockMapCache(Sheet src, int depotCount, Map<String, Long> depotMap, int i) throws Exception {
         Map<Long, BigDecimal> stockMap = new HashMap<>();
         for(int j = 1; j<= depotCount; j++) {
-            int col = 25 + j;
+            int col = 18 + j;
             if(col < src.getColumns()){
                 String depotName = ExcelUtils.getContent(src, 1, col); //获取仓库名称
                 if(StringUtil.isNotEmpty(depotName)) {

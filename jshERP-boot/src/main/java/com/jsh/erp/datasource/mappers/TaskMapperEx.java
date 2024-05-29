@@ -13,6 +13,8 @@ public interface TaskMapperEx {
 
     TaskEx selectById(Long id);
 
+    TaskEx selectExById(Long id);
+
     List<TaskEx> selectByConditionTask(@Param("taskEx") TaskEx taskEx,
                                        @Param("planBeginTime") String planBeginTime,
                                        @Param("planEndTime") String planEndTime,

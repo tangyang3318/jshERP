@@ -876,6 +876,9 @@ public class DepotHeadService {
                 if(dh.getOperTime() != null) {
                     dh.setOperTimeStr(getCenternTime(dh.getOperTime()));
                 }
+                if(dh.getOverTime() != null) {
+                    dh.setOverTimeStr(getCenternTime(dh.getOverTime()));
+                }
                 //商品信息简述
                 if(materialsListMap!=null) {
                     dh.setMaterialsList(materialsListMap.get(dh.getId()));

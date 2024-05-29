@@ -1,6 +1,7 @@
 package com.jsh.erp.service.material;
 
 import com.alibaba.fastjson.JSONObject;
+import com.jsh.erp.datasource.entities.MaterialVo4Unit;
 import com.jsh.erp.service.ICommonQuery;
 import com.jsh.erp.service.depot.DepotResource;
 import com.jsh.erp.service.depot.DepotService;
@@ -8,11 +9,13 @@ import com.jsh.erp.utils.Constants;
 import com.jsh.erp.utils.QueryUtils;
 import com.jsh.erp.utils.StringUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service(value = "material_component")
 @MaterialResource
@@ -45,8 +48,9 @@ public class MaterialComponent implements ICommonQuery {
         String enabled = StringUtil.getInfo(search, "enabled");
         String remark = StringUtil.getInfo(search, "remark");
         String mpList = StringUtil.getInfo(search, "mpList");
+        Integer type = "1".equals(StringUtil.getInfo(search, "type"))? Constants.PRODUCT:Constants.MATERIAL;
         return materialService.select(materialParam, color, materialOther, weight, expiryNum,
-                enableSerialNumber, enableBatchNumber, position, enabled, remark, categoryId, mpList, QueryUtils.offset(map), QueryUtils.rows(map));
+                enableSerialNumber, enableBatchNumber, position, enabled, remark, categoryId, mpList, QueryUtils.offset(map), QueryUtils.rows(map),type);
     }
 
     @Override
@@ -64,8 +68,9 @@ public class MaterialComponent implements ICommonQuery {
         String enabled = StringUtil.getInfo(search, "enabled");
         String remark = StringUtil.getInfo(search, "remark");
         String mpList = StringUtil.getInfo(search, "mpList");
+        Integer type = "1".equals(StringUtil.getInfo(search, "type"))? Constants.PRODUCT:Constants.MATERIAL;
         return materialService.countMaterial(materialParam, color, materialOther, weight, expiryNum,
-                enableSerialNumber, enableBatchNumber, position, enabled, remark, categoryId, mpList);
+                enableSerialNumber, enableBatchNumber, position, enabled, remark, categoryId, mpList,type);
     }
 
     @Override

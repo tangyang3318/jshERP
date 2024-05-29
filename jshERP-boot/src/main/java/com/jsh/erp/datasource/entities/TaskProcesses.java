@@ -60,7 +60,7 @@ public class TaskProcesses {
     @TableField(exist = false)
     private List<TaskProcesses> beforeProcessesEntity;
     @TableField(exist = false)
-    private Task task;
+    private TaskEx task;
     //租户
     @TableField(exist = false)
     private String searchKey;
