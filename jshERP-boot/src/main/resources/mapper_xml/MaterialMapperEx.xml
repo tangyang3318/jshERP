@@ -76,7 +76,7 @@
         <if test="enabled != null and enabled !=''">
             and m.enabled = #{enabled}
         </if>
-        <if test="type != null and type !=''">
+        <if test="type != null">
             and m.pub_or_mat_type = #{type}
         </if>
         <if test="remark != null and remark !=''">
