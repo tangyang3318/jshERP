@@ -1564,7 +1564,7 @@ INSERT INTO `tyerp`.`jsh_function`(`id`, `number`, `name`, `parent_number`, `url
 INSERT INTO `tyerp`.`jsh_function`(`id`, `number`, `name`, `parent_number`, `url`, `component`, `state`, `sort`, `enabled`, `type`, `push_btn`, `icon`, `delete_flag`) VALUES (44, '0704', '财务管理', '0', '/financial', '/layouts/TabLayout', b'0', '0450', b'1', '电脑版', '', 'money-collect', '0');
 INSERT INTO `tyerp`.`jsh_function`(`id`, `number`, `name`, `parent_number`, `url`, `component`, `state`, `sort`, `enabled`, `type`, `push_btn`, `icon`, `delete_flag`) VALUES (203, '070403', '支出单', '0704', '/financial/item_out', '/financial/ItemOutList', b'0', '0470', b'1', '电脑版', '1,2,3,7', 'profile', '0');
 INSERT INTO `tyerp`.`jsh_function`(`id`, `number`, `name`, `parent_number`, `url`, `component`, `state`, `sort`, `enabled`, `type`, `push_btn`, `icon`, `delete_flag`) VALUES (204, '070404', '收款单', '0704', '/financial/money_in', '/financial/MoneyInList', b'0', '0475', b'1', '电脑版', '1,2,3,7', 'profile', '0');
-INSERT INTO `tyerp`.`jsh_function`(`id`, `number`, `name`, `parent_number`, `url`, `component`, `state`, `sort`, `enabled`, `type`, `push_btn`, `icon`, `delete_flag`) VALUES (1001, '100301', '附件管理', '0101', '/material/fileManage', '/material/fileManageList', b'0', '0241', b'1', '电脑版', '1', 'profile', '0');
+INSERT INTO `tyerp`.`jsh_function`(`id`, `number`, `name`, `parent_number`, `url`, `component`, `state`, `sort`, `enabled`, `type`, `push_btn`, `icon`, `delete_flag`) VALUES (1001, '100301', '合同管理', '0101', '/material/fileManage', '/material/fileManageList', b'0', '0241', b'1', '电脑版', '1', 'profile', '0');
 CREATE TABLE `contract` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '主键',
   `contract_name` varchar(255) NOT NULL COMMENT '合同名称',
@@ -1578,3 +1578,38 @@ CREATE TABLE `contract` (
   `file_name` varchar(255) DEFAULT NULL COMMENT '文件地址，逗号分割',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=10378 DEFAULT CHARSET=utf8 COMMENT='合同表';
+
+alter table jsh_depot_head add contract_id bigint(20) DEFAULT NULL COMMENT '合同ID' ;
+alter table task add  over_quantity decimal(24,6) DEFAULT NULL COMMENT '已完工数量';
+alter table task add  bar_code varchar(50) DEFAULT NULL COMMENT '商品拓展条码';
+alter table task add  bar_code varchar(50) DEFAULT NULL COMMENT '商品拓展条码';
+alter table task add contract_id bigint(20) DEFAULT NULL COMMENT '合同ID' ;
+alter table jsh_depot_head add over_time datetime DEFAULT NULL COMMENT '完工时间' ;
+alter table jsh_material add `pub_or_mat_type` int(1) DEFAULT '0' COMMENT '商品产品标识'
+alter table jsh_material_category add `pub_or_mat_type` int(1) DEFAULT '0' COMMENT '商品产品标识';
+INSERT INTO `jsh_function`(`id`, `number`, `name`, `parent_number`, `url`, `component`, `state`, `sort`, `enabled`, `type`, `push_btn`, `icon`, `delete_flag`) VALUES (194, '010204', '收支项目', '0102', '/system/in_out_item', '/system/InOutItemList', b'0', '0282', b'1', '电脑版', '1', 'profile', '0');
+
+INSERT INTO `jsh_function`(`id`, `number`, `name`, `parent_number`, `url`, `component`, `state`, `sort`, `enabled`, `type`, `push_btn`, `icon`, `delete_flag`) VALUES (197, '070402', '收入单', '0704', '/financial/item_in', '/financial/ItemInList', b'0', '0465', b'1', '电脑版', '1,2,3,7', 'profile', '0');
+
+INSERT INTO `jsh_function`(`id`, `number`, `name`, `parent_number`, `url`, `component`, `state`, `sort`, `enabled`, `type`, `push_btn`, `icon`, `delete_flag`) VALUES (31, '010206', '经手人管理', '0102', '/system/person', '/system/PersonList', b'0', '0284', b'1', '电脑版', '1', 'profile', '0');
+
+
+alter table jsh_account_head add contract_id bigint(20) DEFAULT NULL COMMENT '合同ID' ;
+
+INSERT INTO `tyerp`.`jsh_function`(`id`, `number`, `name`, `parent_number`, `url`, `component`, `state`, `sort`, `enabled`, `type`, `push_btn`, `icon`, `delete_flag`) VALUES (1002, '100302', '合同报表', '0301', '/report/contract_report', '/report/ContractReport', b'0', '0610', b'1', '电脑版', '', 'profile', '0');
+UPDATE `tyerp`.`jsh_user_business` SET `type` = 'RoleFunctions', `key_id` = '10', `value` = '[210][225][211][241][32][33][199][242][38][41][200][201][239][202][40][232][233][197][44][203][204][205][206][212][246][207][208][209][226][227][228][229][59][235][237][244][22][21][23][220][240][247][25][24][217][218][26][194][195][31][13][14][243][15][234][248][198][259][400][401][402][403][404][405][406][501][502][503][27][28][1001][1002]', `btn_str` = '[{\"funId\":13,\"btnStr\":\"1\"},{\"funId\":14,\"btnStr\":\"1\"},{\"funId\":243,\"btnStr\":\"1\"},{\"funId\":234,\"btnStr\":\"1\"},{\"funId\":22,\"btnStr\":\"1\"},{\"funId\":23,\"btnStr\":\"1\"},{\"funId\":220,\"btnStr\":\"1\"},{\"funId\":240,\"btnStr\":\"1\"},{\"funId\":247,\"btnStr\":\"1\"},{\"funId\":25,\"btnStr\":\"1\"},{\"funId\":217,\"btnStr\":\"1\"},{\"funId\":218,\"btnStr\":\"1\"},{\"funId\":26,\"btnStr\":\"1\"},{\"funId\":194,\"btnStr\":\"1\"},{\"funId\":195,\"btnStr\":\"1\"},{\"funId\":31,\"btnStr\":\"1\"},{\"funId\":241,\"btnStr\":\"1,2,7\"},{\"funId\":33,\"btnStr\":\"1,2,7\"},{\"funId\":199,\"btnStr\":\"1,7,2\"},{\"funId\":242,\"btnStr\":\"1,2,7\"},{\"funId\":41,\"btnStr\":\"1,2,7\"},{\"funId\":200,\"btnStr\":\"1,2,7\"},{\"funId\":210,\"btnStr\":\"1,2,7\"},{\"funId\":211,\"btnStr\":\"1,2,7\"},{\"funId\":197,\"btnStr\":\"1,2,7\"},{\"funId\":203,\"btnStr\":\"1,7,2\"},{\"funId\":204,\"btnStr\":\"1,7,2\"},{\"funId\":205,\"btnStr\":\"1,2,7\"},{\"funId\":206,\"btnStr\":\"1,7,2\"},{\"funId\":212,\"btnStr\":\"1,2,7\"},{\"funId\":201,\"btnStr\":\"1,2,7\"},{\"funId\":202,\"btnStr\":\"1,2,7\"},{\"funId\":40,\"btnStr\":\"1,2,7\"},{\"funId\":232,\"btnStr\":\"1,2,7\"},{\"funId\":233,\"btnStr\":\"1,2,7\"},{\"funId\":401,\"btnStr\":\"1,2,3,7,C\"},{\"funId\":405,\"btnStr\":\"A\"},{\"funId\":406,\"btnStr\":\"B\"},{\"funId\":27,\"btnStr\":\"1\"},{\"funId\":28,\"btnStr\":\"1\"},{\"funId\":1001,\"btnStr\":\"1\"}]', `tenant_id` = NULL, `delete_flag` = '0' WHERE `id` = 32;
+ALTER TABLE task MODIFY  COLUMN id bigint AUTO_INCREMENT PRIMARY KEY;
+ALTER TABLE task_material MODIFY  COLUMN id bigint AUTO_INCREMENT PRIMARY KEY;
+ALTER TABLE task_report MODIFY  COLUMN id bigint AUTO_INCREMENT PRIMARY KEY;
+ALTER TABLE task MODIFY  COLUMN id bigint AUTO_INCREMENT PRIMARY KEY;
+
+
+
+alter table jsh_depot_head add invoice_file varchar(255) DEFAULT NULL COMMENT '发票附件' ;
+alter table jsh_depot_head add certificate_file varchar(255) DEFAULT NULL COMMENT '合格证附件' ;
+alter table jsh_depot_head add delivery_file varchar(255) DEFAULT NULL COMMENT '送货单附件' ;
+alter table jsh_depot_head add contract_file varchar(255) DEFAULT NULL COMMENT '合同附件' ;
+alter table jsh_depot_head add other_file varchar(255) DEFAULT NULL COMMENT '其他附件' ;
+
+
+alter table jsh_account_head add depot_sale_order_id bigint(20) DEFAULT NULL COMMENT '关联销售订单' ;

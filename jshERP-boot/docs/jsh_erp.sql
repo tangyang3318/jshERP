@@ -300,7 +300,6 @@ INSERT INTO `jsh_function` VALUES ('201', '080103', '其它入库', '0801', '/bi
 INSERT INTO `jsh_function` VALUES ('21', '0101', '产品管理', '0', '/material', '/layouts/TabLayout', '\0', '0620', '', '电脑版', null, 'shopping', '0');
 INSERT INTO `jsh_function` VALUES ('22', '010101', '产品类别', '0101', '/material/material_category', '/material/MaterialCategoryList', '\0', '0230', '', '电脑版', '1', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('23', '010102', '产品信息', '0101', '/material/material', '/material/MaterialList', '\0', '0240', '', '电脑版', '1,3', 'profile', '0');
-INSERT INTO `jsh_function` VALUES ('220', '010103', '计量单位', '0101', '/system/unit', '/system/UnitList', '\0', '0245', '', '电脑版', '1', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('247', '010105', '多属性', '0101', '/material/material_attribute', '/material/MaterialAttributeList', '\0', '0250', '', '电脑版', '1', 'profile', '0');
 
 INSERT INTO `jsh_function` VALUES ('38', '0603', '销售管理', '0', '/billB', '/layouts/TabLayout', '\0', '0390', '', '电脑版', '', 'shopping-cart', '0');
@@ -314,14 +313,11 @@ INSERT INTO `jsh_function` VALUES ('199', '050204', '采购退货', '0502', '/bi
 INSERT INTO `jsh_function` VALUES ('241', '050202', '采购订单', '0502', '/bill/purchase_order', '/bill/PurchaseOrderList', '\0', '0335', '', '电脑版', '1,2,3', 'profile', '0');
 
 
-INSERT INTO `tyerp`.`jsh_function`(`id`, `number`, `name`, `parent_number`, `url`, `component`, `state`, `sort`, `enabled`, `type`, `push_btn`, `icon`, `delete_flag`) VALUES (402, '090202', 'BOM设置', '0901', '/task/bomSetting', '/task/bomSettingList', b'0', '0002', b'1', '电脑版', '1,2,3', 'profile', '0');
-
 INSERT INTO `jsh_function` VALUES ('400', '0901', '生产管理', '0', '/task', '/system/task', '\0', '0330', '', '电脑版', '', 'retweet', '0');
 INSERT INTO `jsh_function` VALUES ('401', '090201', '任务管理', '0901', '/task/taskManage', '/task/TaskManageList', '\0', '0001', '', '电脑版', '1,2,3', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('402', '090202', 'BOM设置', '0901', '/task/bomSetting', '/task/bomSettingList', '\0', '0002', '', '电脑版', '1,2,3', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('403', '090203', '我的任务', '0901', '/task/myTask', '/task/myTaskList', '\0', '0003', '', '电脑版', '1,2,3', 'profile', '0');
 
-INSERT INTO `jsh_function` VALUES ('198', '0301', '报表查询', '0', '/report', '/layouts/TabLayout', '\0', '0570', '', '电脑版', null, 'pie-chart', '0');
 INSERT INTO `jsh_function` VALUES ('246', '030113', '商品库存', '0301', '/report/material_stock', '/report/MaterialStock', '\0', '0605', '', '电脑版', '', 'profile', '0');
 INSERT INTO `jsh_function` VALUES ('501', '030114', '生产任务报表', '0301', '/report/product_task', '/report/productTask', '\0', '0605', '', '电脑版', '', 'profile', '0');
 

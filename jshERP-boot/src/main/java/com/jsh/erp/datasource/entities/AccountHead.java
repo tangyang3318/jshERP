@@ -1,8 +1,11 @@
 package com.jsh.erp.datasource.entities;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Data
 public class AccountHead {
     private Long id;
 
@@ -35,6 +38,8 @@ public class AccountHead {
     private String source;
 
     private Long tenantId;
+
+    private Long contractId;
 
     private String deleteFlag;
 

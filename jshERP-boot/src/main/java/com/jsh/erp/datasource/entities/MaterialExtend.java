@@ -1,8 +1,14 @@
 package com.jsh.erp.datasource.entities;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Data
+@TableName(value = "material_extend", resultMap = "com.jsh.erp.datasource.mappers.MaterialExtendMapper.BaseResultMap")
 public class MaterialExtend {
     private Long id;
 
@@ -35,6 +41,9 @@ public class MaterialExtend {
     private Long tenantId;
 
     private String deleteFlag;
+    //商品
+    @TableField(exist = false)
+    private Material materialEntity;
 
     public Long getId() {
         return id;

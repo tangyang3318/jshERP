@@ -17,6 +17,7 @@
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
     <result column="file_name" jdbcType="BIGINT" property="fileName" />
+    <result column="contract_id" jdbcType="BIGINT" property="contractId" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -78,7 +79,7 @@
   </sql>
   <sql id="Base_Column_List">
     id, bill_no, material_id, quantity,over_quantity, over_time, plan_over_time, create_time,
-    update_time, creator, status, remark,bar_code,file_name
+    update_time, creator, status, remark,bar_code,file_name,contract_id
   </sql>
   <select id="selectByExample" parameterType="com.jsh.erp.datasource.entities.TaskExample" resultMap="BaseResultMap">
     select
@@ -112,10 +113,10 @@
   </delete>
   <insert id="insert" parameterType="com.jsh.erp.datasource.entities.Task" useGeneratedKeys="true" keyProperty="id">
     insert into task (id, bill_no, material_id, quantity,over_quantity, over_time, plan_over_time,
-    create_time, update_time, creator, status, remark,bar_code,file_name)
+    create_time, update_time, creator,contract_id, status, remark,bar_code,file_name)
     values (#{id,jdbcType=BIGINT}, #{billNo,jdbcType=VARCHAR}, #{materialId,jdbcType=BIGINT},
       #{quantity,jdbcType=DECIMAL},#{overQuantity,jdbcType=DECIMAL}, #{overTime,jdbcType=TIMESTAMP}, #{planOverTime,jdbcType=TIMESTAMP},
-      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},#{creator,jdbcType=BIGINT},
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},#{creator,jdbcType=BIGINT},#{contractId,jdbcType=BIGINT},
        #{status,jdbcType=VARCHAR},#{remark,jdbcType=VARCHAR},#{barCode,jdbcType=VARCHAR},#{fileName,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.Task">
@@ -153,6 +154,9 @@
       </if>
       <if test="creator != null">
         creator,
+      </if>
+      <if test="contractId != null">
+        contract_id,
       </if>
       <if test="remark != null">
         remark,
@@ -197,6 +201,9 @@
       </if>
       <if test="creator != null">
         #{creator,jdbcType=BIGINT},
+      </if>
+      <if test="contractId != null">
+        #{contract_id,jdbcType=BIGINT},
       </if>
       <if test="remark != null">
         #{remark,jdbcType=VARCHAR},
@@ -251,6 +258,9 @@
       <if test="record.creator != null">
         creator = #{record.creator,jdbcType=BIGINT},
       </if>
+      <if test="record.contractId != null">
+        contract_id = #{record.contractId,jdbcType=BIGINT},
+      </if>
       <if test="record.remark != null">
         remark = #{record.remark,jdbcType=TIMESTAMP},
       </if>
@@ -281,7 +291,8 @@
     creator = #{record.creator,jdbcType=BIGINT},
     remark = #{record.remark,jdbcType=VARCHAR},
     file_name = #{record.fileName,jdbcType=VARCHAR},
-    tenant_id = #{record.tenantId,jdbcType=BIGINT}
+    tenant_id = #{record.tenantId,jdbcType=BIGINT},
+    contract_id = #{record.contractId,jdbcType=BIGINT}
     <if test="_parameter != null">
       <include refid="Update_By_Example_Where_Clause" />
     </if>
@@ -322,6 +333,9 @@
       <if test="creator != null">
         creator = #{creator,jdbcType=BIGINT},
       </if>
+      <if test="contractId != null">
+        contract_id = #{contractId,jdbcType=BIGINT},
+      </if>
       <if test="remark != null">
         remark = #{remark,jdbcType=VARCHAR},
       </if>
@@ -349,7 +363,8 @@
       creator = #{creator,jdbcType=BIGINT},x
       remark = #{remark,jdbcType=VARCHAR},
       file_name = #{fileName,jdbcType=VARCHAR},
-      tenant_id = #{tenantId,jdbcType=BIGINT}
+      tenant_id = #{tenantId,jdbcType=BIGINT},
+      contract_id = #{contractId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

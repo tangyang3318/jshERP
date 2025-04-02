@@ -114,6 +114,12 @@
         <if test="creator != null">
             and dh.creator=#{creator}
         </if>
+        <if test="contractId != null">
+            and dh.contract_id=#{contractId}
+        </if>
+        <if test="depotSaleOrderId != null">
+            and dh.depot_sale_order_id=#{depotSaleOrderId}
+        </if>
         <if test="depotId != null">
             and di.depot_id=#{depotId}
         </if>
@@ -220,6 +226,12 @@
         </if>
         <if test="creator != null">
             and dh.creator=#{creator}
+        </if>
+        <if test="contractId != null">
+            and dh.contract_id=#{contractId}
+        </if>
+        <if test="depotSaleOrderId != null">
+            and dh.depot_sale_order_id=#{depotSaleOrderId}
         </if>
         <if test="depotId != null">
             and di.depot_id=#{depotId}

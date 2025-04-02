@@ -39,6 +39,7 @@ public class TaskComponent implements ICommonQuery {
         taskEx.setRemark(StringUtil.getInfo(search, "remark"));
         taskEx.setKey(StringUtil.getInfo(search, "key"));
         taskEx.setMaterialId(StringUtils.isEmpty(StringUtil.getInfo(search, "materialId")) ? null: Long.parseLong(StringUtil.getInfo(search, "materialId")));
+        taskEx.setContractId(StringUtils.isEmpty(StringUtil.getInfo(search, "contractId")) ? null: Long.parseLong(StringUtil.getInfo(search, "contractId")));
         String planBeginTime = StringUtil.getInfo(search, "planBeginTime");
         String planEndTime = StringUtil.getInfo(search, "planEndTime");
         String beginTime = StringUtil.getInfo(search, "beginTime");
@@ -54,6 +55,7 @@ public class TaskComponent implements ICommonQuery {
         taskEx.setStatus(StringUtil.getInfo(search, "status"));
         taskEx.setStatus(StringUtil.getInfo(search, "remark"));
         taskEx.setMaterialId(StringUtils.isEmpty(StringUtil.getInfo(search, "materialId")) ? null: Long.parseLong(StringUtil.getInfo(search, "materialId")));
+        taskEx.setContractId(StringUtils.isEmpty(StringUtil.getInfo(search, "contractId")) ? null: Long.parseLong(StringUtil.getInfo(search, "contractId")));
         String planBeginTime = StringUtil.getInfo(search, "planBeginTime");
         String planEndTime = StringUtil.getInfo(search, "planEndTime");
         String beginTime = StringUtil.getInfo(search, "beginTime");

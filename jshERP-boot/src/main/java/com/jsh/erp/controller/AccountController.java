@@ -3,6 +3,7 @@ package com.jsh.erp.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.jsh.erp.datasource.entities.Account;
+import com.jsh.erp.datasource.entities.AccountRequestVo;
 import com.jsh.erp.datasource.vo.AccountVo4InOutList;
 import com.jsh.erp.datasource.vo.AccountVo4List;
 import com.jsh.erp.service.account.AccountService;
@@ -14,11 +15,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,12 +111,23 @@ public class AccountController {
                                                  @RequestParam("pageSize") Integer pageSize,
                                                  @RequestParam("accountId") Long accountId,
                                                  @RequestParam("initialAmount") BigDecimal initialAmount,
+                                                 @RequestParam("contractId") Long contractId,
                                                  HttpServletRequest request) throws Exception{
         BaseResponseInfo res = new BaseResponseInfo();
         Map<String, Object> map = new HashMap<String, Object>();
+        if(ObjectUtils.isEmpty(initialAmount) && ObjectUtils.isEmpty(contractId)){
+            return null;
+        }
         try {
-            List<AccountVo4InOutList> dataList = accountService.findAccountInOutList(accountId, (currentPage-1)*pageSize, pageSize);
-            int total = accountService.findAccountInOutListCount(accountId);
+            List<AccountVo4InOutList> dataList = new ArrayList<>();
+            int total = 0;
+            if(!ObjectUtils.isEmpty(accountId)) {
+                dataList = accountService.findAccountInOutList(accountId, (currentPage-1)*pageSize, pageSize);
+                total = accountService.findAccountInOutListCount(accountId);
+            }else{
+                dataList = accountService.findAccountInOutListForContractId(contractId, (currentPage-1)*pageSize, pageSize);
+                total = accountService.findAccountInOutListCountForContractId(contractId);
+            }
             map.put("total", total);
             //存放数据json数组
             JSONArray dataArray = new JSONArray();
@@ -126,7 +140,10 @@ public class AccountController {
                     BigDecimal balance = accountService.getAccountSum(accountId, null, endTime, forceFlag)
                             .add(accountService.getAccountSumByHead(accountId, null, endTime, forceFlag))
                             .add(accountService.getAccountSumByDetail(accountId, null, endTime, forceFlag))
-                            .add(accountService.getManyAccountSum(accountId, null, endTime, forceFlag)).add(initialAmount);
+                            .add(accountService.getManyAccountSum(accountId, null, endTime, forceFlag));
+                    if(!ObjectUtils.isEmpty(initialAmount)){
+                        balance.add(initialAmount);
+                    }
                     aEx.setBalance(balance);
                     aEx.setAccountId(accountId);
                     dataArray.add(aEx);

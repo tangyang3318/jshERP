@@ -593,4 +593,24 @@ public class AccountService {
         }
         return result;
     }
+
+    public List<AccountVo4InOutList> findAccountInOutListForContractId(Long contractId, int offset, Integer rows) {
+        List<AccountVo4InOutList> list=null;
+        try{
+            list = accountMapperEx.findAccountInOutListForContractId(contractId, offset, rows);
+        }catch(Exception e){
+            JshException.readFail(logger, e);
+        }
+        return list;
+    }
+
+    public int findAccountInOutListCountForContractId(Long contractId) {
+        int result=0;
+        try{
+            result = accountMapperEx.findAccountInOutListCountForContractId(contractId);
+        }catch(Exception e){
+            JshException.readFail(logger, e);
+        }
+        return result;
+    }
 }

@@ -115,7 +115,7 @@ public class DepotHeadService {
     }
 
     public List<DepotHeadVo4List> select(String type, String subType, String hasDebt, String status, String purchaseStatus, String number, String linkNumber,
-           String beginTime, String endTime, String materialParam, Long organId, Long creator, Long depotId, Long accountId, String remark, int offset, int rows) throws Exception {
+                                         String beginTime, String endTime, String materialParam, Long organId, Long creator, Long depotId, Long accountId, String remark, Long contractId, Long depotSaleOrderId, int offset, int rows) throws Exception {
         List<DepotHeadVo4List> resList = new ArrayList<>();
         try{
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
@@ -134,7 +134,7 @@ public class DepotHeadService {
             beginTime = Tools.parseDayToTime(beginTime,BusinessConstants.DAY_FIRST_TIME);
             endTime = Tools.parseDayToTime(endTime,BusinessConstants.DAY_LAST_TIME);
             List<DepotHeadVo4List> list = depotHeadMapperEx.selectByConditionDepotHead(type, subType, creatorArray, hasDebt, statusArray, purchaseStatusArray, number, linkNumber, beginTime, endTime,
-                 materialParam, organId, organArray, creator, depotId, depotArray, accountId, remark, offset, rows);
+                 materialParam, organId, organArray, creator, depotId, depotArray, accountId, remark,contractId, depotSaleOrderId,offset, rows);
             if (null != list) {
                 List<Long> idList = new ArrayList<>();
                 List<String> numberList = new ArrayList<>();
@@ -229,7 +229,7 @@ public class DepotHeadService {
     }
 
     public Long countDepotHead(String type, String subType, String hasDebt, String status, String purchaseStatus, String number, String linkNumber,
-           String beginTime, String endTime, String materialParam, Long organId, Long creator, Long depotId, Long accountId, String remark) throws Exception{
+                               String beginTime, String endTime, String materialParam, Long organId, Long creator, Long depotId, Long accountId, String remark, Long contractId, Long depotSaleOrderId) throws Exception{
         Long result=null;
         try{
             String [] depotArray = getDepotArray(subType);
@@ -242,7 +242,7 @@ public class DepotHeadService {
             beginTime = Tools.parseDayToTime(beginTime,BusinessConstants.DAY_FIRST_TIME);
             endTime = Tools.parseDayToTime(endTime,BusinessConstants.DAY_LAST_TIME);
             result=depotHeadMapperEx.countsByDepotHead(type, subType, creatorArray, hasDebt, statusArray, purchaseStatusArray, number, linkNumber, beginTime, endTime,
-                   materialParam, organId, organArray, creator, depotId, depotArray, accountId, remark);
+                   materialParam, organId, organArray, creator, depotId, depotArray, accountId, remark,contractId,depotSaleOrderId);
         }catch(Exception e){
             JshException.readFail(logger, e);
         }
@@ -953,12 +953,12 @@ public class DepotHeadService {
         }
         String subType = depotHead.getSubType();
         //结算账户校验
-//        if("采购".equals(subType) || "采购退货".equals(subType) || "销售".equals(subType) || "销售退货".equals(subType)) {
-//            if (StringUtil.isEmpty(depotHead.getAccountIdList()) && depotHead.getAccountId() == null) {
-//                throw new BusinessRunTimeException(ExceptionConstants.DEPOT_HEAD_ACCOUNT_FAILED_CODE,
-//                        String.format(ExceptionConstants.DEPOT_HEAD_ACCOUNT_FAILED_MSG));
-//            }
-//        }
+        if("采购".equals(subType) || "采购退货".equals(subType) || "销售".equals(subType) || "销售退货".equals(subType)) {
+            if (StringUtil.isEmpty(depotHead.getAccountIdList()) && depotHead.getAccountId() == null) {
+                throw new BusinessRunTimeException(ExceptionConstants.DEPOT_HEAD_ACCOUNT_FAILED_CODE,
+                        String.format(ExceptionConstants.DEPOT_HEAD_ACCOUNT_FAILED_MSG));
+            }
+        }
         //判断用户是否已经登录过，登录过不再处理
         User userInfo=userService.getCurrentUser();
         depotHead.setCreator(userInfo==null?null:userInfo.getId());

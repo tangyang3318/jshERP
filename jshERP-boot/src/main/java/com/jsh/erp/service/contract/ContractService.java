@@ -1,9 +1,14 @@
 package com.jsh.erp.service.contract;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import com.jsh.erp.datasource.entities.Contract;
 import com.jsh.erp.datasource.mappers.ContractMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * @Author: TangYang
@@ -27,6 +33,12 @@ public class ContractService {
         return contractMapper.selectById(id);
     }
 
+    public int searchByCode(String code) {
+        QueryWrapper<Contract> contractQueryWrapper = new QueryWrapper<>();
+        contractQueryWrapper.eq("contract_code",code);
+        return contractMapper.selectCount(contractQueryWrapper);
+    }
+
     public IPage<Contract>  selectPageList(Map<String, String> map, int pageNo, int pageSize){
         if(pageNo <= 0){
             pageNo = 1;
@@ -35,7 +47,18 @@ public class ContractService {
             pageSize = 10;
         }
         IPage<Contract> page = new Page<>(pageNo, pageSize);
-        QueryWrapper<Contract> queryWrapper = new QueryWrapper<>();
+        Contract contract = JSONObject.parseObject(map.get("search"),Contract.class);
+        LambdaQueryWrapper<Contract> queryWrapper = new LambdaQueryWrapper<>();
+        if (StringUtils.isNotEmpty(contract.getContractCode())) {
+            queryWrapper.eq(Contract::getContractCode,contract.getContractCode());
+        }
+        if (StringUtils.isNotEmpty(contract.getContractName())) {
+            queryWrapper.eq(Contract::getContractName,contract.getContractName());
+        }
+        if (StringUtils.isNotEmpty(contract.getTimeRange())) {
+            JSONArray objects = JSONObject.parseArray(contract.getTimeRange());
+            queryWrapper.between(Contract::getCreateTime,objects.getString(0),objects.getString(1));
+        }
         return contractMapper.selectPage(page, queryWrapper);
     }
 

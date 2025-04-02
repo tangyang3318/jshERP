@@ -28,10 +28,11 @@ public class Contract {
     private Long creator;
     //备注
     private String remark;
-    //租户
-    private Long tenantId;
     //文件
     private String fileName;
+    //文件
+    @TableField(exist =  false)
+    private String timeRange;
 
     //耗材
     @TableField(exist = false)

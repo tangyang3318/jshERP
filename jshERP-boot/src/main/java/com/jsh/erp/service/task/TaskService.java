@@ -21,12 +21,14 @@ import com.jsh.erp.service.taskReport.TaskReportService;
 import com.jsh.erp.service.user.UserService;
 import com.jsh.erp.service.userBusiness.UserBusinessService;
 import com.jsh.erp.utils.StringUtil;
+import com.mysql.jdbc.StringUtils;
 import org.apache.ibatis.annotations.Param;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -346,7 +348,11 @@ public class TaskService {
         if(StringUtil.isNotEmpty(idsStr) && StringUtil.isNotEmpty(status)){
             List<String> strings = Arrays.asList(idsStr.split(","));
             List<Long> ids = new ArrayList<>();
-            strings.forEach(item -> ids.add(Long.parseLong(item)));
+            strings.forEach(item -> {
+                if(!StringUtils.isNullOrEmpty(item)){
+                    ids.add(Long.parseLong(item));
+                }
+            });
             Task task = new Task();
             task.setStatus(status);
             TaskExample taskExample = new TaskExample();

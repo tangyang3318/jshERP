@@ -45,6 +45,8 @@ public class Task {
     private String remark;
     //租户
     private Long tenantId;
+    //租户
+    private Long contractId;
     //文件名称
     private String fileName;
 

@@ -83,6 +83,8 @@ public class ResourceController {
             return returnJson(objectMap, ErpInfo.OK.name, ErpInfo.OK.code);
         } else if(insert == -1) {
             return returnJson(objectMap, ErpInfo.TEST_USER.name, ErpInfo.TEST_USER.code);
+        } else if(insert == -1001) {
+            return returnJson(objectMap, "当前合同编号已存在！", -1001);
         } else {
             return returnJson(objectMap, ErpInfo.ERROR.name, ErpInfo.ERROR.code);
         }

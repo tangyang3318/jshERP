@@ -34,6 +34,8 @@ public interface DepotHeadMapperEx {
             @Param("depotArray") String[] depotArray,
             @Param("accountId") Long accountId,
             @Param("remark") String remark,
+            @Param("contractId")  Long contractId,
+            @Param("depotSaleOrderId")  Long depotSaleOrderId,
             @Param("offset") Integer offset,
             @Param("rows") Integer rows);
 
@@ -55,7 +57,9 @@ public interface DepotHeadMapperEx {
             @Param("depotId") Long depotId,
             @Param("depotArray") String[] depotArray,
             @Param("accountId") Long accountId,
-            @Param("remark") String remark);
+            @Param("remark") String remark,
+            @Param("contractId")Long contractId,
+            @Param("depotSaleOrderId")  Long depotSaleOrderId);
 
     List<MaterialsListVo> findMaterialsListMapByHeaderIdList(
             @Param("idList") List<Long> idList);

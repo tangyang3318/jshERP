@@ -21,8 +21,10 @@
     <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
     <association property="materialEntity" javaType="com.jsh.erp.datasource.entities.Material"
                  column="material_id"
-                 select="com.jsh.erp.datasource.mappers.MaterialMapper.selectById" >
-    </association>
+                 select="com.jsh.erp.datasource.mappers.MaterialMapper.selectById" />
+    <association property="materialExtend" javaType="com.jsh.erp.datasource.entities.MaterialExtend"
+                 column="bar_code"
+                 select="com.jsh.erp.datasource.mappers.MaterialExtendMapper.selectByBarCode" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>

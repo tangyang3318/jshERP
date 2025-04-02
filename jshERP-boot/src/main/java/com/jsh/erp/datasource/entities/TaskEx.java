@@ -24,4 +24,7 @@ public class TaskEx extends Task {
     //商品
     @TableField(exist = false)
     private String key;
+    //合同
+    @TableField(exist = false)
+    private Long contractId;
 }

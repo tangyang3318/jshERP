@@ -19,6 +19,10 @@
     <result column="bill_type" jdbcType="VARCHAR" property="billType" />
     <result column="remark" jdbcType="VARCHAR" property="remark" />
     <result column="file_name" jdbcType="VARCHAR" property="fileName" />
+    <result column="invoice_file" jdbcType="VARCHAR" property="invoiceFile" />
+    <result column="contract_file" jdbcType="VARCHAR" property="contractFile" />
+    <result column="delivery_file" jdbcType="VARCHAR" property="deliveryFile" />
+    <result column="certificate_file" jdbcType="VARCHAR" property="certificateFile" />
     <result column="sales_man" jdbcType="VARCHAR" property="salesMan" />
     <result column="account_id_list" jdbcType="VARCHAR" property="accountIdList" />
     <result column="account_money_list" jdbcType="VARCHAR" property="accountMoneyList" />
@@ -32,6 +36,8 @@
     <result column="source" jdbcType="VARCHAR" property="source" />
     <result column="link_number" jdbcType="VARCHAR" property="linkNumber" />
     <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
+    <result column="contract_id" jdbcType="BIGINT" property="contractId" />
+    <result column="depot_sale_order_id" jdbcType="BIGINT" property="depotSaleOrderId" />
     <result column="delete_flag" jdbcType="VARCHAR" property="deleteFlag" />
     <result column="over_time" jdbcType="TIMESTAMP" property="overTime" />
   </resultMap>
@@ -96,9 +102,9 @@
   <sql id="Base_Column_List">
     id, type, sub_type, default_number, number, create_time, oper_time, organ_id, creator,
     account_id, change_amount, back_amount, total_price, pay_type, bill_type, remark,
-    file_name, sales_man, account_id_list, account_money_list, discount, discount_money,
+    file_name,invoice_file,contract_file,delivery_file,certificate_file,sales_man, account_id_list, account_money_list, discount, discount_money,
     discount_last_money, other_money, deposit, status, purchase_status, source, link_number,
-    tenant_id, delete_flag,over_time
+    tenant_id, delete_flag,over_time,contract_id,depot_sale_order_id
   </sql>
   <select id="selectByExample" parameterType="com.jsh.erp.datasource.entities.DepotHeadExample" resultMap="BaseResultMap">
     select
@@ -136,23 +142,24 @@
       oper_time, organ_id, creator,
       account_id, change_amount, back_amount,
       total_price, pay_type, bill_type,
-      remark, file_name, sales_man,
+      remark, file_name,invoice_file,contract_file,delivery_file,certificate_file, sales_man,
       account_id_list, account_money_list, discount,
       discount_money, discount_last_money, other_money,
       deposit, status, purchase_status,
       source, link_number,
-      delete_flag,over_time)
+      delete_flag,contract_id,depot_sale_order_id,over_time)
     values (#{id,jdbcType=BIGINT}, #{type,jdbcType=VARCHAR}, #{subType,jdbcType=VARCHAR},
       #{defaultNumber,jdbcType=VARCHAR}, #{number,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
       #{operTime,jdbcType=TIMESTAMP}, #{organId,jdbcType=BIGINT}, #{creator,jdbcType=BIGINT},
       #{accountId,jdbcType=BIGINT}, #{changeAmount,jdbcType=DECIMAL}, #{backAmount,jdbcType=DECIMAL},
       #{totalPrice,jdbcType=DECIMAL}, #{payType,jdbcType=VARCHAR}, #{billType,jdbcType=VARCHAR},
-      #{remark,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{salesMan,jdbcType=VARCHAR},
+      #{remark,jdbcType=VARCHAR}, #{fileName,jdbcType=VARCHAR}, #{invoiceFile,jdbcType=VARCHAR}, #{contractFile,jdbcType=VARCHAR}, #{deliveryFile,jdbcType=VARCHAR}, #{certificateFile,jdbcType=VARCHAR}, #{salesMan,jdbcType=VARCHAR},
       #{accountIdList,jdbcType=VARCHAR}, #{accountMoneyList,jdbcType=VARCHAR}, #{discount,jdbcType=DECIMAL},
       #{discountMoney,jdbcType=DECIMAL}, #{discountLastMoney,jdbcType=DECIMAL}, #{otherMoney,jdbcType=DECIMAL},
       #{deposit,jdbcType=DECIMAL}, #{status,jdbcType=VARCHAR}, #{purchaseStatus,jdbcType=VARCHAR},
       #{source,jdbcType=VARCHAR}, #{linkNumber,jdbcType=VARCHAR},
       #{deleteFlag,jdbcType=VARCHAR},
+      #{contractId,jdbcType=BIGINT},
       #{overTime,jdbcType=TIMESTAMP})
   </insert>
   <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.DepotHead">
@@ -209,6 +216,18 @@
       <if test="fileName != null">
         file_name,
       </if>
+      <if test="invoiceFile != null">
+        invoice_file,
+      </if>
+      <if test="contractFile != null">
+        contract_file,
+      </if>
+      <if test="deliveryFile != null">
+        delivery_file,
+      </if>
+      <if test="certificateFile != null">
+        certificate_file,
+      </if>
       <if test="salesMan != null">
         sales_man,
       </if>
@@ -253,6 +272,12 @@
       </if>
       <if test="overTime != null">
         over_time,
+      </if>
+      <if test="contractId != null">
+        contract_id,
+      </if>
+      <if test="depotSaleOrderId != null">
+        depot_sale_order_id,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -307,6 +332,18 @@
       <if test="fileName != null">
         #{fileName,jdbcType=VARCHAR},
       </if>
+      <if test="invoiceFile != null">
+        #{invoiceFile,jdbcType=VARCHAR},
+      </if>
+      <if test="contractFile != null">
+        #{contractFile,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryFile != null">
+        #{deliveryFile,jdbcType=VARCHAR},
+      </if>
+      <if test="certificateFile != null">
+        #{certificateFile,jdbcType=VARCHAR},
+      </if>
       <if test="salesMan != null">
         #{salesMan,jdbcType=VARCHAR},
       </if>
@@ -352,6 +389,9 @@
       <if test="overTime != null">
         #{overTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="contractId != null">
+        #{contractId,jdbcType=BIGINT},
+      </if>
     </trim>
   </insert>
   <select id="countByExample" parameterType="com.jsh.erp.datasource.entities.DepotHeadExample" resultType="java.lang.Long">
@@ -387,6 +427,12 @@
       <if test="record.organId != null">
         organ_id = #{record.organId,jdbcType=BIGINT},
       </if>
+      <if test="record.contractId != null">
+        contract_id = #{record.contractId,jdbcType=BIGINT},
+      </if>
+      <if test="record.depotSaleOrderId != null">
+        depot_sale_order_id = #{record.depotSaleOrderId,jdbcType=BIGINT},
+      </if>
       <if test="record.creator != null">
         creator = #{record.creator,jdbcType=BIGINT},
       </if>
@@ -413,6 +459,18 @@
       </if>
       <if test="record.fileName != null">
         file_name = #{record.fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.invoiceFile != null">
+        invoice_file = #{record.invoiceFile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractFile != null">
+        contract_file = #{record.contractFile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.deliveryFile != null">
+        delivery_file = #{record.deliveryFile,jdbcType=VARCHAR},
+      </if>
+      <if test="record.certificateFile != null">
+        certificate_file = #{record.certificateFile,jdbcType=VARCHAR},
       </if>
       <if test="record.salesMan != null">
         sales_man = #{record.salesMan,jdbcType=VARCHAR},
@@ -483,6 +541,10 @@
       bill_type = #{record.billType,jdbcType=VARCHAR},
       remark = #{record.remark,jdbcType=VARCHAR},
       file_name = #{record.fileName,jdbcType=VARCHAR},
+    invoice_file = #{record.invoiceFile,jdbcType=VARCHAR},
+    contract_file = #{record.contractFile,jdbcType=VARCHAR},
+    delivery_file = #{record.deliveryFile,jdbcType=VARCHAR},
+    certificate_file = #{record.certificateFile,jdbcType=VARCHAR},
       sales_man = #{record.salesMan,jdbcType=VARCHAR},
       account_id_list = #{record.accountIdList,jdbcType=VARCHAR},
       account_money_list = #{record.accountMoneyList,jdbcType=VARCHAR},
@@ -496,6 +558,8 @@
       source = #{record.source,jdbcType=VARCHAR},
       link_number = #{record.linkNumber,jdbcType=VARCHAR},
       tenant_id = #{record.tenantId,jdbcType=BIGINT},
+      contract_id = #{record.contractId,jdbcType=BIGINT},
+    depot_sale_order_id = #{record.depotSaleOrderId,jdbcType=BIGINT},
       delete_flag = #{record.deleteFlag,jdbcType=VARCHAR},
     over_time = #{record.overTime,jdbcType=TIMESTAMP}
     <if test="_parameter != null">
@@ -532,6 +596,12 @@
       <if test="accountId != null">
         account_id = #{accountId,jdbcType=BIGINT},
       </if>
+      <if test="contractId != null">
+        contract_id = #{contractId,jdbcType=BIGINT},
+      </if>
+      <if test="depotSaleOrderId != null">
+        depot_sale_order_id = #{depotSaleOrderId,jdbcType=BIGINT},
+      </if>
       <if test="changeAmount != null">
         change_amount = #{changeAmount,jdbcType=DECIMAL},
       </if>
@@ -552,6 +622,18 @@
       </if>
       <if test="fileName != null">
         file_name = #{fileName,jdbcType=VARCHAR},
+      </if>
+      <if test="invoiceFile != null">
+        invoice_file = #{invoiceFile,jdbcType=VARCHAR},
+      </if>
+      <if test="contractFile != null">
+        contract_file = #{contractFile,jdbcType=VARCHAR},
+      </if>
+      <if test="deliveryFile != null">
+        delivery_file = #{deliveryFile,jdbcType=VARCHAR},
+      </if>
+      <if test="certificateFile != null">
+        certificate_file = #{certificateFile,jdbcType=VARCHAR},
       </if>
       <if test="salesMan != null">
         sales_man = #{salesMan,jdbcType=VARCHAR},
@@ -619,6 +701,10 @@
       bill_type = #{billType,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       file_name = #{fileName,jdbcType=VARCHAR},
+      invoice_file = #{invoiceFile,jdbcType=VARCHAR},
+      contract_file = #{contractFile,jdbcType=VARCHAR},
+      delivery_file = #{deliveryFile,jdbcType=VARCHAR},
+      certificate_file = #{certificateFile,jdbcType=VARCHAR},
       sales_man = #{salesMan,jdbcType=VARCHAR},
       account_id_list = #{accountIdList,jdbcType=VARCHAR},
       account_money_list = #{accountMoneyList,jdbcType=VARCHAR},
@@ -632,6 +718,8 @@
       source = #{source,jdbcType=VARCHAR},
       link_number = #{linkNumber,jdbcType=VARCHAR},
       tenant_id = #{tenantId,jdbcType=BIGINT},
+      contract_id = #{contractId,jdbcType=BIGINT},
+      depot_sale_order_id = #{depotSaleOrderId,jdbcType=BIGINT},
       delete_flag = #{deleteFlag,jdbcType=VARCHAR},
       over_time = #{overTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}

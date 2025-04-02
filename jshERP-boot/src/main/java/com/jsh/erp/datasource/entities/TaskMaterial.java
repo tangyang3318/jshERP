@@ -11,6 +11,7 @@ import org.mapstruct.BeanMapping;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 任务耗材
@@ -60,4 +61,7 @@ public class TaskMaterial {
     //商品
     @TableField(exist = false)
     private Material materialEntity;
+    //拓展
+    @TableField(exist = false)
+    private MaterialExtend materialExtend;
 }

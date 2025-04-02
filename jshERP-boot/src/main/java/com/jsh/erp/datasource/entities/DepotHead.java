@@ -1,8 +1,11 @@
 package com.jsh.erp.datasource.entities;
 
+import lombok.Data;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Data
 public class DepotHead {
     private Long id;
 
@@ -24,6 +27,10 @@ public class DepotHead {
 
     private Long accountId;
 
+    private Long contractId;
+
+    private Long depotSaleOrderId;
+
     private BigDecimal changeAmount;
 
     private BigDecimal backAmount;
@@ -37,6 +44,14 @@ public class DepotHead {
     private String remark;
 
     private String fileName;
+
+    private String invoiceFile;
+
+    private String contractFile;
+
+    private String deliveryFile;
+
+    private String certificateFile;
 
     private String salesMan;
 

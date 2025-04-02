@@ -7,6 +7,7 @@ import com.jsh.erp.service.ICommonQuery;
 import com.jsh.erp.service.user.UserService;
 import com.jsh.erp.utils.QueryUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +41,9 @@ public class ContractComponent implements ICommonQuery {
     @Override
     public int insert(JSONObject obj, HttpServletRequest request) throws Exception{
         Contract contract = JSONObject.parseObject(obj.toJSONString(),Contract.class);
+        if(contractService.searchByCode(contract.getContractCode()) > 0){
+            return -1001;
+        }
         User userInfo = userService.getCurrentUser();
         contract.setCreator(userInfo==null?null:userInfo.getId());
         contract.setCreateTime(new Date());

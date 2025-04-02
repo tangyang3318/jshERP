@@ -18,6 +18,9 @@
     <result column="update_time" jdbcType="BIGINT" property="updateTime" />
     <result column="tenant_id" jdbcType="BIGINT" property="tenantId" />
     <result column="delete_Flag" jdbcType="VARCHAR" property="deleteFlag" />
+    <association property="materialEntity" javaType="com.jsh.erp.datasource.entities.Material"
+                 column="material_id"
+                 select="com.jsh.erp.datasource.mappers.MaterialMapper.selectById" />
   </resultMap>
   <sql id="Example_Where_Clause">
     <where>
@@ -78,8 +81,8 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    id, material_id, bar_code, commodity_unit, sku, purchase_decimal, commodity_decimal, 
-    wholesale_decimal, low_decimal, default_flag, create_time, create_serial, update_serial, 
+    id, material_id, bar_code, commodity_unit, sku, purchase_decimal, commodity_decimal,
+    wholesale_decimal, low_decimal, default_flag, create_time, create_serial, update_serial,
     update_time, tenant_id, delete_Flag
   </sql>
   <select id="selectByExample" parameterType="com.jsh.erp.datasource.entities.MaterialExtendExample" resultMap="BaseResultMap">
@@ -97,10 +100,16 @@
     </if>
   </select>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
-    select 
+    select
     <include refid="Base_Column_List" />
     from jsh_material_extend
     where id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByBarCode" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from jsh_material_extend
+    where bar_code = #{barCord,jdbcType=BIGINT}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from jsh_material_extend
@@ -113,17 +122,17 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.jsh.erp.datasource.entities.MaterialExtend">
-    insert into jsh_material_extend (id, material_id, bar_code, 
-      commodity_unit, sku, purchase_decimal, 
-      commodity_decimal, wholesale_decimal, low_decimal, 
-      default_flag, create_time, create_serial, 
-      update_serial, update_time, tenant_id, 
+    insert into jsh_material_extend (id, material_id, bar_code,
+      commodity_unit, sku, purchase_decimal,
+      commodity_decimal, wholesale_decimal, low_decimal,
+      default_flag, create_time, create_serial,
+      update_serial, update_time, tenant_id,
       delete_Flag)
-    values (#{id,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, #{barCode,jdbcType=VARCHAR}, 
-      #{commodityUnit,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, #{purchaseDecimal,jdbcType=DECIMAL}, 
-      #{commodityDecimal,jdbcType=DECIMAL}, #{wholesaleDecimal,jdbcType=DECIMAL}, #{lowDecimal,jdbcType=DECIMAL}, 
-      #{defaultFlag,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createSerial,jdbcType=VARCHAR}, 
-      #{updateSerial,jdbcType=VARCHAR}, #{updateTime,jdbcType=BIGINT}, #{tenantId,jdbcType=BIGINT}, 
+    values (#{id,jdbcType=BIGINT}, #{materialId,jdbcType=BIGINT}, #{barCode,jdbcType=VARCHAR},
+      #{commodityUnit,jdbcType=VARCHAR}, #{sku,jdbcType=VARCHAR}, #{purchaseDecimal,jdbcType=DECIMAL},
+      #{commodityDecimal,jdbcType=DECIMAL}, #{wholesaleDecimal,jdbcType=DECIMAL}, #{lowDecimal,jdbcType=DECIMAL},
+      #{defaultFlag,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createSerial,jdbcType=VARCHAR},
+      #{updateSerial,jdbcType=VARCHAR}, #{updateTime,jdbcType=BIGINT}, #{tenantId,jdbcType=BIGINT},
       #{deleteFlag,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.MaterialExtend">

@@ -72,9 +72,15 @@ public interface AccountMapperEx {
             @Param("offset") Integer offset,
             @Param("rows") Integer rows);
 
+    List<AccountVo4InOutList> findAccountInOutListForContractId(
+            @Param("contractId") Long contractId,
+            @Param("offset") Integer offset,
+            @Param("rows") Integer rows);
+
     int findAccountInOutListCount(
             @Param("accountId") Long accountId);
 
     int batchDeleteAccountByIds(@Param("updateTime") Date updateTime, @Param("updater") Long updater, @Param("ids") String ids[]);
 
+    int findAccountInOutListCountForContractId( @Param("contractId")Long contractId);
 }

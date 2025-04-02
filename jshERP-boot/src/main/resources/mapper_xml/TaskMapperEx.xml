@@ -26,6 +26,9 @@
         <if test="taskEx.status != null">
             and ta.status = #{taskEx.status}
         </if>
+        <if test="taskEx.contractId != null">
+            and ta.contract_id = #{taskEx.contractId}
+        </if>
         <if test="planBeginTime != null and planEndTime != null">
             and ta.plan_over_time between #{planBeginTime} and #{planEndTime}
         </if>
@@ -51,6 +54,9 @@
         where 1=1
         <if test="planBeginTime != null and planEndTime != null">
             and plan_over_time between #{planBeginTime} and #{planEndTime}
+        </if>
+        <if test="taskEx.contractId  != null ">
+            and contract_id = #{taskEx.contractId}
         </if>
         <if test="beginTime != null and endTime != null">
             and over_time between #{beginTime} and #{endTime}
