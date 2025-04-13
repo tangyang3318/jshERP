@@ -2,6 +2,8 @@ package com.jsh.erp.service.depotHead;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.jsh.erp.constants.BusinessConstants;
 import com.jsh.erp.constants.ExceptionConstants;
 import com.jsh.erp.datasource.entities.*;
@@ -18,6 +20,7 @@ import com.jsh.erp.service.depot.DepotService;
 import com.jsh.erp.service.depotItem.DepotItemService;
 import com.jsh.erp.service.log.LogService;
 import com.jsh.erp.service.orgaUserRel.OrgaUserRelService;
+import com.jsh.erp.service.otherPrice.OtherPriceService;
 import com.jsh.erp.service.person.PersonService;
 import com.jsh.erp.service.role.RoleService;
 import com.jsh.erp.service.sequence.SequenceService;
@@ -61,6 +64,8 @@ public class DepotHeadService {
     private DepotHeadMapperEx depotHeadMapperEx;
     @Resource
     private UserService userService;
+    @Resource
+    private OtherPriceService otherPriceService;
     @Resource
     private RoleService roleService;
     @Resource
@@ -542,6 +547,9 @@ public class DepotHeadService {
                 throw new BusinessRunTimeException(ExceptionConstants.DEPOT_HEAD_UN_AUDIT_DELETE_FAILED_CODE,
                         String.format(ExceptionConstants.DEPOT_HEAD_UN_AUDIT_DELETE_FAILED_MSG));
             }
+            //删除另外价格表
+            List<Long> idList = StringUtil.strToLongList(ids);
+            otherPriceService.deleteByDepotIds(idList);
         }
         logService.insertLog("单据", sb.toString(),
                 ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest());
@@ -884,6 +892,10 @@ public class DepotHeadService {
                     dh.setMaterialsList(materialsListMap.get(dh.getId()));
                 }
                 dh.setCreatorName(userService.getUser(dh.getCreator()).getUsername());
+                //返回其他费用
+                if(("采购".equals(dh.getSubType()) && "入库".equals(dh.getType())) || ("销售".equals(dh.getSubType()) && "出库".equals(dh.getType()))){
+                    dh.setOtherPriceList(otherPriceService.getOtherPriceListByDepotId(dh.getId()));
+                }
                 resList.add(dh);
             }
         }catch(Exception e){
@@ -1005,6 +1017,14 @@ public class DepotHeadService {
         }
         try{
             depotHeadMapper.insertSelective(depotHead);
+            //插入其他价格表
+            if(ObjectUtils.isNotEmpty(depotHead.getOtherPrices())){
+                List<OtherPrice> otherPrices = depotHead.getOtherPrices();
+                for (int i = 0; i < otherPrices.size(); i++) {
+                    otherPrices.get(i).setDepotId(depotHead.getId());
+                }
+                otherPriceService.insertBeatchPrice(otherPrices);
+            }
         }catch(Exception e){
             JshException.writeFail(logger, e);
         }
@@ -1126,6 +1146,10 @@ public class DepotHeadService {
                             String.format(ExceptionConstants.DEPOT_HEAD_MEMBER_PAY_LACK_MSG));
                 }
             }
+        }
+        //修改其他价格表
+        if(ObjectUtils.isNotEmpty(depotHead.getOtherPrices())){
+            otherPriceService.updateBeatchByDepotId(depotHead.getOtherPrices(),depotHead.getId());
         }
         /**入库和出库处理单据子表信息*/
         depotItemService.saveDetials(rows,depotHead.getId(), "update",request);
@@ -1441,9 +1465,9 @@ public class DepotHeadService {
     }
 
     public String getBillCategory(String subType) {
-        if(subType.equals("零售") || subType.equals("零售退货")) {
+        if(StringUtils.isNotEmpty(subType) && (subType.equals("零售") || subType.equals("零售退货"))) {
             return "retail";
-        } else if(subType.equals("销售订单") || subType.equals("销售") || subType.equals("销售退货")) {
+        } else if(StringUtils.isNotEmpty(subType) && (subType.equals("销售订单") || subType.equals("销售") || subType.equals("销售退货"))) {
             return "sale";
         } else {
             return "buy";

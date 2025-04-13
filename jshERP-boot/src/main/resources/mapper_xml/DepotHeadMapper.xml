@@ -159,10 +159,12 @@
       #{deposit,jdbcType=DECIMAL}, #{status,jdbcType=VARCHAR}, #{purchaseStatus,jdbcType=VARCHAR},
       #{source,jdbcType=VARCHAR}, #{linkNumber,jdbcType=VARCHAR},
       #{deleteFlag,jdbcType=VARCHAR},
+      #{depotSaleOrderId,jdbcType=BIGINT},
       #{contractId,jdbcType=BIGINT},
       #{overTime,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.DepotHead">
+  <insert id="insertSelective" parameterType="com.jsh.erp.datasource.entities.DepotHead"
+          useGeneratedKeys ="true" keyProperty="id">
     insert into jsh_depot_head
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="id != null">

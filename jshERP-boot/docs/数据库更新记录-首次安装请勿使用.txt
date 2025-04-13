@@ -1613,3 +1613,14 @@ alter table jsh_depot_head add other_file varchar(255) DEFAULT NULL COMMENT '其
 
 
 alter table jsh_account_head add depot_sale_order_id bigint(20) DEFAULT NULL COMMENT '关联销售订单' ;
+alter table jsh_depot_head add depot_sale_order_id bigint(20) DEFAULT NULL COMMENT '关联销售订单' ;
+
+CREATE TABLE `other_price` (
+  `id` bigint(20) NOT NULL,
+  `price_number` decimal(24,6) DEFAULT NULL,
+  `price_type_name` varchar(255T NULL,
+  `depot_id` bigint(20) DEFAULT NULL,
+  `other_desc` varchar(255) DEFAULT NULL,
+  `tenant_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

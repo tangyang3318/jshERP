@@ -59,6 +59,7 @@ public class ContractService {
             JSONArray objects = JSONObject.parseArray(contract.getTimeRange());
             queryWrapper.between(Contract::getCreateTime,objects.getString(0),objects.getString(1));
         }
+        queryWrapper.orderByDesc(Contract::getCreateTime);
         return contractMapper.selectPage(page, queryWrapper);
     }
 

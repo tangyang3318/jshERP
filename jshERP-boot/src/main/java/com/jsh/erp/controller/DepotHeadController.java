@@ -517,23 +517,23 @@ public class DepotHeadController {
      * @param request
      * @return
      */
-    @GetMapping(value = "/getSaleOrderList")
-    @ApiOperation(value = "查询销售订单列表")
-    public BaseResponseInfo getSaleOrderList(HttpServletRequest request) {
-        Map<String, String> parameterMap = ParamUtils.requestToMap(request);
-        parameterMap.put(Constants.SEARCH, search);
-        BaseResponseInfo res = new BaseResponseInfo();
-        try {
-            String creator = depotHeadService.getCreatorByCurrentUser();
-            res.code = 200;
-            res.data = creator;
-        } catch (Exception e) {
-            e.printStackTrace();
-            res.code = 500;
-            res.data = "获取数据失败";
-        }
-        return res;
-    }
+//    @GetMapping(value = "/getSaleOrderList")
+//    @ApiOperation(value = "查询销售订单列表")
+//    public BaseResponseInfo getSaleOrderList(HttpServletRequest request) {
+//        Map<String, String> parameterMap = ParamUtils.requestToMap(request);
+//        parameterMap.put(Constants.SEARCH, search);
+//        BaseResponseInfo res = new BaseResponseInfo();
+//        try {
+//            String creator = depotHeadService.getCreatorByCurrentUser();
+//            res.code = 200;
+//            res.data = creator;
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            res.code = 500;
+//            res.data = "获取数据失败";
+//        }
+//        return res;
+//    }
 
     /**
      * 查询存在欠款的单据

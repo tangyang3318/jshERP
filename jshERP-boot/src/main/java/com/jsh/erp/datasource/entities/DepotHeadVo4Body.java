@@ -10,6 +10,8 @@ public class DepotHeadVo4Body {
 
     private String rows;
 
+    private String otherParams;
+
     private BigDecimal preTotalPrice;
 
     public Long getId() {
@@ -42,5 +44,14 @@ public class DepotHeadVo4Body {
 
     public void setPreTotalPrice(BigDecimal preTotalPrice) {
         this.preTotalPrice = preTotalPrice;
+    }
+
+    public String getOtherParams() {
+
+        return otherParams;
+    }
+
+    public void setOtherParams(String otherParams) {
+        this.otherParams = otherParams;
     }
 }

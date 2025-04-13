@@ -1,9 +1,11 @@
 package com.jsh.erp.datasource.entities;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import lombok.Data;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class DepotHead {
@@ -82,6 +84,9 @@ public class DepotHead {
     private String deleteFlag;
 
     private Date overTime;
+
+    @TableField(exist = false)
+    private List<OtherPrice> otherPrices;
 
     public Long getId() {
         return id;

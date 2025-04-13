@@ -1,9 +1,11 @@
 package com.jsh.erp.datasource.vo;
 
 import com.jsh.erp.datasource.entities.DepotHead;
+import com.jsh.erp.datasource.entities.OtherPrice;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
 
 public class DepotHeadVo4List extends DepotHead{
 
@@ -53,6 +55,11 @@ public class DepotHeadVo4List extends DepotHead{
      * 是否有退款单
      */
     private Boolean hasBackFlag;
+
+    /**
+     * 其他消费集合
+     */
+    private List<OtherPrice> otherPriceList;
 
     /**
      * 实际欠款
@@ -233,5 +240,14 @@ public class DepotHeadVo4List extends DepotHead{
 
     public void setOverTimeStr(String overTimeStr) {
         this.overTimeStr = overTimeStr;
+    }
+
+
+    public List<OtherPrice> getOtherPriceList() {
+        return otherPriceList;
+    }
+
+    public void setOtherPriceList(List<OtherPrice> otherPriceList) {
+        this.otherPriceList = otherPriceList;
     }
 }

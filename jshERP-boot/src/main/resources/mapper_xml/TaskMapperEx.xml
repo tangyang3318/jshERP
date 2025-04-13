@@ -39,7 +39,7 @@
             <bind name="bindRemark" value="'%'+taskEx.remark+'%'"/>
             and ta.remark like #{bindRemark}
         </if>
-        order by ta.create_time
+        order by ta.create_time desc
         <if test="offset != null and rows != null">
             limit #{offset},#{rows}
         </if>
